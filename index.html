@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI 對各大產業的滲透率與實際影響｜MVP 分析頁</title>
 <meta name="description" content="以單頁資料視覺化分析 AI 對各大產業的滲透率、投資強度、生產力影響，以及混合型人才如何重組職能系統。">
+<meta name="page-version-date" content="2026-06-04">
+<meta name="page-version-number" content="v2026.06.04">
 <meta property="og:type" content="website">
 <meta property="og:title" content="AI 對各大產業的滲透率與實際影響">
 <meta property="og:description" content="從產業採用率、投資強度、生產力提升，到混合型人才如何重組設計、產品、工程、行銷與商業流程。">
@@ -522,9 +524,9 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
   </div>
 </div>
 <div class="update-note">
-  <div class="update-note-title">更新日期＆摘要</div>
+  <div class="update-note-title">更新摘要</div>
   <div class="update-note-body">
-    更新日期：<time data-page-version-date datetime="2026-06-02">2026-06-02</time>。本週聚焦「採用率上升，但規模化與財務影響仍有落差」。這份觀察用來比較企業 AI 採用、agentic AI 規模化與長期經濟影響之間的距離。
+    本週聚焦「採用率上升，但規模化與財務影響仍有落差」。這份觀察用來比較企業 AI 採用、agentic AI 規模化與長期經濟影響之間的距離。
   </div>
   <ul class="source-list">
     <li>全球企業 AI 採用率：McKinsey 2025 Global Survey 顯示 88% 受訪者表示其組織在至少一個業務功能中定期使用 AI，較前一年 78% 上升；Stanford AI Index 2026 經濟章亦收錄此趨勢。</li>
@@ -782,7 +784,7 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
     <section aria-labelledby="copyright-title">
       <div class="footer-title" id="copyright-title">版權宣告</div>
       <div class="footer-copy">
-        本頁內容由 Dino 整理與改寫，僅供產業研究、簡報討論與內部決策參考。外部資料、商標與報告內容之著作權歸原權利人所有；本頁新增的中文分析文字、資料編排與視覺化設計，未經授權請勿整頁轉載、商業散布或移除來源標註。引用本頁觀點時，請保留頁名「AI 對產業的數據觀察」、版本日期 <span data-footer-version-date>2026-06-02</span> 與主要資料來源。
+        本頁內容由 Dino 整理與改寫，僅供產業研究、簡報討論與內部決策參考。外部資料、商標與報告內容之著作權歸原權利人所有；本頁新增的中文分析文字、資料編排與視覺化設計，未經授權請勿整頁轉載、商業散布或移除來源標註。引用本頁觀點時，請保留頁名「AI 對產業的數據觀察」、推版日期 <span data-footer-version-date>2026-06-04</span>、版號 <span data-footer-version-number>v2026.06.04</span> 與主要資料來源。
       </div>
     </section>
   </div>
@@ -860,11 +862,16 @@ const preferredFontSize = storage.get('aiIndustryFontSize') || 'medium';
 applyTheme(preferredTheme);
 applyFontSize(preferredFontSize);
 const syncVersionDate = () => {
-  const source = document.querySelector('[data-page-version-date]');
-  const versionDate = source ? (source.getAttribute('datetime') || source.textContent.trim()) : '';
+  const dateSource = document.querySelector('meta[name="page-version-date"]');
+  const numberSource = document.querySelector('meta[name="page-version-number"]');
+  const versionDate = dateSource ? dateSource.getAttribute('content') : '';
+  const versionNumber = numberSource ? numberSource.getAttribute('content') : '';
   if (!versionDate) return;
   document.querySelectorAll('[data-footer-version-date]').forEach(el => {
     el.textContent = versionDate;
+  });
+  document.querySelectorAll('[data-footer-version-number]').forEach(el => {
+    el.textContent = versionNumber;
   });
 };
 syncVersionDate();
