@@ -1,0 +1,183 @@
+
+<h2 class="sr-only">AI 對各大產業的滲透率與實際影響分析，涵蓋金融、醫療、製造等八大產業</h2>
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.wrap { padding: 1.5rem 0; }
+.section-label { font-size: 12px; color: var(--color-text-secondary); text-transform: none; letter-spacing: 0.04em; margin-bottom: 1rem; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+.metric-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; }
+.metric-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+.metric-val { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+.metric-sub { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+.chart-wrap { position: relative; width: 100%; height: 340px; margin-bottom: 1.5rem; }
+.chart-wrap2 { position: relative; width: 100%; height: 300px; margin-bottom: 1.5rem; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 8px; font-size: 12px; color: var(--color-text-secondary); }
+.legend span { display: flex; align-items: center; gap: 5px; }
+.leg-sq { width: 10px; height: 10px; border-radius: 2px; }
+.industry-row { display: grid; grid-template-columns: 110px 1fr 60px; align-items: center; gap: 10px; margin-bottom: 10px; }
+.industry-name { font-size: 13px; color: var(--color-text-secondary); text-align: right; }
+.bar-bg { background: var(--color-background-secondary); border-radius: 4px; height: 20px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+.pct { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.impact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
+.impact-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 14px; }
+.impact-icon { font-size: 20px; margin-bottom: 8px; color: var(--color-text-secondary); }
+.impact-industry { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px; }
+.impact-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+.impact-stat { font-size: 18px; font-weight: 500; }
+.badge { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: var(--border-radius-md); margin-top: 4px; }
+.badge-high { background: #EAF3DE; color: #3B6D11; }
+.badge-mid { background: #FAEEDA; color: #854F0B; }
+.badge-low { background: #E6F1FB; color: #185FA5; }
+@media (prefers-color-scheme: dark) {
+  .badge-high { background: #27500A; color: #C0DD97; }
+  .badge-mid { background: #633806; color: #FAC775; }
+  .badge-low { background: #0C447C; color: #B5D4F4; }
+}
+.divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.5rem 0; }
+</style>
+
+<div class="wrap">
+
+<div class="grid-2">
+  <div class="metric-card">
+    <div class="metric-label">全球企業 AI 採用率</div>
+    <div class="metric-val">72%</div>
+    <div class="metric-sub">2025 年，較 2022 年翻倍</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">AI 對全球 GDP 貢獻預測</div>
+    <div class="metric-val">$15.7 兆</div>
+    <div class="metric-sub">2030 年估計（PwC）</div>
+  </div>
+</div>
+
+<p class="section-label">各產業 AI 滲透率（2025 年估計）</p>
+<div id="bars"></div>
+
+<hr class="divider">
+<p class="section-label">AI 投資規模 vs. 生產力提升預估（泡泡大小 = 市場規模）</p>
+<div class="legend">
+  <span><span class="leg-sq" style="background:#378ADD"></span>科技 / 金融</span>
+  <span><span class="leg-sq" style="background:#1D9E75"></span>醫療 / 製造</span>
+  <span><span class="leg-sq" style="background:#D85A30"></span>零售 / 物流</span>
+  <span><span class="leg-sq" style="background:#D4537E"></span>教育 / 法律</span>
+</div>
+<div class="chart-wrap">
+  <canvas id="bubbleChart" role="img" aria-label="AI 投資與生產力提升泡泡圖，顯示各產業相關性">各產業 AI 投資規模與生產力提升相關性。</canvas>
+</div>
+
+<hr class="divider">
+<p class="section-label">各產業 AI 應用實際影響</p>
+<div class="impact-grid" id="impacts"></div>
+
+<hr class="divider">
+<p class="section-label">AI 採用的三大階段分佈</p>
+<div class="legend">
+  <span><span class="leg-sq" style="background:#3B6D11"></span>深度整合</span>
+  <span><span class="leg-sq" style="background:#BA7517"></span>局部試行</span>
+  <span><span class="leg-sq" style="background:#185FA5"></span>探索評估</span>
+</div>
+<div class="chart-wrap2">
+  <canvas id="stageChart" role="img" aria-label="各產業 AI 採用階段分佈橫條圖">各產業在深度整合、局部試行、探索評估三階段的分佈比例。</canvas>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const industries = [
+  { name: '金融科技', pct: 88, color: '#378ADD' },
+  { name: '科技軟體', pct: 85, color: '#378ADD' },
+  { name: '醫療健康', pct: 74, color: '#1D9E75' },
+  { name: '製造業', pct: 68, color: '#1D9E75' },
+  { name: '零售電商', pct: 65, color: '#D85A30' },
+  { name: '物流運輸', pct: 61, color: '#D85A30' },
+  { name: '教育', pct: 52, color: '#D4537E' },
+  { name: '法律服務', pct: 41, color: '#D4537E' },
+];
+
+const barsEl = document.getElementById('bars');
+industries.forEach(ind => {
+  barsEl.innerHTML += `
+    <div class="industry-row">
+      <div class="industry-name">${ind.name}</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${ind.pct}%;background:${ind.color}"></div></div>
+      <div class="pct">${ind.pct}%</div>
+    </div>`;
+});
+
+const impactData = [
+  { icon: 'ti-chart-line', industry: '金融科技', title: '風險偵測準確率', stat: '+43%', badge: 'badge-high', level: '高滲透' },
+  { icon: 'ti-heart-rate-monitor', industry: '醫療健康', title: '診斷輔助效率', stat: '+38%', badge: 'badge-high', level: '高滲透' },
+  { icon: 'ti-robot', industry: '製造業', title: '生產良率提升', stat: '+22%', badge: 'badge-mid', level: '中滲透' },
+  { icon: 'ti-shopping-cart', industry: '零售電商', title: '個人化推薦轉換', stat: '+31%', badge: 'badge-mid', level: '中滲透' },
+  { icon: 'ti-truck', industry: '物流運輸', title: '路線最佳化節省', stat: '15%', badge: 'badge-mid', level: '中滲透' },
+  { icon: 'ti-school', industry: '教育', title: '學習完成率提升', stat: '+19%', badge: 'badge-low', level: '成長中' },
+  { icon: 'ti-building', industry: '法律服務', title: '文件審查速度', stat: '10×', badge: 'badge-low', level: '成長中' },
+  { icon: 'ti-brain', industry: '科技軟體', title: '開發者生產力', stat: '+55%', badge: 'badge-high', level: '高滲透' },
+];
+
+const impactsEl = document.getElementById('impacts');
+impactData.forEach(d => {
+  impactsEl.innerHTML += `
+    <div class="impact-card">
+      <div class="impact-icon" aria-hidden="true"><i class="ti ${d.icon}"></i></div>
+      <div class="impact-industry">${d.industry}</div>
+      <div class="impact-title">${d.title}</div>
+      <div class="impact-stat" style="color:var(--color-text-primary)">${d.stat}</div>
+      <span class="badge ${d.badge}">${d.level}</span>
+    </div>`;
+});
+
+new Chart(document.getElementById('bubbleChart'), {
+  type: 'bubble',
+  data: {
+    datasets: [
+      { label: '金融科技', data: [{ x: 12.4, y: 43, r: 18 }], backgroundColor: 'rgba(55,138,221,0.7)' },
+      { label: '科技軟體', data: [{ x: 18.2, y: 55, r: 22 }], backgroundColor: 'rgba(55,138,221,0.5)' },
+      { label: '醫療健康', data: [{ x: 9.6, y: 38, r: 20 }], backgroundColor: 'rgba(29,158,117,0.7)' },
+      { label: '製造業', data: [{ x: 7.8, y: 22, r: 24 }], backgroundColor: 'rgba(29,158,117,0.5)' },
+      { label: '零售電商', data: [{ x: 6.2, y: 31, r: 17 }], backgroundColor: 'rgba(216,90,48,0.7)' },
+      { label: '物流運輸', data: [{ x: 4.8, y: 15, r: 14 }], backgroundColor: 'rgba(216,90,48,0.5)' },
+      { label: '教育', data: [{ x: 3.1, y: 19, r: 11 }], backgroundColor: 'rgba(212,83,126,0.7)' },
+      { label: '法律服務', data: [{ x: 2.4, y: 12, r: 9 }], backgroundColor: 'rgba(212,83,126,0.5)' },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: {
+      callbacks: {
+        label: ctx => `${ctx.dataset.label}：投資 $${ctx.raw.x}B，生產力 +${ctx.raw.y}%`
+      }
+    }},
+    scales: {
+      x: { title: { display: true, text: 'AI 投資規模（十億美元）', color: '#888780', font: { size: 11 } }, min: 0, max: 24, ticks: { color: '#888780' }, grid: { color: 'rgba(136,135,128,0.12)' } },
+      y: { title: { display: true, text: '生產力提升預估（%）', color: '#888780', font: { size: 11 } }, min: 0, max: 70, ticks: { color: '#888780' }, grid: { color: 'rgba(136,135,128,0.12)' } }
+    }
+  }
+});
+
+new Chart(document.getElementById('stageChart'), {
+  type: 'bar',
+  data: {
+    labels: ['科技軟體', '金融科技', '醫療健康', '製造業', '零售電商', '物流運輸', '教育', '法律服務'],
+    datasets: [
+      { label: '深度整合', data: [70, 62, 45, 38, 35, 30, 18, 12], backgroundColor: '#639922' },
+      { label: '局部試行', data: [20, 22, 30, 32, 30, 31, 34, 29], backgroundColor: '#BA7517' },
+      { label: '探索評估', data: [10, 16, 25, 30, 35, 39, 48, 59], backgroundColor: '#378ADD' },
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { mode: 'index' } },
+    scales: {
+      x: { stacked: true, max: 100, ticks: { color: '#888780', callback: v => v + '%' }, grid: { color: 'rgba(136,135,128,0.12)' } },
+      y: { stacked: true, ticks: { color: '#888780', font: { size: 12 } }, grid: { display: false } }
+    }
+  }
+});
+</script>

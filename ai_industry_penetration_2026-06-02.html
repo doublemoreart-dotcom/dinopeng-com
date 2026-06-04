@@ -1,0 +1,876 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anta&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+:root {
+  --page-font-scale: 1;
+  --font-latin: "Anta";
+  --page-bg: #F8F8F5;
+  --page-surface: #FFFFFF;
+  --page-surface-alt: #EFEFE9;
+  --page-text: #24231F;
+  --page-text-muted: #68665E;
+  --page-border: #D9D7CF;
+}
+:root[data-theme="dark"] {
+  --page-bg: #141512;
+  --page-surface: #1D1E1A;
+  --page-surface-alt: #292B25;
+  --page-text: #F2F1EA;
+  --page-text-muted: #B8B5A8;
+  --page-border: #3A3C34;
+}
+:root[data-font-size="small"] { --page-font-scale: 1; }
+:root[data-font-size="medium"] { --page-font-scale: 1.25; }
+:root[data-font-size="large"] { --page-font-scale: 1.75; }
+body {
+  background: var(--page-bg);
+  color: var(--page-text);
+  font-family: var(--font-latin), var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+  line-height: 1.5;
+}
+button, select { font-family: inherit; }
+.wrap {
+  width: min(100% - clamp(32px, 7vw, 104px), 1040px);
+  margin: 0 auto;
+  padding: clamp(24px, 5vw, 56px) 0;
+  font-size: calc(1rem * var(--page-font-scale));
+}
+.page-title {
+  color: var(--page-text);
+  font-size: calc(clamp(28px, 4vw, 44px) * var(--page-font-scale));
+  font-weight: 650;
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+}
+.reader-controls { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 1.5rem; }
+.control-group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.reader-control-btn {
+  appearance: none;
+  border: 0.5px solid var(--page-border);
+  background: var(--page-surface-alt);
+  color: var(--page-text);
+  border-radius: 6px;
+  min-height: 32px;
+  padding: 0 10px;
+  font-size: calc(12px * var(--page-font-scale));
+  cursor: pointer;
+}
+.reader-control-btn[aria-pressed="true"] {
+  background: #378ADD;
+  border-color: #378ADD;
+  color: #FFFFFF;
+}
+.section-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 10px 0;
+  margin-bottom: 1.5rem;
+  background: var(--page-bg);
+  background: color-mix(in srgb, var(--page-bg) 92%, transparent);
+  border-top: 0.5px solid var(--page-border);
+  border-bottom: 0.5px solid var(--page-border);
+  backdrop-filter: blur(12px);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.section-tab {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 0.5px solid var(--page-border);
+  border-radius: 6px;
+  background: var(--page-surface-alt);
+  color: var(--page-text);
+  font-size: calc(12px * var(--page-font-scale));
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.section-tab:hover,
+.section-tab:focus-visible {
+  border-color: #378ADD;
+  color: #378ADD;
+  outline: none;
+}
+.analysis-section { scroll-margin-top: calc(84px * var(--page-font-scale)); }
+.analysis-section + .analysis-section { margin-top: clamp(44px, 7vw, 72px); }
+.section-heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px 18px;
+  align-items: flex-end;
+  margin-bottom: 1.25rem;
+}
+.section-heading-text { max-width: 700px; }
+.section-title {
+  color: var(--page-text);
+  font-size: calc(clamp(20px, 2.4vw, 28px) * var(--page-font-scale));
+  font-weight: 650;
+  line-height: 1.2;
+  margin-bottom: 6px;
+  scroll-margin-top: calc(84px * var(--page-font-scale));
+}
+.section-description {
+  color: var(--page-text-muted);
+  font-size: calc(12px * var(--page-font-scale));
+  line-height: 1.65;
+}
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
+.metric-card { appearance: none; font-family: inherit; text-align: left; width: 100%; border: 0.5px solid transparent; background: var(--page-surface-alt); border-radius: 8px; padding: 1rem; cursor: pointer; }
+.metric-card:hover, .metric-card:focus-visible { border-color: #378ADD; box-shadow: 0 10px 24px rgba(55,138,221,0.12); outline: none; }
+.metric-label { font-size: calc(12px * var(--page-font-scale)); color: var(--page-text-muted); margin-bottom: 4px; }
+.metric-val { font-size: calc(22px * var(--page-font-scale)); font-weight: 500; color: var(--page-text); }
+.metric-sub { font-size: calc(12px * var(--page-font-scale)); color: var(--page-text-muted); margin-top: 2px; }
+.update-note { background: var(--page-surface-alt); border: 0.5px solid var(--page-border); border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; }
+.update-note-title { font-size: calc(13px * var(--page-font-scale)); font-weight: 500; color: var(--page-text); margin-bottom: 6px; }
+.update-note-body { font-size: calc(12px * var(--page-font-scale)); line-height: 1.6; color: var(--page-text-muted); }
+.source-list { font-size: calc(11px * var(--page-font-scale)); line-height: 1.55; color: var(--page-text-muted); margin-top: 8px; padding-left: 1rem; }
+.weekly-focus { background: var(--page-surface); border: 0.5px solid var(--page-border); border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; }
+.weekly-focus-title { font-size: calc(14px * var(--page-font-scale)); font-weight: 500; color: var(--page-text); margin-bottom: 8px; }
+.weekly-focus-body { font-size: calc(13px * var(--page-font-scale)); line-height: 1.65; color: var(--page-text-muted); }
+.weekly-focus-body strong { color: var(--page-text); font-weight: 500; }
+.chart-wrap { position: relative; width: 100%; height: clamp(280px, 42vw, 340px); margin-bottom: 1.5rem; }
+.chart-wrap2 { position: relative; width: 100%; height: clamp(260px, 38vw, 300px); margin-bottom: 1.5rem; }
+.stage-explanation,
+.bubble-explanation {
+  background: var(--page-surface);
+  border: 0.5px solid var(--page-border);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: -0.5rem;
+  color: var(--page-text-muted);
+}
+.stage-explanation-title,
+.bubble-explanation-title {
+  color: var(--page-text);
+  font-size: calc(13px * var(--page-font-scale));
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.stage-explanation-grid,
+.bubble-explanation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.stage-explanation-item,
+.bubble-explanation-item {
+  font-size: calc(11px * var(--page-font-scale));
+  line-height: 1.6;
+}
+.stage-explanation-item strong,
+.bubble-explanation-item strong {
+  color: var(--page-text);
+  font-weight: 600;
+}
+.stage-explanation-note,
+.bubble-explanation-note {
+  border-top: 0.5px solid var(--page-border);
+  padding-top: 10px;
+  font-size: calc(12px * var(--page-font-scale));
+  line-height: 1.65;
+}
+.chart-note-list { padding-left: 1rem; }
+.chart-note-list li + li { margin-top: 6px; }
+.chart-note-list strong { color: var(--page-text); font-weight: 600; }
+.chart-note-source { display: block; color: var(--page-text-muted); font-size: calc(11px * var(--page-font-scale)); margin-top: 2px; }
+.page-footer {
+  border-top: 0.5px solid var(--page-border);
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  color: var(--page-text-muted);
+  opacity: 0.78;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem;
+}
+.footer-title {
+  font-size: calc(10px * var(--page-font-scale));
+  font-weight: 500;
+  color: var(--page-text-muted);
+  margin-bottom: 6px;
+}
+.footer-list {
+  padding-left: 1rem;
+  font-size: calc(9px * var(--page-font-scale));
+  line-height: 1.6;
+}
+.footer-list li + li { margin-top: 6px; }
+.footer-copy {
+  font-size: calc(9px * var(--page-font-scale));
+  line-height: 1.65;
+}
+.page-footer a {
+  color: var(--page-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 8px; font-size: calc(12px * var(--page-font-scale)); color: var(--page-text-muted); }
+.legend span { display: flex; align-items: center; gap: 5px; }
+.leg-sq { width: 10px; height: 10px; border-radius: 2px; }
+.adoption-sort { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.sort-select {
+  appearance: none;
+  border: 0.5px solid var(--page-border);
+  background: var(--page-surface-alt);
+  color: var(--page-text);
+  border-radius: 6px;
+  min-height: 34px;
+  padding: 0 34px 0 10px;
+  font-size: calc(12px * var(--page-font-scale));
+  cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(100% - 16px) 14px, calc(100% - 11px) 14px;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+.bars-wrap { position: relative; }
+.industry-row { display: grid; grid-template-columns: 110px 1fr 60px; align-items: center; gap: 10px; margin-bottom: 10px; position: relative; border-radius: 6px; outline: none; }
+.industry-row:hover, .industry-row:focus-visible { background: color-mix(in srgb, #378ADD 10%, transparent); }
+.industry-name { font-size: calc(13px * var(--page-font-scale)); color: var(--page-text-muted); text-align: right; }
+.bar-bg { background: var(--page-surface-alt); border-radius: 4px; height: 20px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+.pct { font-size: calc(13px * var(--page-font-scale)); font-weight: 500; color: var(--page-text); }
+.adoption-tooltip {
+  position: absolute;
+  z-index: 5;
+  right: 0;
+  top: calc(100% + 6px);
+  width: min(320px, calc(100vw - 40px));
+  padding: 10px 12px;
+  background: var(--page-surface);
+  border: 0.5px solid var(--page-border);
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.16);
+  color: var(--page-text);
+  font-size: calc(12px * var(--page-font-scale));
+  line-height: 1.55;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+.industry-row:hover .adoption-tooltip,
+.industry-row:focus-visible .adoption-tooltip { opacity: 1; transform: translateY(0); }
+.tooltip-title { font-weight: 600; margin-bottom: 4px; }
+.tooltip-meta { color: var(--page-text-muted); }
+.impact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 15px; margin-bottom: 1.5rem; }
+.impact-card { appearance: none; font-family: inherit; text-align: left; width: 100%; background: var(--page-surface); border: 0.5px solid var(--page-border); border-radius: 8px; padding: 21px; cursor: pointer; }
+.impact-card:hover, .impact-card:focus-visible { border-color: #378ADD; box-shadow: 0 10px 24px rgba(55,138,221,0.12); outline: none; }
+.impact-icon { font-size: calc(20px * var(--page-font-scale)); margin-bottom: 8px; color: var(--page-text-muted); }
+.impact-industry { font-size: calc(11px * var(--page-font-scale)); color: var(--page-text-muted); margin-bottom: 4px; }
+.impact-title { font-size: calc(13px * var(--page-font-scale)); font-weight: 500; color: var(--page-text); margin-bottom: 4px; }
+.impact-stat { font-size: calc(27px * var(--page-font-scale)); font-weight: 500; color: var(--page-text); }
+:root[data-theme="dark"] .impact-stat { color: var(--page-text); }
+.impact-desc { font-size: calc(11px * var(--page-font-scale)); line-height: 1.55; color: var(--page-text-muted); margin-top: 8px; }
+.impact-explanation {
+  background: var(--page-surface);
+  border: 0.5px solid var(--page-border);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: -0.25rem;
+  color: var(--page-text-muted);
+}
+.impact-explanation-title {
+  color: var(--page-text);
+  font-size: calc(13px * var(--page-font-scale));
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.impact-explanation-list { padding-left: 1rem; font-size: calc(12px * var(--page-font-scale)); line-height: 1.65; }
+.impact-explanation-list li + li { margin-top: 6px; }
+.impact-explanation-list strong { color: var(--page-text); font-weight: 600; }
+.badge { display: inline-block; font-size: calc(10px * var(--page-font-scale)); padding: 2px 8px; border-radius: 8px; margin-top: 4px; }
+.drawer-backdrop { position: fixed; inset: 0; z-index: 30; background: rgba(0,0,0,0.36); opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+.impact-detail-drawer {
+  position: fixed;
+  z-index: 31;
+  top: 0;
+  right: 0;
+  width: min(440px, 100vw);
+  height: 100dvh;
+  overflow-y: auto;
+  background: var(--page-surface);
+  border-left: 0.5px solid var(--page-border);
+  box-shadow: -20px 0 48px rgba(0,0,0,0.22);
+  padding: clamp(20px, 4vw, 32px);
+  transform: translateX(100%);
+  transition: transform 0.24s ease;
+}
+body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
+.impact-detail-drawer[aria-hidden="false"] { transform: translateX(0); }
+.drawer-close { appearance: none; border: 0.5px solid var(--page-border); background: var(--page-surface-alt); color: var(--page-text); border-radius: 6px; min-height: 32px; padding: 0 10px; cursor: pointer; margin-bottom: 1rem; }
+.drawer-kicker { font-size: calc(11px * var(--page-font-scale)); color: var(--page-text-muted); margin-bottom: 4px; }
+.drawer-title { font-size: calc(22px * var(--page-font-scale)); color: var(--page-text); line-height: 1.2; margin-bottom: 8px; }
+.drawer-stat { font-size: calc(30px * var(--page-font-scale)); font-weight: 600; color: var(--page-text); margin-bottom: 12px; }
+.drawer-summary { font-size: calc(13px * var(--page-font-scale)); line-height: 1.65; color: var(--page-text-muted); margin-bottom: 1rem; }
+.drawer-section { border-top: 0.5px solid var(--page-border); padding-top: 1rem; margin-top: 1rem; }
+.drawer-section-title { font-size: calc(12px * var(--page-font-scale)); color: var(--page-text); font-weight: 600; margin-bottom: 8px; }
+.drawer-list { padding-left: 1.1rem; color: var(--page-text-muted); font-size: calc(12px * var(--page-font-scale)); line-height: 1.65; }
+.drawer-list li + li { margin-top: 6px; }
+.article-link-list a { color: var(--page-text); text-decoration: underline; text-underline-offset: 3px; }
+.article-link-source, .note-source { display: block; color: var(--page-text-muted); font-size: calc(11px * var(--page-font-scale)); margin-top: 2px; }
+.note-list strong { color: var(--page-text); font-weight: 600; }
+.badge-high { background: #EAF3DE; color: #3B6D11; }
+.badge-mid { background: #FAEEDA; color: #854F0B; }
+.badge-low { background: #E6F1FB; color: #185FA5; }
+@media (prefers-color-scheme: dark) {
+  .badge-high { background: #27500A; color: #C0DD97; }
+  .badge-mid { background: #633806; color: #FAC775; }
+  .badge-low { background: #0C447C; color: #B5D4F4; }
+}
+.divider { border: none; border-top: 0.5px solid var(--page-border); margin: 0 0 1.25rem; }
+@media (max-width: 720px) {
+  .wrap { width: min(100% - 32px, 1040px); padding: 24px 0 36px; }
+  .reader-controls { align-items: flex-start; }
+  .section-tabs { margin-left: -16px; margin-right: -16px; padding-left: 16px; padding-right: 16px; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .stage-explanation-grid, .bubble-explanation-grid { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .industry-row { grid-template-columns: 84px 1fr 46px; gap: 8px; }
+  .industry-name { text-align: left; }
+  .adoption-tooltip { left: 0; right: auto; }
+  .impact-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .reader-controls { display: grid; grid-template-columns: 1fr; }
+  .control-group { width: 100%; }
+  .reader-control-btn { flex: 1; }
+  .chart-wrap { height: 280px; }
+  .chart-wrap2 { height: 280px; }
+}
+</style>
+
+<div class="wrap">
+
+<h1 class="page-title">AI 對產業的數據觀察</h1>
+
+<div class="reader-controls" aria-label="閱讀設定">
+  <div class="control-group" aria-label="主題模式">
+    <button class="reader-control-btn theme-toggle" type="button" data-theme-choice="light" aria-pressed="false">Light</button>
+    <button class="reader-control-btn theme-toggle" type="button" data-theme-choice="dark" aria-pressed="false">Dark</button>
+  </div>
+  <div class="control-group" aria-label="字級大小">
+    <button class="reader-control-btn font-size-control" type="button" data-font-size-choice="small" aria-pressed="false">小</button>
+    <button class="reader-control-btn font-size-control" type="button" data-font-size-choice="medium" aria-pressed="true">中</button>
+    <button class="reader-control-btn font-size-control" type="button" data-font-size-choice="large" aria-pressed="false">大</button>
+  </div>
+</div>
+
+<nav class="section-tabs" aria-label="頁面段落">
+  <a class="section-tab" href="#weekly-observation-title">本週觀察</a>
+  <a class="section-tab" href="#industry-adoption-title">各產業 AI 滲透率</a>
+  <a class="section-tab" href="#investment-productivity-title">AI 投資規模 vs. 生產力提升預估</a>
+  <a class="section-tab" href="#industry-impact-title">各產業 AI 應用實際影響</a>
+  <a class="section-tab" href="#adoption-stages-title">AI 採用的三大階段分佈</a>
+</nav>
+
+<section class="analysis-section" id="weekly-observation" aria-labelledby="weekly-observation-title">
+<div class="section-heading">
+  <div class="section-heading-text">
+    <h2 class="section-title" id="weekly-observation-title">本週觀察</h2>
+    <p class="section-description">追蹤本週 AI 採用、agentic AI 規模化與產業敘事的主要變化，作為整頁資料解讀的入口。</p>
+  </div>
+</div>
+<div class="update-note">
+  <div class="update-note-title">更新日期＆摘要</div>
+  <div class="update-note-body">
+    更新日期：2026-06-02。本週聚焦「採用率上升，但規模化與財務影響仍有落差」。這份觀察用來比較企業 AI 採用、agentic AI 規模化與長期經濟影響之間的距離。
+  </div>
+  <ul class="source-list">
+    <li>全球企業 AI 採用率：McKinsey 2025 Global Survey 顯示 88% 受訪者表示其組織在至少一個業務功能中定期使用 AI，較前一年 78% 上升；Stanford AI Index 2026 經濟章亦收錄此趨勢。</li>
+    <li>Agentic AI：McKinsey 2025 顯示 23% 受訪者表示組織已在企業內某處規模化 agentic AI，另有 39% 已開始實驗。</li>
+    <li>AI 對全球 GDP 貢獻預測：沿用 PwC 對 2030 年 US$15.7 兆的估計。</li>
+    <li>各產業滲透率、投資規模、生產力與採用階段：本版仍為分析估計資料；若引用新數字，需保留年份、來源與口徑。</li>
+  </ul>
+</div>
+
+<div class="weekly-focus">
+  <div class="weekly-focus-title">核心洞察：AI 已普及，真正稀缺的是「規模化編排能力」</div>
+  <div class="weekly-focus-body">
+    2025 年的核心變化不是企業「有沒有用 AI」，而是從個人或單點流程使用，進入跨部門工作流重組。採用率升到 <strong>88%</strong> 代表 AI 已成為常態工具；但 agentic AI 的規模化仍只有 <strong>23%</strong>，顯示多數組織仍卡在實驗、治理、資料品質與流程整合。這也讓混合型人才的價值更明確：能把 AI 產出接回產品、設計、工程、行銷與治理流程的人，會比單純會用工具的人更稀缺。
+  </div>
+</div>
+
+<div class="grid-2">
+  <button class="metric-card" type="button" data-metric-index="0" aria-label="查看組織定期使用 AI 相關文章">
+    <div class="metric-label">組織定期使用 AI</div>
+    <div class="metric-val">88%</div>
+    <div class="metric-sub">2025 年，至少一個業務功能（McKinsey）</div>
+  </button>
+  <button class="metric-card" type="button" data-metric-index="1" aria-label="查看 AI 對全球 GDP 貢獻預測相關文章">
+    <div class="metric-label">AI 對全球 GDP 貢獻預測</div>
+    <div class="metric-val">$15.7 兆</div>
+    <div class="metric-sub">2030 年估計（PwC）</div>
+  </button>
+  <button class="metric-card" type="button" data-metric-index="2" aria-label="查看 Agentic AI 規模化相關文章">
+    <div class="metric-label">Agentic AI 規模化</div>
+    <div class="metric-val">23%</div>
+    <div class="metric-sub">2025 年，已在企業某處擴大部署（McKinsey）</div>
+  </button>
+  <button class="metric-card" type="button" data-metric-index="3" aria-label="查看 Agentic AI 實驗中相關文章">
+    <div class="metric-label">Agentic AI 實驗中</div>
+    <div class="metric-val">39%</div>
+    <div class="metric-sub">2025 年，已開始實驗 AI agents（McKinsey）</div>
+  </button>
+</div>
+</section>
+
+<section class="analysis-section" id="industry-adoption" aria-labelledby="industry-adoption-title">
+<div class="section-heading">
+  <div class="section-heading-text">
+    <h2 class="section-title" id="industry-adoption-title">各產業 AI 滲透率</h2>
+    <p class="section-description">以 2025 年分析估計比較不同產業的 AI 導入強度，可依滲透率或市場規模重新排序。</p>
+  </div>
+  <div class="adoption-sort" aria-label="各產業 AI 滲透率排序">
+    <select class="sort-select" data-sort-select aria-label="排序方式">
+      <option value="adoption-desc">滲透率高到低</option>
+      <option value="adoption-asc">滲透率低到高</option>
+      <option value="market-desc">市場規模大到小</option>
+      <option value="market-asc">市場規模小到大</option>
+      <option value="default">預設</option>
+    </select>
+  </div>
+</div>
+<div class="bars-wrap" id="bars"></div>
+</section>
+
+<section class="analysis-section" id="investment-productivity" aria-labelledby="investment-productivity-title">
+<hr class="divider">
+<div class="section-heading">
+  <div class="section-heading-text">
+    <h2 class="section-title" id="investment-productivity-title">AI 投資規模 vs. 生產力提升預估</h2>
+    <p class="section-description">泡泡圖用來觀察投資強度、生產力提升潛力與市場規模的相對關係，泡泡大小代表市場規模。</p>
+  </div>
+</div>
+<div class="legend">
+  <span><span class="leg-sq" style="background:#378ADD"></span>科技 / 金融</span>
+  <span><span class="leg-sq" style="background:#1D9E75"></span>醫療 / 製造</span>
+  <span><span class="leg-sq" style="background:#D85A30"></span>零售 / 物流</span>
+  <span><span class="leg-sq" style="background:#D4537E"></span>教育 / 法律</span>
+</div>
+<div class="chart-wrap">
+  <canvas id="bubbleChart" role="img" aria-label="AI 投資與生產力提升泡泡圖，顯示各產業相關性">各產業 AI 投資規模與生產力提升相關性。</canvas>
+</div>
+<div class="bubble-explanation">
+  <div class="bubble-explanation-title">如何解讀這張圖</div>
+  <div class="bubble-explanation-grid">
+    <div class="bubble-explanation-item"><strong>X 軸代表 AI 投資規模</strong>，位置越往右，表示該產業投入 AI 基礎建設、模型、資料平台與導入專案的資源越高。</div>
+    <div class="bubble-explanation-item"><strong>Y 軸代表生產力提升預估</strong>，位置越往上，表示 AI 對該產業流程效率、決策速度或產出品質的潛在改善越明顯。</div>
+    <div class="bubble-explanation-item"><strong>泡泡大小代表市場規模</strong>，泡泡越大，表示即使單位改善幅度不高，累積到整個產業仍可能形成可觀的經濟影響。</div>
+  </div>
+  <ul class="bubble-explanation-note chart-note-list">
+    <li><strong>右上角與大泡泡</strong>：右上角代表「投入高、改善潛力也高」；大泡泡則代表「市場基數大，任何流程改善都容易被放大」。<span class="chart-note-source">讀圖重點</span></li>
+    <li><strong>投資高不一定等於效益高</strong>：真正關鍵是 AI 是否接進核心工作流、資料是否可用、治理是否成熟，以及改善是否能轉成營收、成本、風險或交付速度上的實際指標。<span class="chart-note-source">判讀口徑</span></li>
+  </ul>
+</div>
+</section>
+
+<section class="analysis-section" id="industry-impact" aria-labelledby="industry-impact-title">
+<hr class="divider">
+<div class="section-heading">
+  <div class="section-heading-text">
+    <h2 class="section-title" id="industry-impact-title">各產業 AI 應用實際影響</h2>
+    <p class="section-description">整理各產業較常見的 AI 成效指標與落地限制，點擊卡片可查看更完整的應用、風險與觀察重點。</p>
+  </div>
+</div>
+<div class="impact-grid" id="impacts"></div>
+<div class="impact-explanation">
+  <div class="impact-explanation-title">從單點效率到流程重組</div>
+  <ul class="impact-explanation-list">
+    <li><strong>數字代表的是「可觀察的效益方向」</strong>：例如速度、準確率、轉換率或成本節省；它們適合用來比較產業潛力，但仍需搭配資料口徑與導入成熟度解讀。</li>
+    <li><strong>真正影響通常發生在工作流被重排時</strong>：AI 先改善單一任務，接著影響審核、交接、決策與治理流程，最後才可能轉成營收、成本、風險或交付速度上的實際成果。</li>
+    <li><strong>高效益不代表低風險</strong>：金融、醫療、法律等產業即使效率提升明顯，也更需要可解釋性、責任歸屬、資料治理與人工覆核機制。</li>
+  </ul>
+</div>
+</section>
+
+<section class="analysis-section" id="adoption-stages" aria-labelledby="adoption-stages-title">
+<hr class="divider">
+<div class="section-heading">
+  <div class="section-heading-text">
+    <h2 class="section-title" id="adoption-stages-title">AI 採用的三大階段分佈</h2>
+    <p class="section-description">以深度整合、局部試行、探索評估三個階段，觀察不同產業從試用到制度化導入的成熟度差異。</p>
+  </div>
+</div>
+<div class="legend">
+  <span><span class="leg-sq" style="background:#3B6D11"></span>深度整合</span>
+  <span><span class="leg-sq" style="background:#BA7517"></span>局部試行</span>
+  <span><span class="leg-sq" style="background:#185FA5"></span>探索評估</span>
+</div>
+<div class="chart-wrap2">
+  <canvas id="stageChart" role="img" aria-label="各產業 AI 採用階段分佈橫條圖">各產業在深度整合、局部試行、探索評估三階段的分佈比例。</canvas>
+</div>
+<div class="stage-explanation">
+  <div class="stage-explanation-title">如何解讀這張圖</div>
+  <div class="stage-explanation-grid">
+    <div class="stage-explanation-item"><strong>深度整合代表</strong> AI 已進入核心流程，例如開發、風控、排程、客服或決策輔助，並開始影響 KPI、組織分工與治理制度。</div>
+    <div class="stage-explanation-item"><strong>局部試行代表</strong> AI 已在特定團隊或任務中帶來效率，但尚未全面接入資料、權限、稽核與跨部門流程。</div>
+    <div class="stage-explanation-item"><strong>探索評估代表</strong> 產業仍在驗證資料品質、責任歸屬、投資報酬與法規邊界，使用情境多半停留在原型或輔助工具。</div>
+  </div>
+  <ul class="stage-explanation-note chart-note-list">
+    <li><strong>用得多 vs. 用得深</strong>：讀圖時不只看「哪個產業用得多」，也要看「用到多深」。科技軟體與金融科技的深度整合比例較高，代表 AI 已成為工作流的一部分。<span class="chart-note-source">讀圖重點</span></li>
+    <li><strong>低滲透不等於低價值</strong>：醫療、製造與物流雖然仍有較多局部試行，但一旦資料串接與治理成熟，單位流程改善可能帶來更大的營運價值；低滲透往往只是代表導入阻力、責任風險與系統整合成本更高。<span class="chart-note-source">判讀口徑</span></li>
+  </ul>
+</div>
+</section>
+
+<footer class="page-footer" aria-label="資訊引用來源與版權宣告">
+  <div class="footer-grid">
+    <section aria-labelledby="source-reference-title">
+      <div class="footer-title" id="source-reference-title">資訊引用來源</div>
+      <ul class="footer-list">
+        <li><a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" target="_blank" rel="noopener noreferrer">McKinsey Global Survey 2025: The State of AI</a>：用於企業 AI 定期使用率 88%、agentic AI 規模化 23%、實驗中 39% 等指標。</li>
+        <li><a href="https://hai.stanford.edu/ai-index/2026-ai-index-report" target="_blank" rel="noopener noreferrer">Stanford HAI AI Index 2026</a>：用於整體 AI 趨勢、組織採用率與產業觀察背景。</li>
+        <li><a href="https://www.pwc.com/us/en/tech-effect/ai-analytics/scaling-ai-capabilities-with-generative-investment.html" target="_blank" rel="noopener noreferrer">PwC AI economic impact estimate</a>：用於 2030 年 AI 對全球經濟潛在貢獻 US$15.7 兆的估計。</li>
+        <li>各產業滲透率、投資規模、生產力提升與採用階段分佈為本頁分析估計，用於比較不同產業的相對位置；不應與上述外部報告的調查口徑混算。</li>
+      </ul>
+    </section>
+    <section aria-labelledby="copyright-title">
+      <div class="footer-title" id="copyright-title">版權宣告</div>
+      <div class="footer-copy">
+        本頁內容由 Dino 整理與改寫，僅供產業研究、簡報討論與內部決策參考。外部資料、商標與報告內容之著作權歸原權利人所有；本頁新增的中文分析文字、資料編排與視覺化設計，未經授權請勿整頁轉載、商業散布或移除來源標註。引用本頁觀點時，請保留頁名「AI 對產業的數據觀察」、版本日期 2026-06-02 與主要資料來源。
+      </div>
+    </section>
+  </div>
+</footer>
+
+</div>
+
+<div class="drawer-backdrop" data-drawer-close aria-hidden="true"></div>
+<aside class="impact-detail-drawer" id="impact-detail-drawer" aria-hidden="true" aria-labelledby="drawer-title">
+  <button class="drawer-close" type="button" data-drawer-close>關閉</button>
+  <div class="drawer-kicker" id="drawer-kicker"></div>
+  <div class="drawer-title" id="drawer-title">產業詳情</div>
+  <div class="drawer-stat" id="drawer-stat"></div>
+  <div class="drawer-summary" id="drawer-summary"></div>
+  <div class="drawer-section">
+    <div class="drawer-section-title">典型應用</div>
+    <ul class="drawer-list" id="drawer-use-cases"></ul>
+  </div>
+  <div class="drawer-section">
+    <div class="drawer-section-title">影響如何發生</div>
+    <ul class="drawer-list" id="drawer-mechanism"></ul>
+  </div>
+  <div class="drawer-section">
+    <div class="drawer-section-title">衡量指標</div>
+    <ul class="drawer-list" id="drawer-metrics"></ul>
+  </div>
+  <div class="drawer-section">
+    <div class="drawer-section-title">落地限制</div>
+    <ul class="drawer-list" id="drawer-risks"></ul>
+  </div>
+  <div class="drawer-section">
+    <div class="drawer-section-title">下一步觀察</div>
+    <ul class="drawer-list" id="drawer-watch"></ul>
+  </div>
+</aside>
+<aside class="impact-detail-drawer" id="article-detail-drawer" aria-hidden="true" aria-labelledby="article-drawer-title">
+  <button class="drawer-close" type="button" data-drawer-close>關閉</button>
+  <div class="drawer-kicker" id="article-drawer-kicker">相關文章</div>
+  <div class="drawer-title" id="article-drawer-title">KPI 相關文章</div>
+  <div class="drawer-stat" id="article-drawer-stat"></div>
+  <div class="drawer-summary" id="article-drawer-summary"></div>
+  <div class="drawer-section">
+    <div class="drawer-section-title">建議閱讀</div>
+    <ul class="drawer-list article-link-list" id="article-links"></ul>
+  </div>
+  <div class="drawer-section">
+    <div class="drawer-section-title">閱讀提示</div>
+    <ul class="drawer-list note-list" id="article-notes"></ul>
+  </div>
+</aside>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const rootEl = document.documentElement;
+const storage = {
+  get(key) { try { return localStorage.getItem(key); } catch (e) { return null; } },
+  set(key, value) { try { localStorage.setItem(key, value); } catch (e) {} }
+};
+const applyTheme = theme => {
+  rootEl.dataset.theme = theme;
+  document.querySelectorAll('[data-theme-choice]').forEach(btn => {
+    btn.setAttribute('aria-pressed', String(btn.dataset.themeChoice === theme));
+  });
+  storage.set('aiIndustryTheme', theme);
+};
+const applyFontSize = size => {
+  rootEl.dataset.fontSize = size;
+  document.querySelectorAll('[data-font-size-choice]').forEach(btn => {
+    btn.setAttribute('aria-pressed', String(btn.dataset.fontSizeChoice === size));
+  });
+  storage.set('aiIndustryFontSize', size);
+};
+const preferredTheme = storage.get('aiIndustryTheme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+const preferredFontSize = storage.get('aiIndustryFontSize') || 'medium';
+applyTheme(preferredTheme);
+applyFontSize(preferredFontSize);
+document.querySelectorAll('[data-theme-choice]').forEach(btn => {
+  btn.addEventListener('click', () => applyTheme(btn.dataset.themeChoice));
+});
+document.querySelectorAll('[data-font-size-choice]').forEach(btn => {
+  btn.addEventListener('click', () => applyFontSize(btn.dataset.fontSizeChoice));
+});
+
+const metricArticleData = [
+  {
+    title: '組織定期使用 AI',
+    stat: '88%',
+    summary: '這個指標用來說明 AI 已從少數團隊試用，進入多數組織至少一個業務功能的日常使用。它代表 AI 已經成為企業工作流的普遍工具，但不代表每個組織都已經把 AI 接進核心系統。真正值得追蹤的是使用範圍是否從個人效率，推進到跨部門流程、治理、資料品質與財務成果。換句話說，88% 是普及度訊號，不是成熟度保證。',
+    links: [
+      { title: 'The State of AI: Global Survey 2025', source: 'McKinsey', url: 'https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai' },
+      { title: '2026 AI Index Report: Economy', source: 'Stanford HAI', url: 'https://hai.stanford.edu/ai-index/2026-ai-index-report/economy' },
+      { title: 'AI at work but not at scale', source: 'McKinsey Week in Charts', url: 'https://www.mckinsey.com/featured-insights/week-in-charts/ai-at-work-but-not-at-scale' },
+    ],
+    notes: [
+      { title: '口徑提示', source: '使用率 vs. 規模化', text: '「定期使用 AI」通常指組織至少在一個業務功能中使用 AI，不等於全公司部署，也不等於已有明確財務回報。' },
+      { title: '閱讀方式', source: '採用成熟度', text: '這個數字適合放在總覽，說明 AI 已進入主流；若要判斷成熟度，需搭配 agentic AI 規模化、治理制度與工作流重組程度一起看。' },
+      { title: '決策含義', source: '組織能力', text: '企業接下來的差異不在是否使用 AI，而在是否能建立資料、權限、審核、回饋與責任分工，讓 AI 產出進入正式流程。' },
+    ]
+  },
+  {
+    title: 'AI 對全球 GDP 貢獻預測',
+    stat: 'US$15.7 兆',
+    summary: '這是 PwC 對 2030 年 AI 潛在經濟貢獻的估計，主要來自兩個方向：一是企業透過自動化、預測、輔助決策與流程重組提升生產力；二是 AI 強化產品與服務，帶動新的需求與消費。它適合用來描述長期經濟機會，但不應被解讀為短期已實現收益，也不應直接套用到單一企業或單一產業。',
+    links: [
+      { title: 'PwC Global Artificial Intelligence Study', source: 'PwC', url: 'https://www.pwc.co.nz/insights-and-publications/2023-publications/artificial-intelligence-study.html' },
+      { title: 'Scaling AI capabilities with generative investment', source: 'PwC', url: 'https://www.pwc.com/us/en/tech-effect/ai-analytics/scaling-ai-capabilities-with-generative-investment.html' },
+      { title: 'Sizing the prize: What is the real value of AI?', source: 'PwC report PDF', url: 'https://www.pwc.com/gx/en/issues/analytics/assets/pwc-ai-analysis-sizing-the-prize-report.pdf' },
+    ],
+    notes: [
+      { title: '口徑提示', source: '2030 年估計', text: 'US$15.7 兆是長期潛在經濟貢獻估計，不是已發生收入，也不是每年固定新增 GDP。引用時需標示「估計」與年份。' },
+      { title: '閱讀方式', source: '宏觀機會', text: '這個數字適合回答「AI 的長期經濟重要性」，但若要做產業或公司判斷，仍需回到投資強度、資料可用性、採用成熟度與商業模式。' },
+      { title: '決策含義', source: '投資評估', text: '企業不應只因宏觀估計而增加投入，還要拆解 AI 能改善哪些流程、改善幅度如何衡量，以及是否能轉成毛利、成本、風險或成長指標。' },
+    ]
+  },
+  {
+    title: 'Agentic AI 規模化',
+    stat: '23%',
+    summary: '這個指標說明只有一部分組織把 agentic AI 從試驗推進到企業某處的擴大部署。它反映的不是工具熱度，而是企業是否能讓 AI agent 在明確邊界內執行任務、呼叫工具、交接人工、記錄決策並接受稽核。23% 的重點在於落差：AI 使用率已高，但能把 agentic AI 制度化的人仍少，這正是資料、權限、流程與治理能力的門檻。',
+    links: [
+      { title: 'The State of AI: Global Survey 2025', source: 'McKinsey', url: 'https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai' },
+      { title: '2026 AI Index Report: Economy', source: 'Stanford HAI', url: 'https://hai.stanford.edu/ai-index/2026-ai-index-report/economy' },
+      { title: 'The state of AI 2025 PDF', source: 'McKinsey report PDF', url: 'https://www.mckinsey.com/~/media/mckinsey/business%20functions/quantumblack/our%20insights/the%20state%20of%20ai/2025/the-state-of-ai-how-organizations-are-rewiring-to-capture-value_final.pdf' },
+    ],
+    notes: [
+      { title: '成熟度判讀', source: '實驗 vs. 部署', text: '規模化通常代表 agentic AI 不只存在於 demo，而是已進入某些業務流程，並具備權限、監控、例外處理與責任歸屬。' },
+      { title: '閱讀方式', source: '流程重組', text: '這個數字可用來解釋「AI 普及」與「AI 真的重組流程」之間仍有落差，尤其在高風險或跨系統流程中更明顯。' },
+      { title: '決策含義', source: '治理門檻', text: '若要推進 agentic AI，企業需要先定義任務邊界、資料來源、人工覆核點、錯誤回報與稽核紀錄，而不是只採購更多工具。' },
+    ]
+  },
+  {
+    title: 'Agentic AI 實驗中',
+    stat: '39%',
+    summary: '這個指標代表許多組織已開始測試 AI agents，但仍停留在探索、原型或局部任務驗證。這個階段很重要，因為它會暴露哪些工作適合交給 agent、哪些任務仍需要人工判斷、哪些資料無法支撐自動化，以及哪些流程缺少清楚的責任邊界。39% 表示市場正在快速試探，但真正轉成規模化仍需要組織能力跟上。',
+    links: [
+      { title: 'The State of AI: Global Survey 2025', source: 'McKinsey', url: 'https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai' },
+      { title: 'AI at work but not at scale', source: 'McKinsey Week in Charts', url: 'https://www.mckinsey.com/featured-insights/week-in-charts/ai-at-work-but-not-at-scale' },
+      { title: '2026 AI Index Report', source: 'Stanford HAI', url: 'https://hai.stanford.edu/ai-index/2026-ai-index-report' },
+    ],
+    notes: [
+      { title: '成熟度判讀', source: '探索階段', text: '實驗中不代表沒有價值，而是組織仍在找合適任務、衡量方式、資料條件與治理邊界。這通常是規模化之前的必要學習。' },
+      { title: '閱讀方式', source: '與 23% 對照', text: '39% 實驗中需要和 23% 規模化一起看：兩者差距越大，越表示市場熱度高，但正式部署仍被流程、風險與資料條件卡住。' },
+      { title: '決策含義', source: '試點設計', text: '好的實驗不只是做 demo，而是要設計成功指標、失敗條件、人工交接、資料品質檢查與是否值得擴大部署的判斷標準。' },
+    ]
+  },
+];
+const articleDrawer = document.getElementById('article-detail-drawer');
+const articleDrawerTitle = document.getElementById('article-drawer-title');
+const articleDrawerStat = document.getElementById('article-drawer-stat');
+const articleDrawerSummary = document.getElementById('article-drawer-summary');
+const articleLinks = document.getElementById('article-links');
+const articleNotes = document.getElementById('article-notes');
+const renderArticleLinks = links => {
+  articleLinks.innerHTML = links.map(link => `<li><a href="${link.url}" target="_blank" rel="noopener noreferrer">${link.title}</a><span class="article-link-source">${link.source}</span></li>`).join('');
+};
+const openMetricArticles = item => {
+  document.querySelectorAll('.impact-detail-drawer').forEach(drawerEl => {
+    drawerEl.setAttribute('aria-hidden', 'true');
+  });
+  articleDrawerTitle.textContent = item.title;
+  articleDrawerStat.textContent = item.stat;
+  articleDrawerSummary.textContent = item.summary;
+  renderArticleLinks(item.links);
+  articleNotes.innerHTML = item.notes.map(note => `<li><strong>${note.title}</strong>：${note.text}<span class="note-source">${note.source}</span></li>`).join('');
+  document.body.classList.add('drawer-open');
+  articleDrawer.setAttribute('aria-hidden', 'false');
+  articleDrawer.querySelector('[data-drawer-close]').focus();
+};
+document.querySelectorAll('[data-metric-index]').forEach(btn => {
+  btn.addEventListener('click', () => openMetricArticles(metricArticleData[Number(btn.dataset.metricIndex)]));
+});
+
+const industries = [
+  { name: '金融科技', pct: 88, marketSize: 72, color: '#378ADD', note: '資料密度高、交易流程數位化完整，AI 最容易先進入風控、反詐欺與授信模型。', basis: '2025 年估計，代表高數位化產業採用強度；市場規模屬大型。' },
+  { name: '科技軟體', pct: 85, marketSize: 90, color: '#378ADD', note: '軟體團隊能快速把 AI 接進開發、測試、客服與資料分析流程，導入阻力相對低。', basis: '2025 年估計，反映工具鏈成熟與知識工作占比高；市場規模屬大型。' },
+  { name: '醫療健康', pct: 74, marketSize: 68, color: '#1D9E75', note: 'AI 在影像判讀、病歷摘要與分診輔助中成長快，但受法規、責任與資料品質限制。', basis: '2025 年估計，屬高潛力但治理要求高的產業；市場規模偏大。' },
+  { name: '製造業', pct: 68, marketSize: 75, color: '#1D9E75', note: '主要落在預測維護、機器視覺與排程最佳化，價值大但需要設備資料串接。', basis: '2025 年估計，採用速度取決於產線數位化程度；市場規模大型。' },
+  { name: '零售電商', pct: 65, marketSize: 54, color: '#D85A30', note: '推薦、搜尋、客服與促銷生成最容易落地，成效通常直接反映在轉換與留存。', basis: '2025 年估計，受消費資料量與通路數位化推動；市場規模中大型。' },
+  { name: '物流運輸', pct: 61, marketSize: 48, color: '#D85A30', note: 'AI 能改善路線、倉儲與需求預測，但實際效益取決於即時資料與跨系統整合。', basis: '2025 年估計，屬中滲透、高流程整合需求；市場規模中等。' },
+  { name: '教育', pct: 52, marketSize: 35, color: '#D4537E', note: 'AI 可用於個人化練習、內容生成與學習輔助，但制度、評量與教師角色仍在調整。', basis: '2025 年估計，採用快但成效口徑仍不穩定；市場規模較小。' },
+  { name: '法律服務', pct: 41, marketSize: 28, color: '#D4537E', note: '文件審查與案例檢索能明顯提速，但專業責任、引用可信度與風險判斷限制導入。', basis: '2025 年估計，低滲透但單點任務效率提升明顯；市場規模較小。' },
+];
+
+const barsEl = document.getElementById('bars');
+const sortSelect = document.querySelector('[data-sort-select]');
+const getSortedIndustries = mode => {
+  const data = industries.map((item, index) => ({ ...item, index }));
+  if (mode === 'adoption-asc') return data.sort((a, b) => a.pct - b.pct);
+  if (mode === 'market-desc') return data.sort((a, b) => b.marketSize - a.marketSize);
+  if (mode === 'market-asc') return data.sort((a, b) => a.marketSize - b.marketSize);
+  if (mode === 'default') return data.sort((a, b) => a.index - b.index);
+  return data.sort((a, b) => b.pct - a.pct);
+};
+const renderIndustries = (mode = 'adoption-desc') => {
+  barsEl.innerHTML = '';
+  getSortedIndustries(mode).forEach(ind => {
+    barsEl.innerHTML += `
+    <div class="industry-row" tabindex="0" aria-label="${ind.name} AI 滲透率 ${ind.pct}%">
+      <div class="industry-name">${ind.name}</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${ind.pct}%;background:${ind.color}"></div></div>
+      <div class="pct">${ind.pct}%</div>
+      <div class="adoption-tooltip" role="tooltip">
+        <div class="tooltip-title">${ind.name}：${ind.pct}%</div>
+        <div>${ind.note}</div>
+        <div class="tooltip-meta">${ind.basis} 市場規模指數：${ind.marketSize}。</div>
+      </div>
+    </div>`;
+  });
+};
+sortSelect.addEventListener('change', () => {
+  renderIndustries(sortSelect.value);
+});
+renderIndustries('adoption-desc');
+
+const impactData = [
+  { icon: 'ti-chart-line', industry: '金融科技', title: '風險偵測準確率', stat: '+43%', badge: 'badge-high', level: '高滲透', desc: 'AI 能在交易、授信與詐欺偵測中提前標記異常，降低誤判與人工覆核成本。', detailUseCases: ['交易異常偵測與反詐欺警示', '授信風險評分與客戶分群', '客服與合規文件摘要'], detailMechanism: ['把原本由人工事後檢查的交易與信用訊號，前移到即時偵測與預警。', '讓風控、客服與合規團隊共用同一套風險線索，縮短判斷與覆核時間。'], detailMetrics: ['誤報率與漏報率', '授信審核時間', '詐欺損失率', '人工覆核成本'], detailRisks: ['模型誤判可能造成客戶體驗與合規風險', '資料偏差會影響授信公平性'], detailWatch: ['是否能把模型輸出接進人工覆核流程', '模型治理、稽核與可解釋性是否同步成熟'] },
+  { icon: 'ti-heart-rate-monitor', industry: '醫療健康', title: '診斷輔助效率', stat: '+38%', badge: 'badge-high', level: '高滲透', desc: '把診斷輔助接進分診、影像判讀與病歷摘要，可縮短醫師前置整理時間。', detailUseCases: ['醫學影像輔助判讀', '病歷摘要與照護紀錄整理', '分診與檢查優先順序建議'], detailMechanism: ['把病歷、影像與檢查資料整理成醫師可快速判讀的輔助訊號。', '降低行政整理時間，讓臨床人員把注意力放在診斷判斷與病患溝通。'], detailMetrics: ['影像判讀周轉時間', '病歷摘要節省時間', '醫師行政工時', '臨床覆核一致性'], detailRisks: ['責任歸屬與醫療法規限制高', '資料品質與院內系統整合成本高'], detailWatch: ['AI 是否能降低行政負擔而非增加醫師確認成本', '是否建立臨床驗證與錯誤回報機制'] },
+  { icon: 'ti-robot', industry: '製造業', title: '生產良率提升', stat: '+22%', badge: 'badge-mid', level: '中滲透', desc: '把停機預警與品管檢測接到產線資料，可提前發現缺陷並穩定良率。', detailUseCases: ['機器視覺瑕疵檢測', '設備預測維護', '產線排程與耗材預測'], detailMechanism: ['把設備、影像與產線資料轉成即時異常訊號，讓問題在停機或大量報廢前被發現。', '把維修、品管與排程接成同一個改善循環，降低單點優化的落差。'], detailMetrics: ['良率與報廢率', '非預期停機時間', '維修反應時間', '單位生產成本'], detailRisks: ['老舊設備資料難以串接', '現場流程變更需要訓練與 SOP 調整'], detailWatch: ['資料是否能從單點設備擴展到整條產線', 'AI 建議是否能進入排程與維修決策'] },
+  { icon: 'ti-shopping-cart', industry: '零售電商', title: '個人化推薦轉換', stat: '+31%', badge: 'badge-mid', level: '中滲透', desc: 'AI 讓商品推薦、搜尋排序與促銷訊息更貼近個別需求，提升轉換率。', detailUseCases: ['商品推薦與搜尋排序', '客服機器人與售後摘要', '促銷文案與受眾分群'], detailMechanism: ['把瀏覽、購買、客服與促銷資料串起來，讓推薦與溝通更貼近個別需求。', '將內容生成、受眾分群與轉換追蹤形成快速迭代，縮短行銷實驗週期。'], detailMetrics: ['轉換率與客單價', '搜尋成功率', '客服解決時間', '回購率與留存率'], detailRisks: ['過度個人化可能造成隱私疑慮', '推薦品質不佳會放大庫存與品牌問題'], detailWatch: ['推薦提升是否反映在毛利與留存，而不只是點擊率', '生成內容是否維持品牌一致性'] },
+  { icon: 'ti-truck', industry: '物流運輸', title: '路線最佳化節省', stat: '15%', badge: 'badge-mid', level: '中滲透', desc: '即時路況、倉儲與需求預測能一起進入排程模型，減少空車與等待時間。', detailUseCases: ['路線最佳化與配送排序', '需求預測與倉儲調度', '車隊維修與燃料效率分析'], detailMechanism: ['把路況、訂單、倉儲與車隊狀態即時納入排程，減少等待與空車。', '讓需求預測連動補貨、派車與倉儲配置，使局部節省轉成整體運輸效率。'], detailMetrics: ['準時配送率', '空車率與載運率', '單位配送成本', '燃料使用量'], detailRisks: ['跨系統資料延遲會降低模型效益', '突發事件仍需要人工調度判斷'], detailWatch: ['是否能把路線建議接進派車與倉儲系統', '節省是否體現在準時率與單位配送成本'] },
+  { icon: 'ti-school', industry: '教育', title: '學習完成率提升', stat: '+19%', badge: 'badge-low', level: '成長中', desc: 'AI 可依學習狀態調整練習與回饋，但成效仍取決於課程設計與教師介入。', detailUseCases: ['個人化練習與即時回饋', '教材生成與題庫改寫', '學習弱點摘要與輔導建議'], detailMechanism: ['依照學習狀態調整練習難度與回饋節奏，讓教師更快掌握學生弱點。', '把教材改寫、題庫生成與學習摘要自動化，釋放教師備課與追蹤時間。'], detailMetrics: ['完成率與持續學習率', '弱點改善速度', '教師備課時間', '學習成效評量差異'], detailRisks: ['學習成效難以只用完成率衡量', '學生過度依賴 AI 可能削弱思考訓練'], detailWatch: ['AI 是否補強教師回饋，而非取代教學設計', '評量制度是否能區分輔助與代寫'] },
+  { icon: 'ti-building', industry: '法律服務', title: '文件審查速度', stat: '10×', badge: 'badge-low', level: '成長中', desc: '合約摘要、案例檢索與條款比對速度提高，但最終風險判斷仍需專業把關。', detailUseCases: ['合約條款比對與風險提示', '案例檢索與法規摘要', '盡職調查文件整理'], detailMechanism: ['把大量文件初步分類、摘要與比對，讓法律專業人員把時間集中在風險判斷。', '將引用來源與條款差異整理成可覆核線索，而不是直接取代法律意見。'], detailMetrics: ['文件審查時間', '條款比對覆蓋率', '引用來源可追溯性', '律師覆核修正率'], detailRisks: ['幻覺與錯誤引用會造成重大風險', '不同法域與案件情境需要專業判斷'], detailWatch: ['是否建立引用來源追蹤與律師覆核機制', '效率提升是否轉化為更高品質的策略判斷'] },
+  { icon: 'ti-brain', industry: '科技軟體', title: '開發者生產力', stat: '+55%', badge: 'badge-high', level: '高滲透', desc: 'AI coding 能加速樣板、測試與文件產出，工程師的價值轉向架構判斷與品質治理。', detailUseCases: ['程式樣板與測試草稿生成', '錯誤排查與文件摘要', '原型與內部工具快速建立'], detailMechanism: ['把重複程式、測試草稿與文件整理交給 AI，讓工程師更快進入架構與問題判斷。', '縮短原型到可驗證版本的時間，但也要求更嚴格的 code review 與安全檢查。'], detailMetrics: ['開發週期時間', '測試覆蓋率', '缺陷回歸率', 'code review 修正量'], detailRisks: ['產出速度提高也可能放大技術債', '安全、授權與程式品質仍需審查'], detailWatch: ['團隊是否建立 AI 產出 code review 規範', '生產力提升是否反映在交付品質而非只看速度'] },
+];
+
+const impactsEl = document.getElementById('impacts');
+impactData.forEach((d, index) => {
+  impactsEl.innerHTML += `
+    <button class="impact-card" type="button" data-impact-index="${index}" aria-label="查看${d.industry}詳情">
+      <div class="impact-icon" aria-hidden="true"><i class="ti ${d.icon}"></i></div>
+      <div class="impact-industry">${d.industry}</div>
+      <div class="impact-title">${d.title}</div>
+      <div class="impact-stat">${d.stat}</div>
+      <span class="badge ${d.badge}">${d.level}</span>
+      <div class="impact-desc">${d.desc}</div>
+    </button>`;
+});
+
+const drawer = document.getElementById('impact-detail-drawer');
+const drawerKicker = document.getElementById('drawer-kicker');
+const drawerTitle = document.getElementById('drawer-title');
+const drawerStat = document.getElementById('drawer-stat');
+const drawerSummary = document.getElementById('drawer-summary');
+const drawerUseCases = document.getElementById('drawer-use-cases');
+const drawerMechanism = document.getElementById('drawer-mechanism');
+const drawerMetrics = document.getElementById('drawer-metrics');
+const drawerRisks = document.getElementById('drawer-risks');
+const drawerWatch = document.getElementById('drawer-watch');
+const renderDrawerList = (el, items) => {
+  el.innerHTML = items.map(item => `<li>${item}</li>`).join('');
+};
+const openImpactDetail = item => {
+  closeDrawers();
+  drawerKicker.textContent = `${item.industry} / ${item.level}`;
+  drawerTitle.textContent = item.title;
+  drawerStat.textContent = item.stat;
+  drawerSummary.textContent = item.desc;
+  renderDrawerList(drawerUseCases, item.detailUseCases);
+  renderDrawerList(drawerMechanism, item.detailMechanism);
+  renderDrawerList(drawerMetrics, item.detailMetrics);
+  renderDrawerList(drawerRisks, item.detailRisks);
+  renderDrawerList(drawerWatch, item.detailWatch);
+  document.body.classList.add('drawer-open');
+  drawer.setAttribute('aria-hidden', 'false');
+  drawer.querySelector('[data-drawer-close]').focus();
+};
+const closeDrawers = () => {
+  document.body.classList.remove('drawer-open');
+  document.querySelectorAll('.impact-detail-drawer').forEach(drawerEl => {
+    drawerEl.setAttribute('aria-hidden', 'true');
+  });
+};
+document.querySelectorAll('[data-impact-index]').forEach(btn => {
+  btn.addEventListener('click', () => openImpactDetail(impactData[Number(btn.dataset.impactIndex)]));
+});
+document.querySelectorAll('[data-drawer-close]').forEach(el => {
+  el.addEventListener('click', closeDrawers);
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') closeDrawers();
+});
+
+new Chart(document.getElementById('bubbleChart'), {
+  type: 'bubble',
+  data: {
+    datasets: [
+      { label: '金融科技', data: [{ x: 12.4, y: 43, r: 18 }], backgroundColor: 'rgba(55,138,221,0.7)' },
+      { label: '科技軟體', data: [{ x: 18.2, y: 55, r: 22 }], backgroundColor: 'rgba(55,138,221,0.5)' },
+      { label: '醫療健康', data: [{ x: 9.6, y: 38, r: 20 }], backgroundColor: 'rgba(29,158,117,0.7)' },
+      { label: '製造業', data: [{ x: 7.8, y: 22, r: 24 }], backgroundColor: 'rgba(29,158,117,0.5)' },
+      { label: '零售電商', data: [{ x: 6.2, y: 31, r: 17 }], backgroundColor: 'rgba(216,90,48,0.7)' },
+      { label: '物流運輸', data: [{ x: 4.8, y: 15, r: 14 }], backgroundColor: 'rgba(216,90,48,0.5)' },
+      { label: '教育', data: [{ x: 3.1, y: 19, r: 11 }], backgroundColor: 'rgba(212,83,126,0.7)' },
+      { label: '法律服務', data: [{ x: 2.4, y: 12, r: 9 }], backgroundColor: 'rgba(212,83,126,0.5)' },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: {
+      callbacks: {
+        label: ctx => `${ctx.dataset.label}：投資 $${ctx.raw.x}B，生產力 +${ctx.raw.y}%`
+      }
+    }},
+    scales: {
+      x: { title: { display: true, text: 'AI 投資規模（十億美元）', color: '#888780', font: { size: 11 } }, min: 0, max: 24, ticks: { color: '#888780' }, grid: { color: 'rgba(136,135,128,0.12)' } },
+      y: { title: { display: true, text: '生產力提升預估（%）', color: '#888780', font: { size: 11 } }, min: 0, max: 70, ticks: { color: '#888780' }, grid: { color: 'rgba(136,135,128,0.12)' } }
+    }
+  }
+});
+
+new Chart(document.getElementById('stageChart'), {
+  type: 'bar',
+  data: {
+    labels: ['科技軟體', '金融科技', '醫療健康', '製造業', '零售電商', '物流運輸', '教育', '法律服務'],
+    datasets: [
+      { label: '深度整合', data: [70, 62, 45, 38, 35, 30, 18, 12], backgroundColor: '#639922' },
+      { label: '局部試行', data: [20, 22, 30, 32, 30, 31, 34, 29], backgroundColor: '#BA7517' },
+      { label: '探索評估', data: [10, 16, 25, 30, 35, 39, 48, 59], backgroundColor: '#378ADD' },
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { mode: 'index' } },
+    scales: {
+      x: { stacked: true, max: 100, ticks: { color: '#888780', callback: v => v + '%' }, grid: { color: 'rgba(136,135,128,0.12)' } },
+      y: { stacked: true, ticks: { color: '#888780', font: { size: 12 } }, grid: { display: false } }
+    }
+  }
+});
+</script>
