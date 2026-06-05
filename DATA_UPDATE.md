@@ -30,15 +30,36 @@ ai_industry_penetration_2026-06-09.html
 
 ## 固定來源池
 
-每週優先檢查以下來源：
+每週優先檢查以下來源。若使用 `data/ai_public_reports_for_codex.csv` 或後續整理出的公開報告清單，先把它視為「可引用來源索引」，不要直接視為可改圖表的量化資料集。
 
 - Stanford AI Index
 - McKinsey State of AI
 - PwC AI economic impact / GDP estimate
 - Deloitte State of Generative AI in the Enterprise
+- OECD firm-level AI adoption / OECD AI governance reports
+- Microsoft AI Economy Institute / AI Diffusion reports
+- World Economic Forum Future of Jobs / AI in Action reports
+- BCG AI Radar、EY AI Pulse、Wharton AI Adoption Report 等企業採用與 ROI 報告
+- Anthropic Economic Index、Microsoft Copilot Usage Report 等任務層級使用資料
 - 主要 AI 公司、顧問公司、研究機構的最新企業採用報告
 
 若引用新聞摘要，需回查原始報告、官方公告或研究 PDF。
+
+### 公開報告來源池分層
+
+新增來源時建議先選 8-12 個核心來源，不要把完整來源清單全部放進頁面。建議分層如下：
+
+- KPI / 宏觀影響：McKinsey、Stanford AI Index、PwC、Deloitte。
+- 產業滲透與擴散：OECD firm-level adoption、Microsoft AI Diffusion。
+- 企業成熟度與 ROI：Deloitte、BCG AI Radar、EY AI Pulse、Wharton AI Adoption Report。
+- 人才職能與任務重組：WEF Future of Jobs、Anthropic Economic Index、Microsoft Copilot Usage Report。
+- 治理、信任與公共部門：WEF AI in Action、OECD Governing with AI、KPMG trust study。
+
+來源使用規則：
+
+- CSV 中的 `use_case_summary` 只能作為選題提示；放進頁面前仍需回查原始報告頁、PDF 或官方發布頁。
+- 無法確認年份、樣本、調查口徑或定義的數字，只能用於敘事背景，不放進 KPI、圖表資料或 tooltip 數值。
+- 企業問卷、平台遙測、經濟估計與分析估計不可混算；引用時要標示「使用率」「規模化」「市場估計」「任務使用」等口徑。
 
 ## 推版前低強度來源確認
 
@@ -57,6 +78,13 @@ ai_industry_penetration_2026-06-09.html
 - Token：約 1,500-3,000 tokens。
 - 時間：約 5-10 分鐘，視來源頁面是否容易取得而定。
 - 主要耗損：外部搜尋、來源比對、年份與口徑確認、更新摘要改寫。
+
+若要把新增公開報告來源池導入頁面，可依更新深度估算：
+
+- 低成本版：只更新來源池、頁尾引用與少量文案註記。時間約 1-2 小時；算力很低；工具只需 CSV、瀏覽器、HTML 編輯。
+- 中成本版：新增 8-12 個來源到頁面敘事、KPI 抽屜、tooltip 與本文件。時間約 3-5 小時；token 約 15k-30k；需 PDF / 網頁查核、繁中改寫、瀏覽器驗收。
+- 高成本版：逐份報告抽取數字，重建 KPI、產業圖表與泡泡圖口徑。時間約 1-2 天；token 約 50k-100k；需 PDF 摘要、表格整理、來源交叉比對、Chart.js 資料更新與 RWD 測試。
+- 網站執行端成本：目前仍是單檔 HTML + Chart.js CDN，新增來源文字或少量資料列不會明顯增加瀏覽器算力負擔。
 
 ## 每週檢查清單
 

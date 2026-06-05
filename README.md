@@ -4,12 +4,13 @@
 
 ## 檔案
 
-- `index.html`：本機可上線 MVP 入口頁，基於 `ai_industry_penetration_2026-06-02.html` 補齊標準 HTML 外殼、SEO / Open Graph、Chart.js 載入失敗提示，以及混合型人才相關分析區塊。
+- `index.html`：本機可上線 MVP 入口頁，目前同步 `ai_industry_penetration_2026-06-06.html`，補齊標準 HTML 外殼、SEO / Open Graph、Chart.js 載入失敗提示、混合型人才分析區塊與公開報告來源池。
 - `ai_industry_penetration.html`：原本機版視覺化頁面，保留作為初始版本，不因 MVP 上線入口而覆蓋。
 - `ai_industry_penetration_YYYY-MM-DD.html`：週更後的歷史版本檔案，不覆蓋舊版。
 - `AGENTS.md`：給 Codex / Claude Code / Cursor Agent 讀取的專案規範與任務指引。
 - `DATA_UPDATE.md`：週更節奏、資料來源、檔名規則與更新清單。
 - `WEB_SPEC.md`：每次週更都必須遵守的網頁閱讀性、主題、字級與 RWD 規範。
+- `data/ai_public_reports_for_codex.csv`：公開報告來源索引，只作為引用候選與選題提示；未核定口徑前不直接改 KPI 或圖表數字。
 
 ## 如何查看
 
@@ -72,6 +73,7 @@ ai_industry_penetration_YYYY-MM-DD.html
 - 各產業 AI 應用的實際影響
 - AI 採用階段分佈
 - 混合型人才如何重組設計價值鏈與職能分工
+- 公開報告來源池如何支撐 KPI、產業滲透、企業成熟度、人才職能與治理信任敘事
 
 ## 維護提醒
 
@@ -83,3 +85,5 @@ ai_industry_penetration_YYYY-MM-DD.html
 - `AGENTS.md` 中的資料口徑與驗收標準
 - `DATA_UPDATE.md` 中的週更規則或來源池
 - `WEB_SPEC.md` 中的網頁規範是否仍被遵守
+
+新增公開報告來源時，先把 CSV 或來源清單視為引用候選索引；未逐份確認年份、樣本、調查對象與口徑前，不要把其中數字直接放進 KPI 或圖表。
