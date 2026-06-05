@@ -6,7 +6,7 @@
 <title>AI 對各大產業的滲透率與實際影響｜MVP 分析頁</title>
 <meta name="description" content="以單頁資料視覺化分析 AI 對各大產業的滲透率、投資強度、生產力影響，以及混合型人才如何重組職能系統。">
 <meta name="page-version-date" content="2026-06-05">
-<meta name="page-version-number" content="v2026.06.05">
+<meta name="page-version-number" content="v2026.06.05-2">
 <meta property="og:type" content="website">
 <meta property="og:title" content="AI 對各大產業的滲透率與實際影響">
 <meta property="og:description" content="從產業採用率、投資強度、生產力提升，到混合型人才如何重組設計、產品、工程、行銷與商業流程。">
@@ -176,12 +176,12 @@ button, select { font-family: inherit; }
   color: var(--page-text);
   font-size: calc(13px * var(--page-font-scale));
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 10px;
 }
 .section-inline-note-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  gap: 10px 22px;
   list-style: none;
   padding-left: 0;
 }
@@ -190,10 +190,8 @@ button, select { font-family: inherit; }
 }
 .section-inline-note-list li {
   min-width: 0;
-  padding: 12px 13px;
-  border: 0.5px solid var(--page-border);
-  border-radius: 8px;
-  background: var(--page-surface);
+  padding-left: 12px;
+  border-left: 2px solid color-mix(in srgb, var(--page-border) 82%, transparent);
 }
 .section-inline-note strong {
   color: var(--page-text);
@@ -344,6 +342,16 @@ button, select { font-family: inherit; }
 .chart-note-list li + li { margin-top: 6px; }
 .chart-note-list strong { color: var(--page-text); font-weight: 600; }
 .chart-note-source { display: block; color: var(--page-text-muted); font-size: calc(11px * var(--page-font-scale)); margin-top: 2px; }
+#industry-impact .section-heading {
+  margin-bottom: clamp(28px, 4vw, 44px);
+}
+#industry-impact .section-inline-note {
+  margin-top: 14px;
+}
+#industry-impact .section-inline-note-list {
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
 .page-footer {
   border-top: 0.5px solid var(--page-border);
   margin-top: 2rem;
@@ -885,7 +893,7 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
     <section aria-labelledby="copyright-title">
       <div class="footer-title" id="copyright-title">版權宣告</div>
       <div class="footer-copy">
-        本頁內容由 Dino 整理與改寫，僅供產業研究、簡報討論與內部決策參考。外部資料、商標與報告內容之著作權歸原權利人所有；本頁新增的中文分析文字、資料編排與視覺化設計，未經授權請勿整頁轉載、商業散布或移除來源標註。引用本頁觀點時，請保留頁名「AI 對產業的數據觀察」、推版日期 <span data-footer-version-date>2026-06-05</span>、版號 <span data-footer-version-number>v2026.06.05</span>。
+        本頁內容由 Dino 整理與改寫，僅供產業研究、簡報討論與內部決策參考。外部資料、商標與報告內容之著作權歸原權利人所有；本頁新增的中文分析文字、資料編排與視覺化設計，未經授權請勿整頁轉載、商業散布或移除來源標註。引用本頁觀點時，請保留頁名「AI 對產業的數據觀察」、推版日期 <span data-footer-version-date>2026-06-05</span>、版號 <span data-footer-version-number>v2026.06.05-2</span>。
       </div>
     </section>
   </div>
