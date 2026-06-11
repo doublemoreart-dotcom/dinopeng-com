@@ -6,7 +6,7 @@
 <title>AI 對各大產業的滲透率與實際影響｜MVP 分析頁</title>
 <meta name="description" content="以單頁資料視覺化分析 AI 對各大產業的滲透率、投資強度、生產力影響，以及混合型人才如何重組職能系統。">
 <meta name="page-version-date" content="2026-06-08">
-<meta name="page-version-number" content="v2026.06.08-1">
+<meta name="page-version-number" content="v2026.06.08-2">
 <meta property="og:type" content="website">
 <meta property="og:title" content="AI 對各大產業的滲透率與實際影響">
 <meta property="og:description" content="從產業採用率、投資強度、生產力提升，到混合型人才如何重組設計、產品、工程、行銷與商業流程。">
@@ -186,6 +186,7 @@ button, select { font-family: inherit; }
 .source-pool-links li,
 .footer-list li,
 .footer-copy,
+.footer-report-copy,
 .drawer-summary,
 .drawer-list li {
   text-align: justify;
@@ -468,6 +469,15 @@ button, select { font-family: inherit; }
   color: var(--page-text-muted);
   opacity: 0.62;
 }
+.footer-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(20px, 4vw, 48px);
+  align-items: start;
+}
+.footer-panel {
+  min-width: 0;
+}
 .footer-title {
   font-size: calc(10px * var(--page-font-scale));
   font-weight: 500;
@@ -477,7 +487,126 @@ button, select { font-family: inherit; }
 .footer-copy {
   font-size: calc(9px * var(--page-font-scale));
   line-height: 1.65;
-  max-width: 820px;
+}
+.footer-report-copy {
+  color: var(--page-text-muted);
+  font-size: calc(9px * var(--page-font-scale));
+  line-height: 1.65;
+  margin-bottom: 10px;
+}
+.footer-report-btn,
+.report-form button {
+  appearance: none;
+  border: 0.5px solid var(--page-border);
+  border-radius: 6px;
+  background: var(--page-surface-alt);
+  color: var(--page-text);
+  min-height: 32px;
+  padding: 0 12px;
+  cursor: pointer;
+  font-size: calc(10px * var(--page-font-scale));
+}
+.footer-report-btn:hover,
+.footer-report-btn:focus-visible,
+.report-form button:hover,
+.report-form button:focus-visible {
+  border-color: #378ADD;
+  color: #378ADD;
+  outline: none;
+}
+.report-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(0,0,0,0.42);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+.report-modal[aria-hidden="false"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+.report-dialog {
+  width: min(520px, 100%);
+  background: var(--page-surface);
+  border: 0.5px solid var(--page-border);
+  border-radius: 8px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.28);
+  padding: clamp(18px, 4vw, 24px);
+}
+.report-dialog-header {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.report-dialog-title {
+  color: var(--page-text);
+  font-size: calc(18px * var(--page-font-scale));
+  font-weight: 600;
+  line-height: 1.3;
+}
+.report-dialog-desc,
+.report-recipient-note {
+  color: var(--page-text-muted);
+  font-size: calc(11px * var(--page-font-scale));
+  line-height: 1.65;
+}
+.report-close {
+  appearance: none;
+  border: 0.5px solid var(--page-border);
+  border-radius: 999px;
+  background: var(--page-surface-alt);
+  color: var(--page-text-muted);
+  width: calc(30px * var(--page-font-scale));
+  height: calc(30px * var(--page-font-scale));
+  cursor: pointer;
+  font-family: "Material Symbols Outlined";
+  font-size: calc(18px * var(--page-font-scale));
+  line-height: 1;
+}
+.report-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+.report-field {
+  display: grid;
+  gap: 5px;
+}
+.report-field label {
+  color: var(--page-text);
+  font-size: calc(11px * var(--page-font-scale));
+  font-weight: 500;
+}
+.report-field input,
+.report-field select,
+.report-field textarea {
+  width: 100%;
+  border: 0.5px solid var(--page-border);
+  border-radius: 6px;
+  background: var(--page-surface-alt);
+  color: var(--page-text);
+  font: inherit;
+  font-size: calc(11px * var(--page-font-scale));
+  padding: 8px 10px;
+}
+.report-field textarea {
+  min-height: 112px;
+  resize: vertical;
+  line-height: 1.55;
+}
+.report-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
 }
 .page-footer a {
   color: var(--page-text-muted);
@@ -577,6 +706,10 @@ button, select { font-family: inherit; }
 }
 .cluster-card {
   appearance: none;
+  display: grid;
+  grid-template-rows: minmax(calc(28px * var(--page-font-scale)), auto) auto 1fr;
+  align-content: start;
+  row-gap: 10px;
   font-family: inherit;
   position: relative;
   text-align: left;
@@ -589,6 +722,13 @@ button, select { font-family: inherit; }
   border-color: #378ADD;
   box-shadow: 0 10px 24px rgba(55,138,221,0.12);
   outline: none;
+}
+.cluster-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  padding-right: calc(38px * var(--page-font-scale));
 }
 .cluster-kicker,
 .talent-kicker,
@@ -607,6 +747,49 @@ button, select { font-family: inherit; }
   padding: 3px 10px;
   margin-bottom: 10px;
 }
+.cluster-badges .badge {
+  margin-top: 0;
+}
+.cluster-card .cluster-kicker {
+  margin-bottom: 0;
+}
+.influence-kicker {
+  gap: 6px;
+}
+.influence-depth-icons {
+  display: inline-flex;
+  gap: 1px;
+  color: #378ADD;
+}
+.influence-depth-icons .material-symbol {
+  font-family: "Material Symbols Outlined";
+  font-size: calc(13px * var(--page-font-scale));
+  font-weight: 400;
+  line-height: 1;
+}
+.talent-kicker {
+  gap: 6px;
+}
+.talent-icon,
+.talent-title-arrow {
+  flex: 0 0 auto;
+  color: #378ADD;
+  font-family: "Material Symbols Outlined";
+  font-weight: 400;
+  line-height: 1;
+}
+.talent-icon {
+  font-size: calc(15px * var(--page-font-scale));
+}
+.talent-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+}
+.talent-title-arrow {
+  margin-top: 0.12em;
+  font-size: calc(16px * var(--page-font-scale));
+}
 .cluster-title,
 .talent-title,
 .influence-title {
@@ -614,6 +797,9 @@ button, select { font-family: inherit; }
   font-size: calc(14px * var(--page-font-scale));
   font-weight: 600;
   margin-bottom: 8px;
+}
+.cluster-card .cluster-title {
+  margin-bottom: 0;
 }
 .cluster-body,
 .talent-body,
@@ -652,12 +838,65 @@ button, select { font-family: inherit; }
   gap: 8px;
   margin-top: 10px;
 }
+.tag-list-label {
+  color: var(--page-text-muted);
+  font-size: calc(10px * var(--page-font-scale));
+  margin-top: 12px;
+  margin-bottom: 6px;
+}
 .tag {
   border: 0.5px solid var(--page-border);
   border-radius: 999px;
   color: var(--page-text-muted);
   font-size: calc(11px * var(--page-font-scale));
   padding: 4px 9px;
+}
+.influence-radar {
+  border-top: 0.5px solid var(--page-border);
+  margin-top: 12px;
+  padding-top: 10px;
+}
+.influence-radar-title {
+  color: var(--page-text-muted);
+  font-size: calc(10px * var(--page-font-scale));
+  margin-bottom: 6px;
+}
+.influence-radar-canvas {
+  position: relative;
+  min-height: 0;
+}
+.influence-radar-canvas canvas {
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+.radar-static {
+  display: block;
+  width: min(100%, clamp(180px, 16vw, 220px));
+  height: auto;
+  margin: 0 auto;
+}
+.radar-static-grid {
+  fill: none;
+  stroke: color-mix(in srgb, var(--page-border) 84%, transparent);
+  stroke-width: 1;
+}
+.radar-static-axis {
+  stroke: color-mix(in srgb, var(--page-border) 70%, transparent);
+  stroke-width: 0.8;
+}
+.radar-static-area {
+  fill-opacity: 0.18;
+  stroke-width: 2.4;
+}
+.radar-static-point {
+  stroke: var(--page-surface);
+  stroke-width: 1.5;
+}
+.radar-static-label {
+  fill: var(--page-text-muted);
+  font-size: 9px;
+  text-anchor: middle;
 }
 .badge {
   display: inline-flex;
@@ -718,6 +957,7 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
   .reader-controls { align-items: flex-start; }
   .section-tabs { align-items: stretch; }
   .section-tab { flex: 1 1 min(180px, 100%); }
+  .footer-grid { grid-template-columns: 1fr; }
   .stage-explanation-grid, .bubble-explanation-grid { grid-template-columns: 1fr; }
   .grid-2 { grid-template-columns: 1fr; }
   .cluster-grid, .talent-grid, .influence-map { grid-template-columns: 1fr; }
@@ -761,8 +1001,8 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
   <a class="section-tab" href="#industry-impact-title">各產業 AI 應用實際影響</a>
   <a class="section-tab" href="#adoption-stages-title">AI 採用的三大階段分佈</a>
   <a class="section-tab" href="#industry-clusters-title">產業分群解讀</a>
-  <a class="section-tab" href="#hybrid-talent-title">混合型人才</a>
-  <a class="section-tab" href="#hybrid-influence-title">影響範圍地圖</a>
+  <a class="section-tab" href="#hybrid-talent-title">重構人才定義</a>
+  <a class="section-tab" href="#hybrid-influence-title">混合型職能發展能力</a>
   <a class="section-tab" href="#source-pool-title">公開報告來源池</a>
 </nav>
 
@@ -940,25 +1180,37 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
 <div class="cluster-grid">
   <button class="cluster-card" type="button" data-cluster-index="0" aria-label="查看高滲透高影響分群詳情">
     <span class="card-click-icon" aria-hidden="true">arrow_outward</span>
-    <div class="cluster-kicker">高滲透、高影響</div>
+    <div class="cluster-badges" aria-label="高滲透，高影響">
+      <span class="badge badge-high">高滲透</span>
+      <span class="badge badge-high">高影響</span>
+    </div>
     <div class="cluster-title">科技軟體、金融服務、行銷內容、客服銷售</div>
     <div class="cluster-body">落地速度快，因為資料密度高、流程已數位化，AI 容易接進開發、風控、內容生成與客戶互動。實際影響會先出現在速度與成本，再改變審核、交接與品質治理。主要阻力是安全、法遵、品牌一致性與模型輸出責任。</div>
   </button>
   <button class="cluster-card" type="button" data-cluster-index="1" aria-label="查看高滲透低確定性分群詳情">
     <span class="card-click-icon" aria-hidden="true">arrow_outward</span>
-    <div class="cluster-kicker">高滲透、低確定性</div>
+    <div class="cluster-badges" aria-label="高滲透，低確定性">
+      <span class="badge badge-high">高滲透</span>
+      <span class="badge badge-low">低確定性</span>
+    </div>
     <div class="cluster-title">內容、設計、媒體、教育</div>
     <div class="cluster-body">落地速度快但成效不穩，因為 AI 產出門檻降低，工具滲透快；但工作流影響取決於題目判斷、品質標準與脈絡維持。主要阻力是版權、原創性、評量制度、專業身份與低品質內容過量。</div>
   </button>
   <button class="cluster-card" type="button" data-cluster-index="2" aria-label="查看中滲透高潛力分群詳情">
     <span class="card-click-icon" aria-hidden="true">arrow_outward</span>
-    <div class="cluster-kicker">中滲透、高潛力</div>
+    <div class="cluster-badges" aria-label="中滲透，高潛力">
+      <span class="badge badge-mid">中滲透</span>
+      <span class="badge badge-high">高潛力</span>
+    </div>
     <div class="cluster-title">醫療、製造、物流、能源、農業</div>
     <div class="cluster-body">落地速度較慢但改善空間巨大，因為需要資料串接、現場流程改造與清楚責任邊界。AI 的實際影響常落在預測維護、排程、分診、品管與資源配置。主要阻力是系統整合成本、資料品質、法規與現場採納。</div>
   </button>
   <button class="cluster-card" type="button" data-cluster-index="3" aria-label="查看低滲透高阻力分群詳情">
     <span class="card-click-icon" aria-hidden="true">arrow_outward</span>
-    <div class="cluster-kicker">低滲透、高阻力</div>
+    <div class="cluster-badges" aria-label="低滲透，高阻力">
+      <span class="badge badge-low">低滲透</span>
+      <span class="badge badge-mid">高阻力</span>
+    </div>
     <div class="cluster-title">公共部門、傳統中小企業、低數位化產業</div>
     <div class="cluster-body">落地速度慢，阻力通常不是「沒有工具」，而是資料分散、流程未標準化、採購與責任制度較慢。AI 可以先從文件整理、客服、知識庫與內部流程輔助切入，再逐步累積治理與整合能力。</div>
   </button>
@@ -969,30 +1221,30 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
 <hr class="divider">
 <div class="section-heading">
   <div class="section-heading-text">
-    <h2 class="section-title" id="hybrid-talent-title"><span class="section-title-icon" aria-hidden="true">psychology</span>混合型人才定義</h2>
+    <h2 class="section-title" id="hybrid-talent-title"><span class="section-title-icon" aria-hidden="true">psychology</span>重構人才定義</h2>
     <p class="section-description">混合型人才不是什麼都會的人，而是能用 AI 重新編排產品、工程、設計、行銷與商業流程的人；WEF、Anthropic 與 Wharton 的工作、任務與企業採用研究可作為後續引用主軸。</p>
   </div>
 </div>
 <div class="quote-block">能用 AI 連接多個職能，並把問題、資料、內容、介面、流程與商業目標重新組裝成可執行方案的人。</div>
 <div class="talent-grid">
   <article class="talent-card">
-    <div class="talent-kicker">設計能力</div>
-    <div class="talent-title">從做畫面，轉向定義系統與判斷品質</div>
+    <div class="talent-kicker"><span class="talent-icon" aria-hidden="true">design_services</span>設計能力</div>
+    <div class="talent-title"><span class="talent-title-arrow" aria-hidden="true">arrow_forward</span><span>從做畫面，轉向定義系統與判斷品質</span></div>
     <div class="talent-body">AI 讓草圖、版型與內容變快，設計價值更集中在問題定義、體驗流程、設計系統一致性與品質治理。</div>
   </article>
   <article class="talent-card">
-    <div class="talent-kicker">產品能力</div>
-    <div class="talent-title">從寫需求，轉向把 AI 產出轉成產品決策</div>
+    <div class="talent-kicker"><span class="talent-icon" aria-hidden="true">inventory_2</span>產品能力</div>
+    <div class="talent-title"><span class="talent-title-arrow" aria-hidden="true">arrow_forward</span><span>從寫需求，轉向把 AI 產出轉成產品決策</span></div>
     <div class="talent-body">產品角色需要把市場訊號、使用者回饋、原型與資料解讀串成優先級，並判斷哪些 AI 產出值得進入正式產品。</div>
   </article>
   <article class="talent-card">
-    <div class="talent-kicker">工程能力</div>
-    <div class="talent-title">從只實作功能，轉向理解可行性並生成原型</div>
+    <div class="talent-kicker"><span class="talent-icon" aria-hidden="true">code</span>工程能力</div>
+    <div class="talent-title"><span class="talent-title-arrow" aria-hidden="true">arrow_forward</span><span>從只實作功能，轉向理解可行性並生成原型</span></div>
     <div class="talent-body">工程能力不只在寫 code，而是能辨識架構限制、安全風險、資料介面與技術成本，讓 AI 原型可被驗證與治理。</div>
   </article>
   <article class="talent-card">
-    <div class="talent-kicker">行銷能力</div>
-    <div class="talent-title">從包裝賣點，轉向內容、轉換與成長策略</div>
+    <div class="talent-kicker"><span class="talent-icon" aria-hidden="true">campaign</span>行銷能力</div>
+    <div class="talent-title"><span class="talent-title-arrow" aria-hidden="true">arrow_forward</span><span>從包裝賣點，轉向內容、轉換與成長策略</span></div>
     <div class="talent-body">行銷角色需要把產品價值轉成受眾語言、內容系統、實驗節奏與轉換指標，而不是只產出更多素材。</div>
   </article>
 </div>
@@ -1008,33 +1260,90 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
 <hr class="divider">
 <div class="section-heading">
   <div class="section-heading-text">
-    <h2 class="section-title" id="hybrid-influence-title"><span class="section-title-icon" aria-hidden="true">account_tree</span>混合型人才影響範圍地圖</h2>
-    <p class="section-description">AI 讓產出能力民主化，但讓判斷能力、系統整合能力與品質治理能力變得更稀缺。</p>
+    <h2 class="section-title" id="hybrid-influence-title"><span class="section-title-icon" aria-hidden="true">account_tree</span>混合型職能發展能力</h2>
+    <p class="section-description">以影響深度觀察 AI 如何重組交付、管理、市場與治理能力；越靠近核心，越需要判斷能力、系統整合能力與品質治理能力。</p>
   </div>
 </div>
 <div class="influence-map">
   <article class="influence-card">
-    <div class="influence-kicker">核心影響區</div>
+    <div class="influence-kicker"><span class="influence-depth-icons" aria-label="三星深度"><span class="material-symbol" aria-hidden="true">star</span><span class="material-symbol" aria-hidden="true">star</span><span class="material-symbol" aria-hidden="true">star</span></span>核心影響層</div>
     <div class="influence-title">交付、研究、內容、原型與設計系統</div>
     <div class="influence-body">AI 最先改變高頻、可拆解、可快速回饋的工作。混合型人才的價值在於把產出接回使用者研究、設計交付、內容營運、原型製作與設計系統應用。</div>
+    <div class="tag-list-label">影響關鍵字</div>
     <div class="tag-list"><span class="tag">設計交付</span><span class="tag">研究摘要</span><span class="tag">內容營運</span><span class="tag">原型製作</span><span class="tag">設計系統</span></div>
+    <div class="influence-radar">
+      <div class="influence-radar-title">技能對應雷達圖</div>
+      <div class="influence-radar-canvas">
+        <svg class="radar-static" viewBox="0 0 180 180" role="img" aria-label="核心影響區技能對應雷達圖">
+          <polygon class="radar-static-grid" points="90,34 143,80.6 123.1,136 56.9,136 37,80.6"></polygon>
+          <polygon class="radar-static-grid" points="90,20 156.6,68.4 131.1,146.6 48.9,146.6 23.4,68.4"></polygon>
+          <line class="radar-static-axis" x1="90" y1="90" x2="90" y2="20"></line><line class="radar-static-axis" x1="90" y1="90" x2="156.6" y2="68.4"></line><line class="radar-static-axis" x1="90" y1="90" x2="131.1" y2="146.6"></line><line class="radar-static-axis" x1="90" y1="90" x2="48.9" y2="146.6"></line><line class="radar-static-axis" x1="90" y1="90" x2="23.4" y2="68.4"></line>
+          <polygon class="radar-static-area" fill="#378ADD" stroke="#378ADD" points="90,20 143.3,77.1 131.1,146.6 48.9,146.6 36.7,77.1"></polygon>
+          <circle class="radar-static-point" fill="#378ADD" cx="90" cy="20" r="2.5"></circle><circle class="radar-static-point" fill="#378ADD" cx="143.3" cy="77.1" r="2.5"></circle><circle class="radar-static-point" fill="#378ADD" cx="131.1" cy="146.6" r="2.5"></circle><circle class="radar-static-point" fill="#378ADD" cx="48.9" cy="146.6" r="2.5"></circle><circle class="radar-static-point" fill="#378ADD" cx="36.7" cy="77.1" r="2.5"></circle>
+          <text class="radar-static-label" x="90" y="12">問題定義</text><text class="radar-static-label" x="164" y="66">系統整合</text><text class="radar-static-label" x="136" y="162">內容營運</text><text class="radar-static-label" x="44" y="162">技術原型</text><text class="radar-static-label" x="16" y="66">品質治理</text>
+        </svg>
+      </div>
+    </div>
   </article>
   <article class="influence-card">
-    <div class="influence-kicker">次核心影響區</div>
+    <div class="influence-kicker"><span class="influence-depth-icons" aria-label="二星深度"><span class="material-symbol" aria-hidden="true">star</span><span class="material-symbol" aria-hidden="true">star</span></span>延伸影響層</div>
     <div class="influence-title">PM、前端、成長、品牌與管理流程</div>
     <div class="influence-body">當 AI 進入跨部門流程，影響會擴展到需求拆解、前端原型、行銷成長、品牌管理、客戶提案、設計管理與新人培訓。</div>
+    <div class="tag-list-label">影響關鍵字</div>
     <div class="tag-list"><span class="tag">PM 工作</span><span class="tag">前端工程</span><span class="tag">行銷成長</span><span class="tag">品牌管理</span><span class="tag">新人培訓</span></div>
+    <div class="influence-radar">
+      <div class="influence-radar-title">技能對應雷達圖</div>
+      <div class="influence-radar-canvas">
+        <svg class="radar-static" viewBox="0 0 180 180" role="img" aria-label="次核心影響區技能對應雷達圖">
+          <polygon class="radar-static-grid" points="90,34 143,80.6 123.1,136 56.9,136 37,80.6"></polygon>
+          <polygon class="radar-static-grid" points="90,20 156.6,68.4 131.1,146.6 48.9,146.6 23.4,68.4"></polygon>
+          <line class="radar-static-axis" x1="90" y1="90" x2="90" y2="20"></line><line class="radar-static-axis" x1="90" y1="90" x2="156.6" y2="68.4"></line><line class="radar-static-axis" x1="90" y1="90" x2="131.1" y2="146.6"></line><line class="radar-static-axis" x1="90" y1="90" x2="48.9" y2="146.6"></line><line class="radar-static-axis" x1="90" y1="90" x2="23.4" y2="68.4"></line>
+          <polygon class="radar-static-area" fill="#1D9E75" stroke="#1D9E75" points="90,20 156.6,68.4 114.9,127.3 57.1,127.3 36.7,77.1"></polygon>
+          <circle class="radar-static-point" fill="#1D9E75" cx="90" cy="20" r="2.5"></circle><circle class="radar-static-point" fill="#1D9E75" cx="156.6" cy="68.4" r="2.5"></circle><circle class="radar-static-point" fill="#1D9E75" cx="114.9" cy="127.3" r="2.5"></circle><circle class="radar-static-point" fill="#1D9E75" cx="57.1" cy="127.3" r="2.5"></circle><circle class="radar-static-point" fill="#1D9E75" cx="36.7" cy="77.1" r="2.5"></circle>
+          <text class="radar-static-label" x="90" y="12">問題定義</text><text class="radar-static-label" x="164" y="66">系統整合</text><text class="radar-static-label" x="136" y="162">內容營運</text><text class="radar-static-label" x="44" y="162">技術原型</text><text class="radar-static-label" x="16" y="66">品質治理</text>
+        </svg>
+      </div>
+    </div>
   </article>
   <article class="influence-card">
-    <div class="influence-kicker">外圍影響區</div>
+    <div class="influence-kicker"><span class="influence-depth-icons" aria-label="一星深度"><span class="material-symbol" aria-hidden="true">star</span></span>外圍影響層</div>
     <div class="influence-title">市場、教育、招募、工具與競爭結構</div>
     <div class="influence-body">長期影響會進入接案市場、設計教育、組織招募、設計工具市場、創業門檻、產業競爭與專業認同，重新定義人才與服務的價值。</div>
+    <div class="tag-list-label">影響關鍵字</div>
     <div class="tag-list"><span class="tag">接案市場</span><span class="tag">設計教育</span><span class="tag">組織招募</span><span class="tag">創業門檻</span><span class="tag">專業認同</span></div>
+    <div class="influence-radar">
+      <div class="influence-radar-title">技能對應雷達圖</div>
+      <div class="influence-radar-canvas">
+        <svg class="radar-static" viewBox="0 0 180 180" role="img" aria-label="外圍影響區技能對應雷達圖">
+          <polygon class="radar-static-grid" points="90,34 143,80.6 123.1,136 56.9,136 37,80.6"></polygon>
+          <polygon class="radar-static-grid" points="90,20 156.6,68.4 131.1,146.6 48.9,146.6 23.4,68.4"></polygon>
+          <line class="radar-static-axis" x1="90" y1="90" x2="90" y2="20"></line><line class="radar-static-axis" x1="90" y1="90" x2="156.6" y2="68.4"></line><line class="radar-static-axis" x1="90" y1="90" x2="131.1" y2="146.6"></line><line class="radar-static-axis" x1="90" y1="90" x2="48.9" y2="146.6"></line><line class="radar-static-axis" x1="90" y1="90" x2="23.4" y2="68.4"></line>
+          <polygon class="radar-static-area" fill="#D85A30" stroke="#D85A30" points="90,34 129.9,80.6 114.9,127.3 73.6,118.6 23.4,68.4"></polygon>
+          <circle class="radar-static-point" fill="#D85A30" cx="90" cy="34" r="2.5"></circle><circle class="radar-static-point" fill="#D85A30" cx="129.9" cy="80.6" r="2.5"></circle><circle class="radar-static-point" fill="#D85A30" cx="114.9" cy="127.3" r="2.5"></circle><circle class="radar-static-point" fill="#D85A30" cx="73.6" cy="118.6" r="2.5"></circle><circle class="radar-static-point" fill="#D85A30" cx="23.4" cy="68.4" r="2.5"></circle>
+          <text class="radar-static-label" x="90" y="12">問題定義</text><text class="radar-static-label" x="164" y="66">系統整合</text><text class="radar-static-label" x="136" y="162">內容營運</text><text class="radar-static-label" x="44" y="162">技術原型</text><text class="radar-static-label" x="16" y="66">品質治理</text>
+        </svg>
+      </div>
+    </div>
   </article>
   <article class="influence-card">
-    <div class="influence-kicker">關鍵結論</div>
+    <div class="influence-kicker"><span class="influence-depth-icons" aria-label="統整判讀"><span class="material-symbol" aria-hidden="true">stars</span></span>統整判讀層</div>
     <div class="influence-title">跨職能系統的重新編排者</div>
     <div class="influence-body"><strong>AI 時代的混合型人才，不是跨領域工作者，而是跨職能系統的重新編排者。</strong>真正的門檻是能否把 AI 產出轉成可驗證、可交付、可治理的流程結果。</div>
+    <div class="tag-list-label">影響關鍵字</div>
+    <div class="tag-list"><span class="tag">系統編排</span><span class="tag">品質治理</span><span class="tag">可驗證交付</span><span class="tag">流程重構</span><span class="tag">責任邊界</span></div>
+    <div class="influence-radar">
+      <div class="influence-radar-title">技能對應雷達圖</div>
+      <div class="influence-radar-canvas">
+        <svg class="radar-static" viewBox="0 0 180 180" role="img" aria-label="跨職能系統重新編排者技能對應雷達圖">
+          <polygon class="radar-static-grid" points="90,34 143,80.6 123.1,136 56.9,136 37,80.6"></polygon>
+          <polygon class="radar-static-grid" points="90,20 156.6,68.4 131.1,146.6 48.9,146.6 23.4,68.4"></polygon>
+          <line class="radar-static-axis" x1="90" y1="90" x2="90" y2="20"></line><line class="radar-static-axis" x1="90" y1="90" x2="156.6" y2="68.4"></line><line class="radar-static-axis" x1="90" y1="90" x2="131.1" y2="146.6"></line><line class="radar-static-axis" x1="90" y1="90" x2="48.9" y2="146.6"></line><line class="radar-static-axis" x1="90" y1="90" x2="23.4" y2="68.4"></line>
+          <polygon class="radar-static-area" fill="#D4537E" stroke="#D4537E" points="90,20 156.6,68.4 114.9,127.3 57.1,127.3 23.4,68.4"></polygon>
+          <circle class="radar-static-point" fill="#D4537E" cx="90" cy="20" r="2.5"></circle><circle class="radar-static-point" fill="#D4537E" cx="156.6" cy="68.4" r="2.5"></circle><circle class="radar-static-point" fill="#D4537E" cx="114.9" cy="127.3" r="2.5"></circle><circle class="radar-static-point" fill="#D4537E" cx="57.1" cy="127.3" r="2.5"></circle><circle class="radar-static-point" fill="#D4537E" cx="23.4" cy="68.4" r="2.5"></circle>
+          <text class="radar-static-label" x="90" y="12">問題定義</text><text class="radar-static-label" x="164" y="66">系統整合</text><text class="radar-static-label" x="136" y="162">內容營運</text><text class="radar-static-label" x="44" y="162">技術原型</text><text class="radar-static-label" x="16" y="66">品質治理</text>
+        </svg>
+      </div>
+    </div>
   </article>
 </div>
 </section>
@@ -1137,13 +1446,65 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
 </div>
 </section>
 
-<footer class="page-footer" aria-label="版權宣告">
-  <div class="footer-title" id="copyright-title">版權宣告</div>
-  <div class="footer-copy">
-    本頁內容由 Dino 整理與改寫，僅供產業研究、簡報討論與內部決策參考。外部資料、商標與報告內容之著作權歸原權利人所有；本頁新增的中文分析文字、資料編排與視覺化設計，未經授權請勿整頁轉載、商業散布或移除來源標註。引用本頁觀點時，請保留頁名「AI 對產業的數據觀察」、推版日期 <span data-footer-version-date>2026-06-08</span>、版號 <span data-footer-version-number>v2026.06.08-1</span>。
+<footer class="page-footer" aria-label="版權宣告與錯誤回報">
+  <div class="footer-grid">
+    <section class="footer-panel" aria-labelledby="copyright-title">
+      <div class="footer-title" id="copyright-title">版權宣告</div>
+      <div class="footer-copy">
+        本頁內容由 Dino 整理與改寫，僅供產業研究、簡報討論與內部決策參考。外部資料、商標與報告內容之著作權歸原權利人所有；本頁新增的中文分析文字、資料編排與視覺化設計，未經授權請勿整頁轉載、商業散布或移除來源標註。引用本頁觀點時，請保留頁名「AI 對產業的數據觀察」、推版日期 <span data-footer-version-date>2026-06-08</span>、版號 <span data-footer-version-number>v2026.06.08-2</span>。
+      </div>
+    </section>
+    <section class="footer-panel" aria-labelledby="error-report-title">
+      <div class="footer-title" id="error-report-title">錯誤回報</div>
+      <div class="footer-report-copy">
+        若發現資料引用、圖表顯示、文字敘事或互動功能有誤，可送出簡易回報。送出後會開啟你的郵件軟體，內容不會自動上傳到伺服器。
+      </div>
+      <button class="footer-report-btn" type="button" data-report-open>回報錯誤</button>
+    </section>
   </div>
 </footer>
 
+</div>
+
+<div class="report-modal" id="report-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="report-modal-title">
+  <div class="report-dialog">
+    <div class="report-dialog-header">
+      <div>
+        <div class="report-dialog-title" id="report-modal-title">錯誤回報</div>
+        <div class="report-dialog-desc">請簡短描述你看到的問題，送出後會開啟 email 草稿。</div>
+      </div>
+      <button class="report-close" type="button" data-report-close aria-label="關閉錯誤回報">close</button>
+    </div>
+    <form class="report-form" id="report-form">
+      <div class="report-field">
+        <label for="report-section">問題位置</label>
+        <input id="report-section" name="section" type="text" placeholder="例如：各產業 AI 滲透率、公開報告來源池">
+      </div>
+      <div class="report-field">
+        <label for="report-type">問題類型</label>
+        <select id="report-type" name="type">
+          <option value="資料或引用錯誤">資料或引用錯誤</option>
+          <option value="圖表或互動異常">圖表或互動異常</option>
+          <option value="文字敘事需修正">文字敘事需修正</option>
+          <option value="版面或閱讀性問題">版面或閱讀性問題</option>
+          <option value="其他">其他</option>
+        </select>
+      </div>
+      <div class="report-field">
+        <label for="report-detail">問題描述</label>
+        <textarea id="report-detail" name="detail" required placeholder="請描述錯誤內容、預期修正方向，或你看到的畫面狀態。"></textarea>
+      </div>
+      <div class="report-field">
+        <label for="report-contact">回覆聯絡方式（選填）</label>
+        <input id="report-contact" name="contact" type="text" placeholder="Email 或其他可聯絡方式">
+      </div>
+      <div class="report-recipient-note" data-report-recipient-note>收件信箱尚未設定，請先將程式中的 reportEmail 改為正式信箱。</div>
+      <div class="report-actions">
+        <button type="button" data-report-close>取消</button>
+        <button type="submit">開啟 Email 草稿</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <div class="drawer-backdrop" data-drawer-close aria-hidden="true"></div>
@@ -1544,8 +1905,59 @@ document.querySelectorAll('[data-cluster-index]').forEach(btn => {
 document.querySelectorAll('[data-drawer-close]').forEach(el => {
   el.addEventListener('click', closeDrawers);
 });
+const reportEmail = 'doublemore.art@gmail.com';
+const reportModal = document.getElementById('report-modal');
+const reportForm = document.getElementById('report-form');
+const reportRecipientNote = document.querySelector('[data-report-recipient-note]');
+const isReportEmailConfigured = Boolean(reportEmail);
+if (reportRecipientNote) {
+  reportRecipientNote.hidden = isReportEmailConfigured;
+}
+const openReportModal = () => {
+  reportModal.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('report-modal-open');
+  document.getElementById('report-section').focus();
+};
+const closeReportModal = () => {
+  reportModal.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('report-modal-open');
+};
+document.querySelectorAll('[data-report-open]').forEach(btn => {
+  btn.addEventListener('click', openReportModal);
+});
+document.querySelectorAll('[data-report-close]').forEach(btn => {
+  btn.addEventListener('click', closeReportModal);
+});
+reportModal.addEventListener('click', event => {
+  if (event.target === reportModal) closeReportModal();
+});
+reportForm.addEventListener('submit', event => {
+  event.preventDefault();
+  const formData = new FormData(reportForm);
+  const versionDate = document.querySelector('meta[name="page-version-date"]')?.getAttribute('content') || '';
+  const versionNumber = document.querySelector('meta[name="page-version-number"]')?.getAttribute('content') || '';
+  const subject = `AI 對產業的數據觀察錯誤回報：${formData.get('type')}`;
+  const body = [
+    `問題位置：${formData.get('section') || '未填寫'}`,
+    `問題類型：${formData.get('type')}`,
+    '',
+    '問題描述：',
+    formData.get('detail') || '未填寫',
+    '',
+    `回覆聯絡方式：${formData.get('contact') || '未提供'}`,
+    '',
+    `頁面：${window.location.href}`,
+    `版本日期：${versionDate}`,
+    `版號：${versionNumber}`,
+  ].join('\n');
+  window.location.href = `mailto:${reportEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  closeReportModal();
+});
 document.addEventListener('keydown', event => {
-  if (event.key === 'Escape') closeDrawers();
+  if (event.key === 'Escape') {
+    closeDrawers();
+    closeReportModal();
+  }
 });
 
 const showChartFallback = () => {
@@ -1608,6 +2020,7 @@ new Chart(document.getElementById('stageChart'), {
     }
   }
 });
+
 }
 </script>
 </body>

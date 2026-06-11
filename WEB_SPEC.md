@@ -37,6 +37,15 @@
 - 控制列在窄螢幕需可換行或改為單欄。
 - 圖表 canvas 必須有穩定高度，手機版可降低高度但不能過窄。
 
+## 圖示與 Icon
+
+- 頁面圖示優先使用 Google Fonts Icons / Material Symbols。
+- HTML 需保留 Material Symbols 載入連結：
+  `<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400&display=swap" rel="stylesheet">`
+- 功能圖示、箭頭、星等深度標記需以 Material Symbols 呈現，避免混用多套 icon 來源造成視覺不一致。
+- 若以星星表示層級或影響深度，需搭配文字標籤，不可只用圖示表達含義。
+- 圖示需加上 `aria-hidden="true"`；若圖示本身承載層級意義，外層需提供 `aria-label`。
+
 ## 每次週更檢查
 
 更新 `ai_industry_penetration_YYYY-MM-DD.html` 時，需檢查：
@@ -48,3 +57,4 @@
 - 是否保留適度頁面留白與主內容最大寬度。
 - 新增文字是否在小字級與大字級下都可讀。
 - 新增圖表或卡片是否在手機版不溢出。
+- 是否保留 Google Fonts Icons / Material Symbols 載入與一致的圖示用法。
