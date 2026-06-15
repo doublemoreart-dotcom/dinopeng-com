@@ -4,13 +4,15 @@
 
 ## 檔案
 
-- `index.html`：本機可上線 MVP 入口頁，目前同步 `ai_industry_penetration_2026-06-08.html`，補齊標準 HTML 外殼、SEO / Open Graph、Chart.js 載入失敗提示、混合型人才分析區塊與公開報告來源池。
+- `index.html`：本機可上線 MVP 入口頁，目前同步 `ai_industry_penetration_2026-06-15.html`，補齊標準 HTML 外殼、SEO / Open Graph、Chart.js 載入失敗提示、混合型人才分析區塊與公開報告來源池。
 - `ai_industry_penetration.html`：原本機版視覺化頁面，保留作為初始版本，不因 MVP 上線入口而覆蓋。
 - `ai_industry_penetration_YYYY-MM-DD.html`：週更後的歷史版本檔案，不覆蓋舊版。
 - `AGENTS.md`：給 Codex / Claude Code / Cursor Agent 讀取的專案規範與任務指引。
 - `DATA_UPDATE.md`：週更節奏、資料來源、檔名規則與更新清單。
 - `WEB_SPEC.md`：每次週更都必須遵守的網頁閱讀性、主題、字級與 RWD 規範。
 - `data/ai_public_reports_for_codex.csv`：公開報告來源索引，只作為引用候選與選題提示；未核定口徑前不直接改 KPI 或圖表數字。
+- `ai_company_valuation_ranking_test.html`：AI 公司估值排行榜的獨立 UI 測試頁，不列入正式頁面導覽。
+- `tests/ai_company_valuation_ranking_test.mjs`：排行榜原型的 Node 靜態契約測試。
 
 ## 如何查看
 

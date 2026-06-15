@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 公司估值排行榜｜本機測試頁</title>
+<meta name="description" content="AI 公司估值排行榜區塊的獨立本機 UI 測試頁。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  color-scheme: light;
+  --font-scale: 1;
+  --bg: #f7f7f3;
+  --surface: #ffffff;
+  --surface-2: #efefe9;
+  --text: #24231f;
+  --muted: #6c6960;
+  --border: #dad8d0;
+  --accent: #2f7fd2;
+  --accent-soft: #eaf3fc;
+  --positive: #267a48;
+  --positive-soft: #e9f6ed;
+  --negative: #b0473c;
+  --negative-soft: #faece9;
+  --warning: #966813;
+  --warning-soft: #fbf2df;
+  --shadow: 0 18px 50px rgba(36, 35, 31, 0.08);
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #141512;
+  --surface: #1d1e1a;
+  --surface-2: #292b25;
+  --text: #f2f1ea;
+  --muted: #b8b5a8;
+  --border: #3a3c34;
+  --accent: #67a9e8;
+  --accent-soft: #19344c;
+  --positive: #74c994;
+  --positive-soft: #183626;
+  --negative: #ee9185;
+  --negative-soft: #472722;
+  --warning: #e8bd67;
+  --warning-soft: #44351b;
+  --shadow: 0 22px 60px rgba(0, 0, 0, 0.28);
+}
+:root[data-font-size="small"] { --font-scale: 0.92; }
+:root[data-font-size="medium"] { --font-scale: 1; }
+:root[data-font-size="large"] { --font-scale: 1.16; }
+html { scroll-behavior: smooth; }
+body {
+  min-width: 320px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+  font-size: calc(16px * var(--font-scale));
+  line-height: 1.55;
+}
+button, a { font: inherit; }
+button { color: inherit; }
+.material-symbols-outlined { font-family: "Material Symbols Outlined"; font-weight: 400; font-style: normal; line-height: 1; }
+.page-shell { width: min(calc(100% - 40px), 1080px); margin: 0 auto; padding: clamp(28px, 5vw, 64px) 0 80px; }
+.prototype-header { display: grid; gap: 16px; margin-bottom: 28px; }
+.header-topline { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.page-label { color: var(--accent); font-size: calc(12px * var(--font-scale)); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.version-label { color: var(--muted); font-size: calc(12px * var(--font-scale)); }
+h1 { max-width: 850px; font-size: calc(clamp(32px, 6vw, 58px) * var(--font-scale)); line-height: 1.06; letter-spacing: -0.035em; }
+.lead { width: 100%; color: var(--muted); font-size: calc(15px * var(--font-scale)); text-align: justify; text-align-last: left; text-justify: inter-ideograph; }
+.test-notice { display: flex; gap: 10px; align-items: flex-start; padding: 13px 15px; border: 1px solid color-mix(in srgb, var(--warning) 38%, var(--border)); border-radius: 10px; background: var(--warning-soft); color: var(--text); font-size: calc(13px * var(--font-scale)); }
+.test-notice .material-symbols-outlined { flex: 0 0 auto; color: var(--warning); font-size: 20px; margin-top: 1px; }
+.reader-controls { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0 22px; border-bottom: 1px solid var(--border); }
+.control-group { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+.control-label { color: var(--muted); font-size: calc(12px * var(--font-scale)); margin-right: 2px; }
+.control-button, .ranking-tab {
+  appearance: none;
+  min-height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 0 12px;
+  cursor: pointer;
+  font-size: calc(12px * var(--font-scale));
+  transition: border-color 0.16s ease, background 0.16s ease, color 0.16s ease, transform 0.16s ease;
+}
+.control-button:hover, .control-button:focus-visible, .ranking-tab:hover, .ranking-tab:focus-visible { border-color: var(--accent); outline: none; }
+.control-button:active, .ranking-tab:active { transform: translateY(1px); }
+.control-button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: #fff; }
+.ranking-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 28px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-2);
+}
+.ranking-tabs .ranking-tab {
+  min-height: 52px;
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+  font-size: calc(14px * var(--font-scale));
+  font-weight: 720;
+}
+.ranking-tabs .ranking-tab[aria-selected="true"] { border-color: var(--border); background: var(--surface); color: var(--text); box-shadow: 0 6px 18px rgba(36, 35, 31, 0.08); }
+.ranking-tabs .ranking-tab[aria-selected="true"]::after { content: ""; display: inline-block; width: 7px; height: 7px; margin-left: 9px; border-radius: 999px; background: var(--accent); vertical-align: 1px; }
+.ranking-section { margin-top: clamp(32px, 5vw, 52px); }
+.ranking-section[hidden] { display: none; }
+.section-heading { display: flex; justify-content: space-between; gap: 24px; align-items: flex-end; margin-bottom: 18px; }
+.section-heading-main { display: grid; gap: 8px; max-width: 720px; }
+.section-title-row { display: flex; gap: 10px; align-items: center; }
+.section-icon { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 9px; background: var(--accent-soft); color: var(--accent); }
+h2 { font-size: calc(clamp(22px, 3vw, 30px) * var(--font-scale)); line-height: 1.2; }
+.section-copy, .section-meta { color: var(--muted); font-size: calc(13px * var(--font-scale)); }
+.section-meta { flex: 0 0 auto; text-align: right; }
+.top-three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.company-card {
+  appearance: none;
+  position: relative;
+  min-width: 0;
+  min-height: 220px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  padding: 20px;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 0 0 rgba(0,0,0,0);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.company-card::before { content: ""; position: absolute; inset: 0 0 auto; height: 4px; background: var(--rank-color, var(--accent)); }
+.company-card:hover, .company-card:focus-visible { transform: translateY(-3px); border-color: var(--rank-color, var(--accent)); box-shadow: var(--shadow); outline: none; }
+.card-top { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+.rank-mark { color: var(--rank-color, var(--accent)); font-size: calc(13px * var(--font-scale)); font-weight: 800; letter-spacing: 0.05em; }
+.open-icon { color: var(--muted); font-size: 18px; }
+.company-logo { position: relative; display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; overflow: hidden; border: 1px solid var(--border); border-radius: 10px; background: #fff; color: var(--accent); font-weight: 800; line-height: 1; }
+.company-logo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 7px; background: #fff; }
+.company-logo-fallback { position: relative; z-index: 0; letter-spacing: -0.03em; }
+.company-logo-card { width: 48px; height: 48px; margin-top: 16px; font-size: 14px; }
+.company-logo-row { width: 32px; height: 32px; margin-right: 10px; border-radius: 8px; font-size: 10px; }
+.company-logo-row img { padding: 5px; }
+.company-logo-drawer { width: 48px; height: 48px; border-radius: 12px; font-size: 14px; }
+.company-name { display: block; margin-top: 12px; font-size: calc(21px * var(--font-scale)); font-weight: 750; line-height: 1.2; overflow-wrap: anywhere; }
+.company-value { display: block; margin-top: 8px; font-size: calc(clamp(28px, 4vw, 40px) * var(--font-scale)); font-weight: 760; line-height: 1; letter-spacing: -0.035em; }
+.change { display: inline-flex; align-items: center; min-height: 26px; margin-top: 12px; border-radius: 999px; padding: 3px 9px; font-size: calc(11px * var(--font-scale)); font-weight: 700; white-space: nowrap; }
+.change.positive { background: var(--positive-soft); color: var(--positive); }
+.change.negative { background: var(--negative-soft); color: var(--negative); }
+.change.neutral { background: var(--surface-2); color: var(--muted); }
+.tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+.tag { border: 1px solid var(--border); border-radius: 999px; padding: 3px 8px; color: var(--muted); font-size: calc(10px * var(--font-scale)); background: color-mix(in srgb, var(--surface-2) 55%, transparent); }
+.card-date { display: block; margin-top: 13px; color: var(--muted); font-size: calc(10px * var(--font-scale)); }
+.ranking-table-wrap { margin-top: 14px; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); }
+.ranking-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.ranking-table th { height: 40px; padding: 0 14px; background: var(--surface-2); color: var(--muted); font-size: calc(10px * var(--font-scale)); font-weight: 700; letter-spacing: 0.04em; text-align: left; }
+.ranking-table th:nth-child(1) { width: 70px; text-align: center; }
+.ranking-table th:nth-child(3) { width: 150px; text-align: right; }
+.ranking-table th:nth-child(4) { width: 165px; text-align: right; }
+.ranking-table th:nth-child(5) { width: 180px; }
+.ranking-row { border-top: 1px solid var(--border); }
+.ranking-row-button { appearance: none; display: flex; align-items: center; width: 100%; min-height: 44px; border: 0; background: transparent; padding: 0; color: inherit; text-align: left; text-decoration: none; cursor: pointer; }
+.ranking-row-button:hover, .ranking-row-button:focus-visible { color: var(--accent); outline: none; }
+.ranking-row-button:focus-visible { box-shadow: inset 0 0 0 2px var(--accent); border-radius: 5px; }
+.ranking-row td { height: 58px; padding: 8px 14px; background: var(--surface); font-size: calc(12px * var(--font-scale)); vertical-align: middle; transition: background 0.15s ease; }
+.ranking-row td:nth-child(1) { text-align: center; color: var(--muted); font-weight: 800; }
+.ranking-row td:nth-child(3), .ranking-row td:nth-child(4) { text-align: right; }
+.row-company { font-weight: 720; overflow-wrap: anywhere; }
+.row-value { font-weight: 760; }
+.row-category { color: var(--muted); overflow-wrap: anywhere; }
+.method-note { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; margin-top: 14px; padding: 14px 16px; border-left: 3px solid var(--accent); border-radius: 0 9px 9px 0; background: var(--surface-2); color: var(--muted); font-size: calc(12px * var(--font-scale)); }
+.method-note .material-symbols-outlined { color: var(--accent); font-size: 19px; }
+.valuation-methodology { margin-top: clamp(44px, 7vw, 72px); border: 1px solid var(--border); border-radius: 14px; background: var(--surface); overflow: hidden; }
+.methodology-summary { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: center; min-height: 92px; padding: 18px 20px; cursor: pointer; list-style: none; transition: background 0.16s ease, color 0.16s ease; }
+.methodology-summary::-webkit-details-marker { display: none; }
+.methodology-summary:hover { background: var(--surface-2); }
+.methodology-summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.methodology-summary-mark { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 11px; background: var(--accent-soft); color: var(--accent); }
+.methodology-summary-copy { min-width: 0; }
+.methodology-summary h2 { margin-top: 3px; font-size: calc(clamp(18px, 2.5vw, 24px) * var(--font-scale)); }
+.methodology-summary-description { margin-top: 4px; color: var(--muted); font-size: calc(12px * var(--font-scale)); }
+.methodology-summary-icon { color: var(--muted); transition: transform 0.18s ease, color 0.18s ease; }
+.valuation-methodology[open] .methodology-summary { border-bottom: 1px solid var(--border); }
+.valuation-methodology[open] .methodology-summary-icon { transform: rotate(180deg); }
+.methodology-content { padding: clamp(20px, 4vw, 30px); }
+.methodology-heading { display: grid; gap: 9px; max-width: 760px; margin-bottom: 20px; }
+.methodology-eyebrow { color: var(--accent); font-size: calc(11px * var(--font-scale)); font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+.methodology-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.methodology-card { min-width: 0; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); padding: clamp(18px, 3vw, 24px); }
+.methodology-card-header { display: flex; gap: 11px; align-items: center; }
+.methodology-card-icon { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); }
+.methodology-card h3 { font-size: calc(17px * var(--font-scale)); line-height: 1.25; }
+.methodology-list { display: grid; gap: 10px; margin-top: 18px; list-style: none; }
+.methodology-list li { position: relative; padding-left: 16px; color: var(--muted); font-size: calc(12px * var(--font-scale)); }
+.methodology-list li::before { content: ""; position: absolute; top: 0.67em; left: 0; width: 5px; height: 5px; border-radius: 999px; background: var(--accent); }
+.formula-block { margin-top: 18px; border-radius: 10px; background: var(--surface-2); padding: 13px 14px; }
+.formula-label { display: block; margin-bottom: 5px; color: var(--muted); font-size: calc(10px * var(--font-scale)); font-weight: 800; letter-spacing: 0.05em; }
+.formula-block code { color: var(--text); font-family: inherit; font-size: calc(12px * var(--font-scale)); font-weight: 720; line-height: 1.55; overflow-wrap: anywhere; }
+.comparison-rules { display: grid; grid-template-columns: auto 1fr; gap: 13px; align-items: start; margin-top: 14px; border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border)); border-radius: 12px; background: var(--accent-soft); padding: 16px 18px; }
+.comparison-rules .material-symbols-outlined { color: var(--accent); font-size: 22px; }
+.comparison-rules strong { display: block; margin-bottom: 4px; font-size: calc(13px * var(--font-scale)); }
+.comparison-rules p { color: var(--muted); font-size: calc(12px * var(--font-scale)); }
+.drawer-backdrop { position: fixed; inset: 0; z-index: 50; background: rgba(0,0,0,0.42); opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+.detail-drawer { position: fixed; z-index: 60; top: 0; right: 0; width: min(440px, 100%); height: 100dvh; overflow-y: auto; background: var(--surface); border-left: 1px solid var(--border); padding: 24px; transform: translateX(102%); transition: transform 0.24s ease; box-shadow: -18px 0 50px rgba(0,0,0,0.16); }
+body.drawer-open { overflow: hidden; }
+body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
+.detail-drawer[aria-hidden="false"] { transform: translateX(0); }
+.drawer-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+.drawer-company-heading { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 13px; align-items: center; min-width: 0; }
+.drawer-kicker { color: var(--accent); font-size: calc(11px * var(--font-scale)); font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; }
+.drawer-title { margin-top: 7px; font-size: calc(30px * var(--font-scale)); line-height: 1.1; }
+.drawer-close { appearance: none; flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface-2); cursor: pointer; }
+.drawer-close:hover, .drawer-close:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+.drawer-value { margin-top: 24px; font-size: calc(44px * var(--font-scale)); font-weight: 780; line-height: 1; letter-spacing: -0.04em; }
+.drawer-change { margin-top: 10px; }
+.drawer-section { margin-top: 26px; }
+.drawer-section-title { margin-bottom: 8px; font-size: calc(12px * var(--font-scale)); font-weight: 800; letter-spacing: 0.05em; color: var(--muted); text-transform: uppercase; }
+.drawer-copy { color: var(--text); font-size: calc(14px * var(--font-scale)); }
+.drawer-data-list { display: grid; gap: 0; border-top: 1px solid var(--border); }
+.drawer-data-row { display: grid; grid-template-columns: 120px 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: calc(12px * var(--font-scale)); }
+.drawer-data-row dt { color: var(--muted); }
+.drawer-data-row dd { text-align: right; overflow-wrap: anywhere; }
+.source-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; color: var(--accent); font-size: calc(13px * var(--font-scale)); font-weight: 700; text-underline-offset: 3px; }
+.source-link .material-symbols-outlined { font-size: 17px; }
+.footer-note { margin-top: 54px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: calc(11px * var(--font-scale)); }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
+}
+@media (max-width: 720px) {
+  .methodology-grid { grid-template-columns: 1fr; }
+  .methodology-summary { grid-template-columns: auto minmax(0, 1fr) auto; gap: 11px; min-height: 82px; padding: 15px 14px; }
+  .methodology-summary-mark { width: 38px; height: 38px; }
+  .methodology-summary-description { line-height: 1.4; }
+  .page-shell { width: min(calc(100% - 32px), 1080px); padding-top: 28px; }
+  .header-topline, .section-heading { align-items: flex-start; }
+  .section-heading { display: grid; }
+  .section-meta { text-align: left; }
+  .ranking-tabs { position: sticky; top: 0; z-index: 20; margin-top: 22px; background: color-mix(in srgb, var(--surface-2) 92%, transparent); backdrop-filter: blur(12px); }
+  .ranking-tabs .ranking-tab { min-height: 48px; padding-inline: 8px; font-size: calc(12px * var(--font-scale)); }
+  .ranking-section { margin-top: 32px; }
+  .top-three { grid-template-columns: 1fr; }
+  .company-card { min-height: 0; }
+  .ranking-table th:nth-child(5), .ranking-table td:nth-child(5) { display: none; }
+  .ranking-table th:nth-child(1) { width: 48px; }
+  .ranking-table th:nth-child(3) { width: 110px; }
+  .ranking-table th:nth-child(4) { width: 125px; }
+}
+@media (max-width: 420px) {
+  .page-shell { width: min(calc(100% - 24px), 1080px); }
+  .header-topline { display: grid; gap: 5px; }
+  h1 { font-size: calc(34px * var(--font-scale)); }
+  .reader-controls { align-items: flex-start; }
+  .control-group { width: 100%; }
+  .control-button { flex: 1; padding-inline: 8px; }
+  .ranking-table th { padding-inline: 6px; }
+  .ranking-table td { padding-inline: 6px; font-size: calc(11px * var(--font-scale)); }
+  .ranking-table th:nth-child(1) { width: 36px; }
+  .ranking-table th:nth-child(3) { width: 78px; }
+  .ranking-table th:nth-child(4) { width: 86px; }
+  .change { padding-inline: 6px; font-size: calc(9px * var(--font-scale)); }
+  .detail-drawer { padding: 20px 16px; }
+  .drawer-data-row { grid-template-columns: 96px 1fr; gap: 10px; }
+}
+</style>
+</head>
+<body>
+<main class="page-shell">
+  <header class="prototype-header">
+    <div class="header-topline">
+      <div class="page-label">Standalone component prototype</div>
+      <div class="version-label">UI prototype v2026.06.13</div>
+    </div>
+    <h1>AI 公司估值排行榜</h1>
+    <p class="lead">將私人 AI 原生公司的融資估值，與上市 AI 成長公司的公開市場市值分榜觀察。焦點不只是誰最大，也是資本正在加速投票給哪些 AI 商業模式。</p>
+    <div class="test-notice" role="note">
+      <span class="material-symbols-outlined" aria-hidden="true">science</span>
+      <span><strong>UI 測試示意資料。</strong> 本頁公司、金額、變動率與日期僅用於驗證版型和互動，不是已查核的最新估值排名，不作投資依據。</span>
+    </div>
+  </header>
+
+  <div class="reader-controls" aria-label="閱讀設定">
+    <div class="control-group" aria-label="主題設定">
+      <span class="control-label">主題</span>
+      <button class="control-button" type="button" data-theme-choice="light" aria-pressed="true">淺色</button>
+      <button class="control-button" type="button" data-theme-choice="dark" aria-pressed="false">深色</button>
+    </div>
+    <div class="control-group" aria-label="字級設定">
+      <span class="control-label">字級</span>
+      <button class="control-button" type="button" data-font-choice="small" aria-pressed="false">小</button>
+      <button class="control-button" type="button" data-font-choice="medium" aria-pressed="true">中</button>
+      <button class="control-button" type="button" data-font-choice="large" aria-pressed="false">大</button>
+    </div>
+  </div>
+
+  <div class="ranking-tabs" role="tablist" aria-label="AI 公司排行榜">
+    <button class="ranking-tab" type="button" id="private-ranking-tab" data-ranking-tab="private" role="tab" aria-controls="private-ranking" aria-selected="true" tabindex="0">私人 AI 原生公司</button>
+    <button class="ranking-tab" type="button" id="public-ranking-tab" data-ranking-tab="public" role="tab" aria-controls="public-ranking" aria-selected="false" tabindex="-1">上市 AI 成長公司</button>
+  </div>
+
+  <section class="ranking-section" id="private-ranking" data-ranking-panel="private" role="tabpanel" aria-labelledby="private-ranking-tab">
+    <div class="section-heading">
+      <div class="section-heading-main">
+        <div class="section-title-row"><span class="section-icon material-symbols-outlined" aria-hidden="true">rocket_launch</span><h2 id="private-ranking-title">私人 AI 原生公司 Top 10</h2></div>
+        <p class="section-copy">以最近一輪可追溯的 post-money valuation 排序；變動率與前一輪可比估值比較。</p>
+      </div>
+      <div class="section-meta">測試資料集<br>10 家公司</div>
+    </div>
+    <div class="top-three" data-top-three="private"></div>
+    <div class="ranking-table-wrap">
+      <table class="ranking-table">
+        <thead><tr><th scope="col">排名</th><th scope="col">公司</th><th scope="col">估值</th><th scope="col">較前輪</th><th scope="col">核心業務</th></tr></thead>
+        <tbody data-ranking-list="private"></tbody>
+      </table>
+    </div>
+    <div class="method-note"><span class="material-symbols-outlined" aria-hidden="true">info</span><span>正式版應以公司或投資方官方公告優先；官方未揭露估值時，才使用 Reuters、Bloomberg 等可追溯媒體。</span></div>
+  </section>
+
+  <section class="ranking-section" id="public-ranking" data-ranking-panel="public" role="tabpanel" aria-labelledby="public-ranking-tab" hidden>
+    <div class="section-heading">
+      <div class="section-heading-main">
+        <div class="section-title-row"><span class="section-icon material-symbols-outlined" aria-hidden="true">monitoring</span><h2 id="public-ranking-title">上市 AI 成長公司 Top 10</h2></div>
+        <p class="section-copy">以共同基準交易日的公開市場市值排序；變動率比較 30 個日曆日前最近交易日。</p>
+      </div>
+      <div class="section-meta">測試基準日<br>2026-06-12</div>
+    </div>
+    <div class="top-three" data-top-three="public"></div>
+    <div class="ranking-table-wrap">
+      <table class="ranking-table">
+        <thead><tr><th scope="col">排名</th><th scope="col">公司</th><th scope="col">市值</th><th scope="col">30 日變動</th><th scope="col">核心業務</th></tr></thead>
+        <tbody data-ranking-list="public"></tbody>
+      </table>
+    </div>
+    <div class="method-note"><span class="material-symbols-outlined" aria-hidden="true">info</span><span>正式版應使用同一資料提供者與共同基準交易日，並為每家公司說明「AI 為主要成長引擎」的納入理由。</span></div>
+  </section>
+
+  <details class="valuation-methodology" id="valuation-methodology">
+    <summary class="methodology-summary">
+      <span class="methodology-summary-mark material-symbols-outlined" aria-hidden="true">calculate</span>
+      <span class="methodology-summary-copy">
+        <span class="methodology-eyebrow">Methodology</span>
+        <h2 id="valuation-methodology-title">估值來源與計算方式</h2>
+        <span class="methodology-summary-description">點擊展開完整資料來源、估值口徑與計算公式</span>
+      </span>
+      <span class="methodology-summary-icon material-symbols-outlined" aria-hidden="true">expand_more</span>
+    </summary>
+
+    <div class="methodology-content">
+    <div class="methodology-heading">
+      <p class="section-copy">私人公司的融資估值與上市公司的公開市場市值，代表不同定價機制，因此分別計算、分榜比較，不直接混為同一排名。</p>
+    </div>
+
+    <div class="methodology-grid">
+      <article class="methodology-card">
+        <div class="methodology-card-header">
+          <span class="methodology-card-icon material-symbols-outlined" aria-hidden="true">paid</span>
+          <h3>私人公司：最新一輪投後估值</h3>
+        </div>
+        <ul class="methodology-list">
+          <li><strong>來源優先序：</strong>公司或投資方官方公告、監管或法律文件；未公開時，再採 Reuters、Bloomberg 等可追溯媒體。</li>
+          <li><strong>估值口徑：</strong>採最近一輪已揭露的 post-money valuation，不以募資金額或傳聞中的目標估值代替。</li>
+          <li><strong>比較基準：</strong>以前一輪口徑相同且可追溯的投後估值計算；缺少前值時標示「無可比資料」。</li>
+        </ul>
+        <div class="formula-block">
+          <span class="formula-label">估值變動率</span>
+          <code>(最新一輪投後估值 − 前一輪可比估值) ÷ 前一輪可比估值 × 100%</code>
+        </div>
+      </article>
+
+      <article class="methodology-card">
+        <div class="methodology-card-header">
+          <span class="methodology-card-icon material-symbols-outlined" aria-hidden="true">candlestick_chart</span>
+          <h3>上市公司：共同基準日市值</h3>
+        </div>
+        <ul class="methodology-list">
+          <li><strong>來源優先序：</strong>交易所、公司申報資料或同一市場資料提供者，所有公司使用相同基準交易日。</li>
+          <li><strong>市值口徑：</strong>收盤股價 × 流通在外股數；若採資料提供者的市值欄位，整榜必須維持同一供應商與算法。</li>
+          <li><strong>比較基準：</strong>以基準日前 30 個日曆日最接近的有效交易日作為前值，避免休市造成缺值。</li>
+        </ul>
+        <div class="formula-block">
+          <span class="formula-label">30 日市值變動率</span>
+          <code>(基準日市值 − 30 日前可比市值) ÷ 30 日前可比市值 × 100%</code>
+        </div>
+      </article>
+    </div>
+
+    <div class="comparison-rules" role="note">
+      <span class="material-symbols-outlined" aria-hidden="true">rule</span>
+      <div>
+        <strong>共同比較規則</strong>
+        <p>所有金額統一換算為美元，顯示明確的數值基準日與來源發布日；依當期數值由高至低排序，私人公司與上市公司分榜排序。資料口徑不同、前值缺漏或無法驗證時，不強行計算變動率。本測試頁仍使用示意數字與來源連結，不代表最新市場資料。</p>
+      </div>
+    </div>
+    </div>
+  </details>
+
+  <p class="footer-note">本頁是獨立區塊原型，不讀取即時 API、不依賴 Chart.js，也不會修改正式週更檔。</p>
+</main>
+
+<div class="drawer-backdrop" data-drawer-close aria-hidden="true"></div>
+<aside class="detail-drawer" id="company-detail-drawer" aria-hidden="true" aria-modal="true" role="dialog" aria-labelledby="drawer-title">
+  <div class="drawer-header">
+    <div class="drawer-company-heading"><div id="drawer-company-logo"></div><div><div class="drawer-kicker" id="drawer-kicker">公司詳情</div><h2 class="drawer-title" id="drawer-title">公司名稱</h2></div></div>
+    <button class="drawer-close" type="button" data-drawer-close aria-label="關閉公司詳情"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
+  </div>
+  <div class="drawer-value" id="drawer-value"></div>
+  <div class="drawer-change" id="drawer-change"></div>
+  <div class="drawer-section"><div class="drawer-section-title">核心 AI 業務</div><div class="tag-list" id="drawer-tags"></div></div>
+  <div class="drawer-section"><div class="drawer-section-title">納入理由</div><p class="drawer-copy" id="drawer-rationale"></p></div>
+  <div class="drawer-section"><div class="drawer-section-title">數據口徑</div><dl class="drawer-data-list" id="drawer-data"></dl></div>
+  <div class="drawer-section"><div class="drawer-section-title">方法註記</div><p class="drawer-copy" id="drawer-methodology"></p><a class="source-link" id="drawer-source" href="about:blank#ui-test-source" target="_blank" rel="noopener noreferrer"><span>開啟測試來源</span><span class="material-symbols-outlined" aria-hidden="true">open_in_new</span></a></div>
+</aside>
+
+<script>
+const companyLogoFiles = {
+  'OpenAI': 'assets/company-logos/openai.ico',
+  'xAI': 'assets/company-logos/xai.ico',
+  'Anthropic': 'assets/company-logos/anthropic.ico',
+  'Databricks': 'assets/company-logos/databricks.ico',
+  'Scale AI': 'assets/company-logos/scale-ai.ico',
+  'Mistral AI': 'assets/company-logos/mistral-ai.ico',
+  'Perplexity': 'assets/company-logos/perplexity.ico',
+  'Cohere': 'assets/company-logos/cohere.ico',
+  'Harvey': 'assets/company-logos/harvey.ico',
+  'NVIDIA': 'assets/company-logos/nvidia.ico',
+  'Broadcom': 'assets/company-logos/broadcom.ico',
+  'Palantir': 'assets/company-logos/palantir.ico',
+  'AMD': 'assets/company-logos/amd.ico',
+  'CoreWeave': 'assets/company-logos/coreweave.ico',
+  'SoundHound AI': 'assets/company-logos/soundhound-ai.ico',
+  'BigBear.ai': 'assets/company-logos/bigbear-ai.ico',
+  'Innodata': 'assets/company-logos/innodata.ico'
+};
+
+const companyValuationData = [
+  { companyName: 'OpenAI', companyType: 'private', valueUsd: 300e9, valueType: 'post_money_valuation', valueAsOf: '2025-03-31', previousValueUsd: 157e9, previousValueAsOf: '2024-10-02', changePeriodLabel: 'vs. 前輪估值', changeStatus: 'available', businessTags: ['基礎模型', '企業 AI'], inclusionRationale: '核心產品與商業模式圍繞通用 AI 模型與平台。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '示意的 post-money valuation，僅用於版型測試。' },
+  { companyName: 'xAI', companyType: 'private', valueUsd: 80e9, valueType: 'post_money_valuation', valueAsOf: '2025-03-01', previousValueUsd: 50e9, previousValueAsOf: '2024-11-01', changePeriodLabel: 'vs. 前輪估值', changeStatus: 'available', businessTags: ['基礎模型', '超算中心'], inclusionRationale: '主要產品與資本支出聚焦於生成式 AI 模型與計算基礎設施。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '示意估值，前後數值用於驗證正向變動。' },
+  { companyName: 'Anthropic', companyType: 'private', valueUsd: 61.5e9, valueType: 'post_money_valuation', valueAsOf: '2025-03-03', previousValueUsd: 18.4e9, previousValueAsOf: '2024-02-01', changePeriodLabel: 'vs. 前輪估值', changeStatus: 'available', businessTags: ['基礎模型', 'AI 安全'], inclusionRationale: '主要產品為通用模型及企業 API，並將 AI 安全作為核心定位。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '示意估值，僅測試 Top 3 焦點卡。' },
+  { companyName: 'Databricks', companyType: 'private', valueUsd: 62e9, valueType: 'post_money_valuation', valueAsOf: '2024-12-17', previousValueUsd: 43e9, previousValueAsOf: '2023-09-14', changePeriodLabel: 'vs. 前輪估值', changeStatus: 'available', businessTags: ['資料平台', 'ML 工具'], inclusionRationale: '資料與機器學習平台為核心商業模式。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '示意資料。' },
+  { companyName: 'Scale AI', companyType: 'private', valueUsd: 29e9, valueType: 'post_money_valuation', valueAsOf: '2025-05-01', previousValueUsd: 13.8e9, previousValueAsOf: '2024-05-21', changePeriodLabel: 'vs. 前輪估值', changeStatus: 'available', businessTags: ['AI 資料', '模型評測'], inclusionRationale: '提供 AI 訓練資料、評測與應用基礎設施。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '示意資料。' },
+  { companyName: 'Safe Superintelligence', companyType: 'private', valueUsd: 20e9, valueType: 'post_money_valuation', valueAsOf: '2025-04-01', previousValueUsd: 5e9, previousValueAsOf: '2024-09-01', changePeriodLabel: 'vs. 前輪估值', changeStatus: 'available', businessTags: ['AI 安全', '研究'], inclusionRationale: '公司目標直接聚焦於安全的超級智慧研究。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '示意資料。' },
+  { companyName: 'Mistral AI', companyType: 'private', valueUsd: 14e9, valueType: 'post_money_valuation', valueAsOf: '2025-09-01', previousValueUsd: 6.2e9, previousValueAsOf: '2024-06-11', changePeriodLabel: 'vs. 前輪估值', changeStatus: 'available', businessTags: ['開放模型', '企業 AI'], inclusionRationale: '核心業務為基礎模型、API 與企業部署。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '示意資料。' },
+  { companyName: 'Perplexity', companyType: 'private', valueUsd: 14e9, valueType: 'post_money_valuation', valueAsOf: '2025-05-01', previousValueUsd: 9e9, previousValueAsOf: '2024-12-01', changePeriodLabel: 'vs. 前輪估值', changeStatus: 'available', businessTags: ['AI 搜尋', '消費應用'], inclusionRationale: '以生成式 AI 搜尋與問答作為核心產品。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '示意資料。' },
+  { companyName: 'Cohere', companyType: 'private', valueUsd: 5.5e9, valueType: 'post_money_valuation', valueAsOf: '2024-07-22', previousValueUsd: 2.2e9, previousValueAsOf: '2023-06-08', changePeriodLabel: 'vs. 前輪估值', changeStatus: 'available', businessTags: ['企業模型', 'RAG'], inclusionRationale: '聚焦企業生成式 AI 模型與檢索應用。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '示意資料。' },
+  { companyName: 'Harvey', companyType: 'private', valueUsd: 5e9, valueType: 'post_money_valuation', valueAsOf: '2025-02-01', previousValueUsd: null, previousValueAsOf: null, changePeriodLabel: 'vs. 前輪估值', changeStatus: 'unavailable', businessTags: ['法律 AI', '專業服務'], inclusionRationale: '核心產品為法律與專業服務場景的 AI 工作平台。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '刻意保留無前值狀態，測試「無可比資料」。' },
+
+  { companyName: 'NVIDIA', companyType: 'public', valueUsd: 4.1e12, valueType: 'market_cap', valueAsOf: '2026-06-12', previousValueUsd: 3.85e12, previousValueAsOf: '2026-05-13', changePeriodLabel: '近 30 日', changeStatus: 'available', businessTags: ['AI 晶片', '計算平台'], inclusionRationale: 'AI 加速計算與軟體生態是主要成長引擎。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '示意市值，僅驗證 US$T 格式。' },
+  { companyName: 'Broadcom', companyType: 'public', valueUsd: 1.62e12, valueType: 'market_cap', valueAsOf: '2026-06-12', previousValueUsd: 1.7e12, previousValueAsOf: '2026-05-13', changePeriodLabel: '近 30 日', changeStatus: 'available', businessTags: ['AI 網路', '定制晶片'], inclusionRationale: '定制 AI 晶片與資料中心網路是關鍵成長業務。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '刻意使用負向變動測試狀態色與文字。' },
+  { companyName: 'Palantir', companyType: 'public', valueUsd: 360e9, valueType: 'market_cap', valueAsOf: '2026-06-12', previousValueUsd: 325e9, previousValueAsOf: '2026-05-13', changePeriodLabel: '近 30 日', changeStatus: 'available', businessTags: ['AI 平台', '決策系統'], inclusionRationale: 'AIP 與企業決策平台已成為主要成長敘事。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '示意資料。' },
+  { companyName: 'AMD', companyType: 'public', valueUsd: 285e9, valueType: 'market_cap', valueAsOf: '2026-06-12', previousValueUsd: 268e9, previousValueAsOf: '2026-05-13', changePeriodLabel: '近 30 日', changeStatus: 'available', businessTags: ['AI 晶片', '資料中心'], inclusionRationale: 'AI GPU 與資料中心產品為核心成長動能。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '示意資料。' },
+  { companyName: 'CoreWeave', companyType: 'public', valueUsd: 82e9, valueType: 'market_cap', valueAsOf: '2026-06-12', previousValueUsd: 72e9, previousValueAsOf: '2026-05-13', changePeriodLabel: '近 30 日', changeStatus: 'available', businessTags: ['AI 雲端', 'GPU 運算'], inclusionRationale: '主要商業模式為 AI 工作負載的 GPU 雲端基礎設施。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '示意資料。' },
+  { companyName: 'Tempus AI', companyType: 'public', valueUsd: 14e9, valueType: 'market_cap', valueAsOf: '2026-06-12', previousValueUsd: 15.4e9, previousValueAsOf: '2026-05-13', changePeriodLabel: '近 30 日', changeStatus: 'available', businessTags: ['醫療 AI', '精準醫療'], inclusionRationale: '以 AI 與臨床資料平台支援精準醫療決策。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '示意資料。' },
+  { companyName: 'C3.ai', companyType: 'public', valueUsd: 5.2e9, valueType: 'market_cap', valueAsOf: '2026-06-12', previousValueUsd: 5.2e9, previousValueAsOf: '2026-05-13', changePeriodLabel: '近 30 日', changeStatus: 'available', businessTags: ['企業 AI', '應用平台'], inclusionRationale: '主要營運围繞企業 AI 應用與開發平台。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '刻意使用 0% 變動，驗證其與「無可比資料」不同。' },
+  { companyName: 'SoundHound AI', companyType: 'public', valueUsd: 4.4e9, valueType: 'market_cap', valueAsOf: '2026-06-12', previousValueUsd: 4.8e9, previousValueAsOf: '2026-05-13', changePeriodLabel: '近 30 日', changeStatus: 'available', businessTags: ['語音 AI', '餐飲車用'], inclusionRationale: '語音 AI 平台是核心產品與營收來源。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '示意資料。' },
+  { companyName: 'BigBear.ai', companyType: 'public', valueUsd: 3.1e9, valueType: 'market_cap', valueAsOf: '2026-06-12', previousValueUsd: null, previousValueAsOf: null, changePeriodLabel: '近 30 日', changeStatus: 'not_comparable', businessTags: ['決策 AI', '國防應用'], inclusionRationale: '主要產品為決策智慧、視覺 AI 與政府場景應用。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '刻意使用口徑不可比狀態。' },
+  { companyName: 'Innodata', companyType: 'public', valueUsd: 1.6e9, valueType: 'market_cap', valueAsOf: '2026-06-12', previousValueUsd: 1.45e9, previousValueAsOf: '2026-05-13', changePeriodLabel: '近 30 日', changeStatus: 'available', businessTags: ['AI 資料', '訓練服務'], inclusionRationale: '以模型訓練資料工程與 AI 資料服務為主要成長業務。', sourceName: 'UI 測試資料', sourceUrl: 'about:blank#ui-test-source', sourcePublishedAt: '2026-06-13', sourceTier: 'prototype', methodologyNote: '示意資料。' }
+];
+
+const storage = {
+  get(key) { try { return localStorage.getItem(key); } catch (error) { return null; } },
+  set(key, value) { try { localStorage.setItem(key, value); } catch (error) {} }
+};
+
+const validateCompany = company => {
+  const validType = company.companyType === 'private' || company.companyType === 'public';
+  const validValue = Number.isFinite(company.valueUsd) && company.valueUsd > 0;
+  const validDate = /^\d{4}-\d{2}-\d{2}$/.test(company.valueAsOf || '');
+  const validSource = typeof company.sourceUrl === 'string' && company.sourceUrl.length > 0;
+  if (!validType || !validValue || !validDate || !validSource) {
+    console.warn('[valuation-ranking] 排除無效資料', company.companyName || company);
+    return false;
+  }
+  return true;
+};
+
+const formatUsd = value => {
+  if (value >= 1e12) return `US$${(value / 1e12).toFixed(value % 1e12 === 0 ? 0 : 2).replace(/\.00$/, '')}T`;
+  if (value >= 1e9) return `US$${(value / 1e9).toFixed(value % 1e9 === 0 ? 0 : 1).replace(/\.0$/, '')}B`;
+  return `US$${Math.round(value / 1e6)}M`;
+};
+
+const getChangePct = company => {
+  if (company.changeStatus !== 'available' || !Number.isFinite(company.previousValueUsd) || company.previousValueUsd <= 0) return null;
+  return ((company.valueUsd - company.previousValueUsd) / company.previousValueUsd) * 100;
+};
+
+const formatChange = company => {
+  if (company.changeStatus === 'unavailable') return { label: '無可比資料', className: 'neutral' };
+  if (company.changeStatus === 'not_comparable') return { label: '口徑不可比', className: 'neutral' };
+  const pct = getChangePct(company);
+  if (pct === null) return { label: '無可比資料', className: 'neutral' };
+  const sign = pct > 0 ? '+' : '';
+  const direction = pct > 0 ? '上升' : pct < 0 ? '下降' : '持平';
+  return { label: `${sign}${pct.toFixed(1)}% ${direction}`, className: pct > 0 ? 'positive' : pct < 0 ? 'negative' : 'neutral' };
+};
+
+const getRankedCompanies = type => companyValuationData
+  .filter(validateCompany)
+  .filter(company => company.companyType === type)
+  .sort((a, b) => b.valueUsd - a.valueUsd)
+  .slice(0, 10)
+  .map((company, index) => ({ ...company, rank: index + 1 }));
+
+const createChangeMarkup = company => {
+  const change = formatChange(company);
+  return `<span class="change ${change.className}">${change.label}</span>`;
+};
+
+const getCompanyInitials = companyName => {
+  const words = companyName.replace(/\.ai/gi, '').trim().split(/\s+/).filter(Boolean);
+  if (words.length > 1) return words.slice(0, 2).map(word => word[0]).join('').toUpperCase();
+  return words[0].slice(0, 2).toUpperCase();
+};
+
+const createCompanyLogoMarkup = (company, variant) => {
+  const wrap = inner => {
+    if (variant === 'card') return `<span class="company-logo company-logo-card" aria-hidden="true">${inner}</span>`;
+    if (variant === 'row') return `<span class="company-logo company-logo-row" aria-hidden="true">${inner}</span>`;
+    return `<span class="company-logo company-logo-drawer" aria-hidden="true">${inner}</span>`;
+  };
+  const fallbackMarkup = `<span class="company-logo-fallback">${getCompanyInitials(company.companyName)}</span>`;
+  const fallback = wrap(fallbackMarkup);
+  const logoFile = companyLogoFiles[company.companyName];
+  if (!logoFile) return fallback;
+  return wrap(`${fallbackMarkup}<img src="${logoFile}" alt="" loading="lazy" onerror="this.hidden=true">`);
+};
+
+const createDetailButtonAttributes = company => `type="button" data-company-type="${company.companyType}" data-company-rank="${company.rank}" aria-expanded="false" aria-controls="company-detail-drawer"`;
+
+const renderRanking = type => {
+  const ranked = getRankedCompanies(type);
+  const topThree = document.querySelector(`[data-top-three="${type}"]`);
+  const list = document.querySelector(`[data-ranking-list="${type}"]`);
+  const rankColors = ['#2f7fd2', '#4d9a68', '#d08328'];
+
+  topThree.innerHTML = ranked.slice(0, 3).map((company, index) => `
+    <button class="company-card" ${createDetailButtonAttributes(company)} style="--rank-color:${rankColors[index]}">
+      <span class="card-top"><span class="rank-mark">#${company.rank}</span><span class="open-icon material-symbols-outlined" aria-hidden="true">north_east</span></span>
+      ${createCompanyLogoMarkup(company, 'card')}
+      <span class="company-name">${company.companyName}</span>
+      <span class="company-value">${formatUsd(company.valueUsd)}</span>
+      ${createChangeMarkup(company)}
+      <span class="tag-list">${company.businessTags.slice(0, 2).map(tag => `<span class="tag">${tag}</span>`).join('')}</span>
+      <span class="card-date">基準日 ${company.valueAsOf}</span>
+    </button>
+  `).join('');
+
+  list.innerHTML = ranked.slice(3).map(company => `
+    <tr class="ranking-row">
+      <td>${company.rank}</td>
+      <td><button class="ranking-row-button" ${createDetailButtonAttributes(company)}>${createCompanyLogoMarkup(company, 'row')}<span class="row-company">${company.companyName}</span></button></td>
+      <td class="row-value">${formatUsd(company.valueUsd)}</td>
+      <td>${createChangeMarkup(company)}</td>
+      <td class="row-category">${company.businessTags.join(' · ')}</td>
+    </tr>
+  `).join('');
+
+  document.querySelectorAll(`[data-company-type="${type}"]`).forEach(button => {
+    button.addEventListener('click', () => openCompanyDrawer(type, Number(button.dataset.companyRank), button));
+  });
+};
+
+const drawer = document.getElementById('company-detail-drawer');
+let lastDrawerTrigger = null;
+
+const openCompanyDrawer = (type, rank, trigger) => {
+  const company = getRankedCompanies(type).find(item => item.rank === rank);
+  if (!company) return;
+  lastDrawerTrigger = trigger;
+  document.querySelectorAll('[aria-controls="company-detail-drawer"]').forEach(item => item.setAttribute('aria-expanded', String(item === trigger)));
+  document.getElementById('drawer-kicker').textContent = `${type === 'private' ? '私人公司估值' : '上市公司市值'} · #${company.rank}`;
+  document.getElementById('drawer-company-logo').innerHTML = createCompanyLogoMarkup(company, 'drawer');
+  document.getElementById('drawer-title').textContent = company.companyName;
+  document.getElementById('drawer-value').textContent = formatUsd(company.valueUsd);
+  document.getElementById('drawer-change').innerHTML = createChangeMarkup(company);
+  document.getElementById('drawer-tags').innerHTML = company.businessTags.map(tag => `<span class="tag">${tag}</span>`).join('');
+  document.getElementById('drawer-rationale').textContent = company.inclusionRationale;
+  const previousLabel = Number.isFinite(company.previousValueUsd) ? `${formatUsd(company.previousValueUsd)}（${company.previousValueAsOf}）` : '無可比資料';
+  document.getElementById('drawer-data').innerHTML = `
+    <div class="drawer-data-row"><dt>數值類型</dt><dd>${company.valueType === 'market_cap' ? '公開市場市值' : 'Post-money valuation'}</dd></div>
+    <div class="drawer-data-row"><dt>數值基準日</dt><dd>${company.valueAsOf}</dd></div>
+    <div class="drawer-data-row"><dt>前期數值</dt><dd>${previousLabel}</dd></div>
+    <div class="drawer-data-row"><dt>比較期間</dt><dd>${company.changePeriodLabel}</dd></div>
+    <div class="drawer-data-row"><dt>資料狀態</dt><dd>UI 測試示意資料</dd></div>
+    <div class="drawer-data-row"><dt>來源發布日</dt><dd>${company.sourcePublishedAt}</dd></div>
+  `;
+  document.getElementById('drawer-methodology').textContent = company.methodologyNote;
+  const sourceLink = document.getElementById('drawer-source');
+  sourceLink.href = company.sourceUrl;
+  sourceLink.querySelector('span').textContent = company.sourceName;
+  drawer.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('drawer-open');
+  drawer.querySelector('[data-drawer-close]').focus();
+};
+
+const closeCompanyDrawer = () => {
+  if (drawer.getAttribute('aria-hidden') === 'true') return;
+  drawer.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('drawer-open');
+  document.querySelectorAll('[aria-controls="company-detail-drawer"]').forEach(item => item.setAttribute('aria-expanded', 'false'));
+  if (lastDrawerTrigger) lastDrawerTrigger.focus();
+  lastDrawerTrigger = null;
+};
+
+const applyTheme = theme => {
+  document.documentElement.dataset.theme = theme;
+  document.querySelectorAll('[data-theme-choice]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.themeChoice === theme)));
+  storage.set('valuationPrototypeTheme', theme);
+};
+
+const applyFontSize = size => {
+  document.documentElement.dataset.fontSize = size;
+  document.querySelectorAll('[data-font-choice]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.fontChoice === size)));
+  storage.set('valuationPrototypeFontSize', size);
+};
+
+const applyRankingTab = (type, moveFocus = false) => {
+  document.querySelectorAll('[data-ranking-tab]').forEach(button => {
+    const selected = button.dataset.rankingTab === type;
+    button.setAttribute('aria-selected', String(selected));
+    button.tabIndex = selected ? 0 : -1;
+    if (selected && moveFocus) button.focus();
+  });
+  document.querySelectorAll('[data-ranking-panel]').forEach(panel => {
+    panel.hidden = panel.dataset.rankingPanel !== type;
+  });
+};
+
+const handleRankingTabKeydown = event => {
+  const tabs = [...document.querySelectorAll('[data-ranking-tab]')];
+  const currentIndex = tabs.indexOf(event.currentTarget);
+  let nextIndex = currentIndex;
+  if (event.key === 'ArrowRight') nextIndex = (currentIndex + 1) % tabs.length;
+  else if (event.key === 'ArrowLeft') nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+  else if (event.key === 'Home') nextIndex = 0;
+  else if (event.key === 'End') nextIndex = tabs.length - 1;
+  else return;
+  event.preventDefault();
+  applyRankingTab(tabs[nextIndex].dataset.rankingTab, true);
+};
+
+renderRanking('private');
+renderRanking('public');
+applyTheme(storage.get('valuationPrototypeTheme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+applyFontSize(storage.get('valuationPrototypeFontSize') || 'medium');
+
+document.querySelectorAll('[data-theme-choice]').forEach(button => button.addEventListener('click', () => applyTheme(button.dataset.themeChoice)));
+document.querySelectorAll('[data-font-choice]').forEach(button => button.addEventListener('click', () => applyFontSize(button.dataset.fontChoice)));
+document.querySelectorAll('[data-ranking-tab]').forEach(button => {
+  button.addEventListener('click', () => applyRankingTab(button.dataset.rankingTab));
+  button.addEventListener('keydown', handleRankingTabKeydown);
+});
+document.querySelectorAll('[data-drawer-close]').forEach(button => button.addEventListener('click', closeCompanyDrawer));
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') closeCompanyDrawer();
+  if (event.key === 'Tab' && drawer.getAttribute('aria-hidden') === 'false') {
+    const focusable = [...drawer.querySelectorAll('button, a[href]')].filter(element => !element.hasAttribute('disabled'));
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  }
+});
+</script>
+</body>
+</html>

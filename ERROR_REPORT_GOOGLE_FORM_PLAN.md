@@ -1,5 +1,12 @@
 # Google Form 錯誤回報整合規劃
 
+## 實作狀態
+
+- 狀態：已完成方案 A 串接、表單內容優化與發布驗證。
+- 表單網址：<https://docs.google.com/forms/d/e/1FAIpQLScYr_-_MGfh0lV8Mps7tuvWMi7wX_qfDs1CVm7b51aRTRUY1w/viewform?usp=header>
+- 網頁行為：點擊 footer 的「開啟錯誤回報表單」後，在新分頁開啟 Google Form。
+- 備援方式：若表單網址未設定或無法使用，保留原有 Email 回報彈窗與 `doublemore.art@gmail.com` 聯絡方式。
+
 ## 目標
 
 將目前 footer 的「錯誤回報」從 `mailto:` 草稿模式，升級為 Google Form 收件與 Google Sheet 彙整。使用者仍從頁面 footer 點擊「回報錯誤」，但回報資料會進入表單後台，方便追蹤、整理與後續修正。
@@ -61,7 +68,7 @@ footer 按鈕點擊後，開啟 Google Form 新分頁。
 
 ## 建議採用
 
-先採用 **方案 A**，之後若外部讀者增加，再升級到 **方案 B**。
+目前採用 **方案 A**，之後若外部讀者增加，再評估升級到 **方案 B**。
 
 目前靜態網頁不需要後端，Google Form 可以穩定收件、寄通知並彙整到 Google Sheet；若未來要做狀態追蹤或管理後台，再考慮自建 API。
 
