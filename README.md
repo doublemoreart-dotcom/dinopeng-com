@@ -4,7 +4,7 @@
 
 ## 檔案
 
-- `index.html`：本機可上線入口頁，目前同步 `ai_industry_penetration_2026-07-02.html`，包含產業分析、混合型人才、AI 公司估值排行榜與公開報告來源池。
+- `index.html`：本機可上線入口頁，目前同步 `ai_industry_penetration_2026-07-03.html`，包含產業分析、混合型人才、AI 公司估值排行榜與公開報告來源池。
 - `ai_industry_penetration.html`：原本機版視覺化頁面，保留作為初始版本，不因 MVP 上線入口而覆蓋。
 - `ai_industry_penetration_YYYY-MM-DD.html`：週更後的歷史版本檔案，不覆蓋舊版。
 - `AGENTS.md`：給 Codex / Claude Code / Cursor Agent 讀取的專案規範與任務指引。
