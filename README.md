@@ -42,11 +42,19 @@ open ai_industry_penetration.html
   - Branch：`main`
   - Folder：`/root`
 
-部署完成後，公開網址通常會是：
+本專案已將 GitHub Pages 自訂網域設為：
 
 ```text
-https://<github-username>.github.io/ai-industry-penetration-analysis/
+https://dinopeng.com/
 ```
+
+自訂網域由根目錄的 `CNAME` 管理。網域供應商的 DNS 需另外設定：
+
+- 根網域 `@`：四筆 `A` 紀錄，分別指向 `185.199.108.153`、`185.199.109.153`、`185.199.110.153`、`185.199.111.153`。
+- `www`：一筆 `CNAME` 紀錄，指向 `doublemoreart-dotcom.github.io`。
+- 移除與上述設定衝突的舊 `A`、`AAAA` 或 `CNAME` 紀錄。
+
+DNS 生效後，在 GitHub repo 的 Settings → Pages 確認 Custom domain 為 `dinopeng.com`，並啟用 Enforce HTTPS。
 
 ## 週更與版本命名
 
