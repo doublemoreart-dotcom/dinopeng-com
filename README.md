@@ -4,7 +4,8 @@
 
 ## 檔案
 
-- `index.html`：本機可上線入口頁，目前同步 `ai_industry_penetration_2026-07-03.html`，包含產業分析、混合型人才、AI 公司估值排行榜與公開報告來源池。
+- `index.html`：根網址相容入口，目前同步 `ai_industry_penetration_2026-07-05.html`。
+- `aidata/index.html`：正式專案網址入口，與根目錄 `index.html` 保持完全同步。
 - `ai_industry_penetration.html`：原本機版視覺化頁面，保留作為初始版本，不因 MVP 上線入口而覆蓋。
 - `ai_industry_penetration_YYYY-MM-DD.html`：週更後的歷史版本檔案，不覆蓋舊版。
 - `AGENTS.md`：給 Codex / Claude Code / Cursor Agent 讀取的專案規範與任務指引。
@@ -42,11 +43,13 @@ open ai_industry_penetration.html
   - Branch：`main`
   - Folder：`/root`
 
-本專案已將 GitHub Pages 自訂網域設為：
+本專案已將 GitHub Pages 自訂網域設為 `dinopeng.com`，正式專案網址為：
 
 ```text
-https://dinopeng.com/
+https://dinopeng.com/aidata/
 ```
+
+根網址 `https://dinopeng.com/` 暫時保留相同內容，避免既有連結失效；未來可改為個人首頁。`aidata/index.html` 與 `aidata/assets/` 是 `/aidata/` 路徑的發布副本，每次推版必須和根目錄入口及資源同步。
 
 自訂網域由根目錄的 `CNAME` 管理。網域供應商的 DNS 需另外設定：
 

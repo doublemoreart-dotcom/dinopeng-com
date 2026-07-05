@@ -8,6 +8,7 @@
 
 - `ai_industry_penetration.html`
 - `ai_industry_penetration_YYYY-MM-DD.html`
+- `index.html` 與 `aidata/index.html`（正式入口同步副本）
 - `DATA_UPDATE.md`
 - `WEB_SPEC.md`
 
@@ -143,6 +144,7 @@ const groupColors = {
 ## 實作規範
 
 - 主要檔案保持為單檔 HTML，除非使用者要求改成框架專案。
+- `https://dinopeng.com/aidata/` 為正式專案網址；每次推版需讓 `aidata/index.html` 與根目錄 `index.html` 完全同步，並同步相對資源。
 - 週更時必須建立新日期檔，格式為 `ai_industry_penetration_YYYY-MM-DD.html`。
 - 第一次週更以 `ai_industry_penetration.html` 作為範本；後續週更以最近一期日期版本作為範本。
 - 不要覆蓋或回改舊日期版本，除非使用者明確要求修正歷史檔案。
