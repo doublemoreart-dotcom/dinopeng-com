@@ -13,6 +13,36 @@ const extractValuationData = html => {
   return vm.runInNewContext(match[1]);
 };
 
+const extractLogoMap = html => {
+  const match = html.match(/const mainCompanyLogoFiles\s*=\s*(\{[\s\S]*?\})\s*;\s*const mainCompanyValuationData\b/);
+  assert.ok(match, 'mainCompanyLogoFiles should be present');
+  return vm.runInNewContext(`(${match[1]})`);
+};
+
+const escapeRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const extractCssDeclarationBlock = (html, selectors) => {
+  const styleBlocks = [...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)].map(match => match[1]).join('\n');
+  const selectorGroup = (Array.isArray(selectors) ? selectors : [selectors])
+    .map(selector => escapeRegExp(selector).replace(/\s+/g, '\\s+'))
+    .join('\\s*,\\s*');
+  const match = styleBlocks.match(new RegExp(`(?:^|})\\s*${selectorGroup}\\s*\\{([^{}]*)\\}`, 'm'));
+
+  assert.ok(match, `missing CSS rule: ${(Array.isArray(selectors) ? selectors : [selectors]).join(', ')}`);
+  return match[1];
+};
+
+const assertCssDeclaration = (block, property, expected) => {
+  const declarations = new Map(block.split(';').map(declaration => {
+    const colon = declaration.indexOf(':');
+    return colon < 0
+      ? ['', '']
+      : [declaration.slice(0, colon).trim(), declaration.slice(colon + 1).trim()];
+  }));
+
+  assert.equal(declarations.get(property), expected, `${property} should be ${expected}`);
+};
+
 test('main page includes the AI company valuation ranking section', async () => {
   const html = await readFile(pagePath, 'utf8');
 
@@ -43,6 +73,59 @@ test('main page valuation ranking references existing local logo assets', async 
     assert.equal(existsSync(new URL(path, rootPath)), true, `${path} should exist`);
   }
   assert.match(html, /if \(!logoFile\) return fallback;/);
+});
+
+test('every ranked company has an existing local logo asset', async () => {
+  const html = await readFile(pagePath, 'utf8');
+  const companies = extractValuationData(html).map(row => row.companyName);
+  const logos = extractLogoMap(html);
+
+  assert.equal(companies.length, 20);
+  for (const company of companies) {
+    assert.ok(logos[company], `${company} should have a logo mapping`);
+    assert.equal(existsSync(new URL(logos[company], rootPath)), true, `${company} logo should exist`);
+  }
+});
+
+test('valuation row buttons use inline flex alignment with the intended gap', async () => {
+  const html = await readFile(pagePath, 'utf8');
+  const block = extractCssDeclarationBlock(html, '.valuation-row-button');
+
+  assertCssDeclaration(block, 'display', 'inline-flex');
+  assertCssDeclaration(block, 'align-items', 'center');
+  assertCssDeclaration(block, 'gap', '9px');
+});
+
+test('valuation row logos do not add spacing outside the button gap', async () => {
+  const html = await readFile(pagePath, 'utf8');
+  const block = extractCssDeclarationBlock(html, '.valuation-logo-row');
+
+  assertCssDeclaration(block, 'margin-right', '0');
+});
+
+test('valuation drawer headings vertically align the logo and label', async () => {
+  const html = await readFile(pagePath, 'utf8');
+  const block = extractCssDeclarationBlock(html, '.valuation-company-drawer-heading');
+
+  assertCssDeclaration(block, 'align-items', 'center');
+});
+
+test('valuation drawer links use the page text color and underline spacing', async () => {
+  const html = await readFile(pagePath, 'utf8');
+  const block = extractCssDeclarationBlock(html, '.valuation-company-detail-drawer .drawer-list a');
+
+  assertCssDeclaration(block, 'color', 'var(--page-text)');
+  assertCssDeclaration(block, 'text-underline-offset', '3px');
+});
+
+test('valuation drawer link hover and focus-visible states share the site accent rule', async () => {
+  const html = await readFile(pagePath, 'utf8');
+  const block = extractCssDeclarationBlock(html, [
+    '.valuation-company-detail-drawer .drawer-list a:hover',
+    '.valuation-company-detail-drawer .drawer-list a:focus-visible',
+  ]);
+
+  assertCssDeclaration(block, 'color', '#378ADD');
 });
 
 test('valuation section discloses update timing and mirrors sources in the public report pool', async () => {
