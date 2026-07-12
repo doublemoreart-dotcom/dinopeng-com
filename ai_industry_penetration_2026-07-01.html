@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI 對產業的數據觀察</title>
 <meta name="description" content="以單頁資料視覺化分析 AI 對各大產業的滲透率、投資強度、生產力影響，以及混合型人才如何重組職能系統。">
-<meta name="page-version-date" content="2026-07-01">
-<meta name="page-version-number" content="v2026.07.01-1">
+<meta name="page-version-date" content="2026-07-05">
+<meta name="page-version-number" content="v2026.07.05-1">
 <meta property="og:type" content="website">
 <meta property="og:title" content="AI 對各大產業的滲透率與實際影響">
 <meta property="og:description" content="從產業採用率、投資強度、生產力提升，到混合型人才如何重組設計、產品、工程、行銷與商業流程。">
@@ -996,7 +996,7 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
 .valuation-logo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 6px; background: #fff; }
 .valuation-logo-fallback { position: relative; z-index: 0; font-size: 10px; }
 .valuation-logo-card { width: 44px; height: 44px; margin-top: 12px; }
-.valuation-logo-row { width: 30px; height: 30px; margin-right: 9px; }
+.valuation-logo-row { width: 30px; height: 30px; margin-right: 0; }
 .valuation-logo-drawer { width: 46px; height: 46px; border-radius: 10px; }
 .valuation-company-name { display: block; margin-top: 10px; font-size: calc(18px * var(--page-font-scale)); font-weight: 650; line-height: 1.2; overflow-wrap: anywhere; }
 .valuation-company-value { display: block; margin-top: 6px; font-size: calc(24px * var(--page-font-scale)); font-weight: 650; line-height: 1; }
@@ -1014,7 +1014,7 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
 .valuation-table td { height: 56px; padding: 8px 12px; border-top: 0.5px solid var(--page-border); font-size: calc(12px * var(--page-font-scale)); vertical-align: middle; }
 .valuation-table td:nth-child(1) { text-align: center; color: var(--page-text-muted); font-weight: 700; }
 .valuation-table td:nth-child(3), .valuation-table td:nth-child(4) { text-align: right; }
-.valuation-row-button { appearance: none; display: flex; align-items: center; width: 100%; min-height: 36px; border: 0; background: transparent; color: inherit; cursor: pointer; text-align: left; }
+.valuation-row-button { appearance: none; display: inline-flex; align-items: center; gap: 9px; width: 100%; min-height: 36px; border: 0; background: transparent; color: inherit; cursor: pointer; text-align: left; }
 .valuation-methodology { margin-top: 14px; border: 0.5px solid var(--page-border); border-radius: 8px; background: var(--page-surface); overflow: hidden; }
 .valuation-methodology > summary { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 12px 14px; cursor: pointer; list-style: none; color: var(--page-text); font-size: calc(12px * var(--page-font-scale)); font-weight: 600; }
 .valuation-methodology > summary::-webkit-details-marker { display: none; }
@@ -1032,13 +1032,16 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
   line-height: 1.65;
 }
 .valuation-data-note-row { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px; align-items: start; }
-.valuation-data-note-icon { color: #378ADD; font-family: "Material Symbols Outlined"; font-size: calc(16px * var(--page-font-scale)); line-height: 1.4; }
+.valuation-data-note-icon { display: inline-flex; align-items: center; justify-content: center; min-height: 1.65em; color: #378ADD; font-family: "Material Symbols Outlined"; font-size: calc(16px * var(--page-font-scale)); line-height: 1; }
 .valuation-data-note strong { color: var(--page-text); font-weight: 600; }
 .valuation-data-links { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 4px; list-style: none; }
 .valuation-data-links a { color: var(--page-text-muted); text-underline-offset: 3px; }
 .valuation-data-links a:hover, .valuation-data-links a:focus-visible { color: #378ADD; }
 .valuation-data-status { margin-top: 4px; }
 .valuation-company-drawer-heading { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: center; margin-bottom: 8px; }
+.valuation-company-detail-drawer .drawer-list a { color: var(--page-text); text-underline-offset: 3px; }
+.valuation-company-detail-drawer .drawer-list a:hover,
+.valuation-company-detail-drawer .drawer-list a:focus-visible { color: #378ADD; }
 @media (prefers-color-scheme: dark) {
   .badge-high { background: #27500A; border-color: #416E1B; color: #C0DD97; }
   .badge-mid { background: #633806; border-color: #8F5A12; color: #FAC775; }
@@ -1649,7 +1652,7 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
     <section class="footer-panel" aria-labelledby="copyright-title">
       <div class="footer-title" id="copyright-title">版權宣告</div>
       <div class="footer-copy">
-        本頁內容由 Dino 整理與改寫，僅供產業研究、簡報討論與內部決策參考。外部資料、商標與報告內容之著作權歸原權利人所有；本頁新增的中文分析文字、資料編排與視覺化設計，未經授權請勿整頁轉載、商業散布或移除來源標註。引用本頁觀點時，請保留頁名「AI 對產業的數據觀察」、發布日期 <span data-footer-version-date>2026-07-01</span>、版號 <span data-footer-version-number>v2026.07.01-1</span>。
+        本頁內容由 Dino 整理與改寫，僅供產業研究、簡報討論與內部決策參考。外部資料、商標與報告內容之著作權歸原權利人所有；本頁新增的中文分析文字、資料編排與視覺化設計，未經授權請勿整頁轉載、商業散布或移除來源標註。引用本頁觀點時，請保留頁名「AI 對產業的數據觀察」、發布日期 <span data-footer-version-date>2026-07-05</span>、版號 <span data-footer-version-number>v2026.07.05-1</span>。
       </div>
     </section>
     <section class="footer-panel" aria-labelledby="error-report-title">
@@ -1838,11 +1841,23 @@ const mainCompanyLogoFiles = {
   'OpenAI': 'assets/company-logos/openai.ico',
   'Anthropic': 'assets/company-logos/anthropic.ico',
   'Databricks': 'assets/company-logos/databricks.ico',
+  'Figure AI': 'assets/company-logos/figure-ai.ico',
   'Safe Superintelligence': 'assets/company-logos/ssi.ico',
-  'Mistral AI': 'assets/company-logos/mistral-ai.ico',
+  'Anysphere': 'assets/company-logos/anysphere.ico',
   'Perplexity': 'assets/company-logos/perplexity.ico',
+  'Helsing': 'assets/company-logos/helsing.ico',
+  'Mistral AI': 'assets/company-logos/mistral-ai.ico',
+  'Thinking Machines Lab': 'assets/company-logos/thinking-machines.ico',
   'NVIDIA': 'assets/company-logos/nvidia.ico',
+  'Alphabet': 'assets/company-logos/alphabet.ico',
+  'Apple': 'assets/company-logos/apple.ico',
+  'Microsoft': 'assets/company-logos/microsoft.ico',
+  'Amazon': 'assets/company-logos/amazon.ico',
+  'TSMC': 'assets/company-logos/tsmc.ico',
   'Broadcom': 'assets/company-logos/broadcom.ico',
+  'Tesla': 'assets/company-logos/tesla.ico',
+  'Meta': 'assets/company-logos/meta.ico',
+  'Oracle': 'assets/company-logos/oracle.ico',
 };
 
 const mainCompanyValuationData = [
