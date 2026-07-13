@@ -1,0 +1,10 @@
+{
+  "name": "ai-industry-penetration-analysis",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "release:prepare": "node scripts/release-prepare.mjs",
+    "release:check": "node scripts/release-check.mjs",
+    "release:verify": "node scripts/release-verify.mjs"
+  }
+}

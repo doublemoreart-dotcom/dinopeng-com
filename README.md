@@ -10,6 +10,7 @@
 - `ai_industry_penetration_YYYY-MM-DD.html`：週更後的歷史版本檔案，不覆蓋舊版。
 - `AGENTS.md`：給 Codex / Claude Code / Cursor Agent 讀取的專案規範與任務指引。
 - `DATA_UPDATE.md`：週更節奏、資料來源、檔名規則與更新清單。
+- `RELEASE.md`：Git 上版流程，包含 prepare / check / verify 三段腳本。
 - `WEB_SPEC.md`：每次週更都必須遵守的網頁閱讀性、主題、字級與 RWD 規範。
 - `data/ai_public_reports_for_codex.csv`：公開報告來源索引，只作為引用候選與選題提示；未核定口徑前不直接改 KPI 或圖表數字。
 - `data/ai_company_valuation_2026-07-13.csv`：AI 公司估值排行榜的最新查核快照，保存估值／市值、基準日、來源層級與方法備註。
@@ -81,6 +82,21 @@ ai_industry_penetration_YYYY-MM-DD.html
 - 可切換 Light / Dark Mode。
 - 可選擇小 / 中 / 大三種字級。
 - 符合 RWD，手機版不溢出。
+
+推版前可使用腳本守住入口檔、日期快照與資源同步：
+
+```bash
+npm run release:prepare
+npm run release:check
+```
+
+GitHub Pages 部署成功後，可用最新 commit 做線上雜湊驗收：
+
+```bash
+npm run release:verify -- <commit>
+```
+
+完整步驟請見 `RELEASE.md`。
 
 ## 內容重點
 
