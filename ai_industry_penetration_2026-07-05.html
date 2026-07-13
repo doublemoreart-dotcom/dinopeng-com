@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI 對產業的數據觀察</title>
 <meta name="description" content="以單頁資料視覺化分析 AI 對各大產業的滲透率、投資強度、生產力影響，以及混合型人才如何重組職能系統。">
-<meta name="page-version-date" content="2026-07-13">
-<meta name="page-version-number" content="v2026.07.13-1">
+<meta name="page-version-date" content="2026-07-05">
+<meta name="page-version-number" content="v2026.07.05-1">
 <meta property="og:type" content="website">
 <meta property="og:title" content="AI 對各大產業的滲透率與實際影響">
 <meta property="og:description" content="從產業採用率、投資強度、生產力提升，到混合型人才如何重組設計、產品、工程、行銷與商業流程。">
@@ -1031,8 +1031,8 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
   font-size: calc(10px * var(--page-font-scale));
   line-height: 1.65;
 }
-.valuation-data-note-row { display: grid; grid-template-columns: calc(18px * var(--page-font-scale)) minmax(0, 1fr); gap: 8px; align-items: start; }
-.valuation-data-note-icon { display: inline-flex; align-items: center; justify-content: center; width: calc(18px * var(--page-font-scale)); height: calc(16.5px * var(--page-font-scale)); color: #378ADD; font-family: "Material Symbols Outlined"; font-size: calc(16px * var(--page-font-scale)); line-height: 1; }
+.valuation-data-note-row { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px; align-items: start; }
+.valuation-data-note-icon { display: inline-flex; align-items: center; justify-content: center; min-height: 1.65em; color: #378ADD; font-family: "Material Symbols Outlined"; font-size: calc(16px * var(--page-font-scale)); line-height: 1; }
 .valuation-data-note strong { color: var(--page-text); font-weight: 600; }
 .valuation-data-links { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 4px; list-style: none; }
 .valuation-data-links a { color: var(--page-text-muted); text-underline-offset: 3px; }
@@ -1210,7 +1210,7 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
   <div class="section-heading">
     <div class="section-heading-text">
       <h3 class="section-inline-note-title">上市 AI 與多元科技公司 Top 10</h3>
-      <p class="section-description">上市公司目前沿用 2026-06-30 公司整體市值排序；30 日股價變動比較 2026-06-01 與 2026-06-30 收盤價，待取得同口徑市場資料後整批重算。</p>
+      <p class="section-description">以 2026-06-30 公司整體市值排序；30 日股價變動比較 2026-06-01 與 2026-06-30 收盤價。</p>
     </div>
   </div>
   <div class="valuation-top-three" data-valuation-top-three="public"></div>
@@ -1224,13 +1224,13 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
 <details class="valuation-methodology">
   <summary>估值來源與計算方式</summary>
   <div class="valuation-methodology-body">
-    私人公司採最近一輪已完成且可追溯的融資估值；仍在洽談、二級市場報價、收購選擇權與未完成交易不納入。上市公司目前沿用 Nasdaq 於 2026-06-30 共同基準日提供的公司整體市值，並以 2026-06-01 與 2026-06-30 收盤價計算股價變動；2026-07-13 已查核到 Nvidia、Apple 等大型科技股市值出現近期變動，待取得可機器讀取且同口徑的市場資料後再整批重算。私人估值與公開市值的定價機制不同，僅適合分榜比較，不代表 AI 業務本身價值，亦不構成投資建議。
+    私人公司採最近一輪已完成且可追溯的融資估值；仍在洽談、媒體目標價或未完成交易不納入。上市公司採 Nasdaq 於共同基準日提供的公司整體市值，並以 2026-06-01 與 2026-06-30 收盤價計算股價變動。私人估值與公開市值的定價機制不同，僅適合分榜比較，不代表 AI 業務本身價值，亦不構成投資建議。
   </div>
 </details>
 <div class="valuation-data-note" aria-label="估值排行榜資料更新與引用來源">
   <div class="valuation-data-note-row">
     <span class="valuation-data-note-icon" aria-hidden="true">update</span>
-    <div>資料整理時間：<time datetime="2026-07-13">2026-07-13</time>；私人公司估值已更新至最新可追溯輪次。上市公司市值仍沿用 <time datetime="2026-06-30">2026-06-30</time> Nasdaq 基準日，待取得同口徑市場資料後整批重算。</div>
+    <div>資料整理時間：<time datetime="2026-07-01">2026-07-01</time>；上市公司市值基準日：<time datetime="2026-06-30">2026-06-30</time>。私人公司估值依各公司最近一輪已完成且可追溯資料，實際日期請以卡片詳情為準。</div>
   </div>
   <div class="valuation-data-note-row">
     <span class="valuation-data-note-icon" aria-hidden="true">library_books</span>
@@ -1238,12 +1238,12 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
       <strong>引用來源：</strong>私人公司優先採公司或投資方公告，無公告時採 Reuters、Financial Times、Wall Street Journal 等一線媒體；上市公司市值與歷史收盤價統一採 Nasdaq 資料。
       <ul class="valuation-data-links">
         <li><a href="https://openai.com/index/accelerating-the-next-phase-ai/" target="_blank" rel="noopener noreferrer">OpenAI 2026 募資公告</a></li>
-        <li><a href="https://apnews.com/article/anthropic-ai-claude-openai-valuation-86c432fa375548fd4f111f8164d6ffc1" target="_blank" rel="noopener noreferrer">Anthropic 2026 新融資報導</a></li>
+        <li><a href="https://www.anthropic.com/news/anthropic-raises-30-billion-series-g-funding-380-billion-post-money-valuation" target="_blank" rel="noopener noreferrer">Anthropic Series G 公告</a></li>
         <li><a href="https://www.prnewswire.com/news-releases/databricks-grows-65-yoy-surpasses-5-4-billion-revenue-run-rate-doubles-down-on-lakebase-and-genie-302682674.html" target="_blank" rel="noopener noreferrer">Databricks 2026 融資公告</a></li>
         <li><a href="https://www.figure.ai/news/series-c" target="_blank" rel="noopener noreferrer">Figure AI Series C 公告</a></li>
         <li><a href="https://www.nasdaq.com/market-activity/stocks" target="_blank" rel="noopener noreferrer">Nasdaq Market Activity</a></li>
       </ul>
-      <p class="valuation-data-status">閱讀時請留意：私人公司估值更新頻率不一，外幣輪次以公告當期約值換算；上市榜顯示公司整體市值，不等同其 AI 業務價值。本版已更新 Anthropic 私人估值，上市榜仍為 2026-06-30 同口徑基準。</p>
+      <p class="valuation-data-status">閱讀時請留意：私人公司估值更新頻率不一，外幣輪次以公告當期約值換算；上市榜顯示公司整體市值，不等同其 AI 業務價值。</p>
     </div>
   </div>
 </div>
@@ -1563,10 +1563,10 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
       </span>
     </summary>
     <div class="source-pool-content">
-      <div class="source-pool-body">私人公司以最近一輪已完成的公開募資資料確認估值，排除仍在洽談的目標價、二級市場報價與收購選擇權；上市公司以 Nasdaq 同一交易日的整體市值與歷史收盤價比較。本版已更新 Anthropic 私人估值，上市公司仍沿用 2026-06-30 同口徑基準，待可機器讀取市場資料後整批重算。</div>
+      <div class="source-pool-body">私人公司以最近一輪已完成的公開募資資料確認估值，排除仍在洽談的目標價；上市公司以 Nasdaq 同一交易日的整體市值與歷史收盤價比較。兩種定價機制分榜閱讀，不直接合併排名。</div>
       <ul class="source-pool-links">
         <li><a href="https://openai.com/index/accelerating-the-next-phase-ai/" target="_blank" rel="noopener noreferrer">OpenAI 2026 募資公告</a></li>
-        <li><a href="https://apnews.com/article/anthropic-ai-claude-openai-valuation-86c432fa375548fd4f111f8164d6ffc1" target="_blank" rel="noopener noreferrer">Anthropic 2026 新融資報導</a></li>
+        <li><a href="https://www.anthropic.com/news/anthropic-raises-30-billion-series-g-funding-380-billion-post-money-valuation" target="_blank" rel="noopener noreferrer">Anthropic Series G 公告</a></li>
         <li><a href="https://www.prnewswire.com/news-releases/databricks-grows-65-yoy-surpasses-5-4-billion-revenue-run-rate-doubles-down-on-lakebase-and-genie-302682674.html" target="_blank" rel="noopener noreferrer">Databricks 2026 融資公告</a></li>
         <li><a href="https://www.figure.ai/news/series-c" target="_blank" rel="noopener noreferrer">Figure AI Series C 公告</a></li>
         <li><a href="https://www.nasdaq.com/market-activity/stocks" target="_blank" rel="noopener noreferrer">Nasdaq Market Activity</a></li>
@@ -1652,7 +1652,7 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
     <section class="footer-panel" aria-labelledby="copyright-title">
       <div class="footer-title" id="copyright-title">版權宣告</div>
       <div class="footer-copy">
-        本頁內容由 Dino 整理與改寫，僅供產業研究、簡報討論與內部決策參考。外部資料、商標與報告內容之著作權歸原權利人所有；本頁新增的中文分析文字、資料編排與視覺化設計，未經授權請勿整頁轉載、商業散布或移除來源標註。引用本頁觀點時，請保留頁名「AI 對產業的數據觀察」、發布日期 <span data-footer-version-date>2026-07-13</span>、版號 <span data-footer-version-number>v2026.07.13-1</span>。
+        本頁內容由 Dino 整理與改寫，僅供產業研究、簡報討論與內部決策參考。外部資料、商標與報告內容之著作權歸原權利人所有；本頁新增的中文分析文字、資料編排與視覺化設計，未經授權請勿整頁轉載、商業散布或移除來源標註。引用本頁觀點時，請保留頁名「AI 對產業的數據觀察」、發布日期 <span data-footer-version-date>2026-07-05</span>、版號 <span data-footer-version-number>v2026.07.05-1</span>。
       </div>
     </section>
     <section class="footer-panel" aria-labelledby="error-report-title">
@@ -1861,8 +1861,8 @@ const mainCompanyLogoFiles = {
 };
 
 const mainCompanyValuationData = [
-  { companyName: 'Anthropic', companyType: 'private', valueUsd: 965e9, valueType: 'post_money_valuation', previousValueUsd: 380e9, valueAsOf: '2026-05-28', previousValueAsOf: '2026-02-12', changePeriodLabel: 'vs. 前輪估值', priceChange30dPct: null, businessTags: ['基礎模型', '企業 AI'], inclusionRationale: 'Claude 模型、Claude Code、API 與企業工作流是主要價值來源；本版採最新可追溯融資估值，排除二級市場報價。', sourceName: 'Anthropic / AP News', sourceUrl: 'https://apnews.com/article/anthropic-ai-claude-openai-valuation-86c432fa375548fd4f111f8164d6ffc1', sourcePublishedAt: '2026-05-28', sourceTier: 'tier_one_media', methodologyNote: '採 Anthropic 對外宣布且 AP 報導的新融資後估值；二級市場 US$1.2T 報價未納入。' },
   { companyName: 'OpenAI', companyType: 'private', valueUsd: 852e9, valueType: 'post_money_valuation', previousValueUsd: 300e9, valueAsOf: '2026-03-31', previousValueAsOf: '2025-03-31', changePeriodLabel: 'vs. 前輪估值', priceChange30dPct: null, businessTags: ['基礎模型', 'AI 平台'], inclusionRationale: '通用模型、ChatGPT、API 與 agentic 工作流構成主要產品與商業模式。', sourceName: 'OpenAI', sourceUrl: 'https://openai.com/index/accelerating-the-next-phase-ai/', sourcePublishedAt: '2026-03-31', sourceTier: 'official', methodologyNote: '採最近一輪已完成且由公司揭露的投後估值。' },
+  { companyName: 'Anthropic', companyType: 'private', valueUsd: 380e9, valueType: 'post_money_valuation', previousValueUsd: 183e9, valueAsOf: '2026-02-12', previousValueAsOf: '2025-09-02', changePeriodLabel: 'vs. 前輪估值', priceChange30dPct: null, businessTags: ['基礎模型', '企業 AI'], inclusionRationale: 'Claude 模型、API、Claude Code 與企業工作流是主要價值來源。', sourceName: 'Anthropic', sourceUrl: 'https://www.anthropic.com/news/anthropic-raises-30-billion-series-g-funding-380-billion-post-money-valuation', sourcePublishedAt: '2026-02-12', sourceTier: 'official', methodologyNote: '採最近一輪已完成且由公司揭露的投後估值。' },
   { companyName: 'Databricks', companyType: 'private', valueUsd: 134e9, valueType: 'financing_valuation', previousValueUsd: 100e9, valueAsOf: '2026-02-09', previousValueAsOf: '2025-09-08', changePeriodLabel: 'vs. 前輪估值', priceChange30dPct: null, businessTags: ['資料平台', '企業 AI'], inclusionRationale: '資料湖倉、AI 開發平台與 agent 資料基礎設施是核心業務。', sourceName: 'Databricks / PR Newswire', sourceUrl: 'https://www.prnewswire.com/news-releases/databricks-grows-65-yoy-surpasses-5-4-billion-revenue-run-rate-doubles-down-on-lakebase-and-genie-302682674.html', sourcePublishedAt: '2026-02-09', sourceTier: 'official', methodologyNote: '採已完成融資估值；尚在洽談的更高估值未納入。' },
   { companyName: 'Figure AI', companyType: 'private', valueUsd: 39e9, valueType: 'post_money_valuation', previousValueUsd: 2.6e9, valueAsOf: '2025-09-16', previousValueAsOf: '2024-02-29', changePeriodLabel: 'vs. 前輪估值', priceChange30dPct: null, businessTags: ['具身 AI', '人形機器人'], inclusionRationale: '以 Helix 具身智慧系統與通用型人形機器人為主要產品。', sourceName: 'Figure AI', sourceUrl: 'https://www.figure.ai/news/series-c', sourcePublishedAt: '2025-09-16', sourceTier: 'official', methodologyNote: '採公司 Series C 公告的投後估值。' },
   { companyName: 'Safe Superintelligence', companyType: 'private', valueUsd: 32e9, valueType: 'financing_valuation', previousValueUsd: 5e9, valueAsOf: '2025-04-12', previousValueAsOf: '2024-09-04', changePeriodLabel: 'vs. 前輪估值', priceChange30dPct: null, businessTags: ['AI 安全', '前沿研究'], inclusionRationale: '公司專注於安全超級智慧研究，尚未以商業產品收入作為主要估值依據。', sourceName: 'TechCrunch / Financial Times', sourceUrl: 'https://techcrunch.com/2025/04/12/openai-co-founder-ilya-sutskevers-safe-superintelligence-reportedly-valued-at-32b/', sourcePublishedAt: '2025-04-12', sourceTier: 'tier_one_media', methodologyNote: '採媒體報導的已完成融資估值，公司未發布完整輪次公告。' },
