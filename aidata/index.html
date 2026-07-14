@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI 對產業的數據觀察</title>
 <meta name="description" content="以單頁資料視覺化分析 AI 對各大產業的滲透率、投資強度、生產力影響，以及混合型人才如何重組職能系統。">
-<meta name="page-version-date" content="2026-07-13">
-<meta name="page-version-number" content="v2026.07.13-1">
+<meta name="page-version-date" content="2026-07-14">
+<meta name="page-version-number" content="v2026.07.14-1">
 <meta property="og:type" content="website">
 <meta property="og:title" content="AI 對各大產業的滲透率與實際影響">
 <meta property="og:description" content="從產業採用率、投資強度、生產力提升，到混合型人才如何重組設計、產品、工程、行銷與商業流程。">
@@ -52,6 +52,20 @@ button, select { font-family: inherit; }
   margin: 0 auto;
   padding: clamp(24px, 5vw, 56px) 0;
   font-size: calc(1rem * var(--page-font-scale));
+}
+.hero-visual {
+  width: 100%;
+  margin: 0 0 clamp(22px, 4vw, 36px);
+  border: 0.5px solid var(--page-border);
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--page-surface-alt);
+}
+.hero-visual img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1440 / 520;
+  object-fit: cover;
 }
 .page-title {
   color: var(--page-text);
@@ -1053,6 +1067,8 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
 .divider { border: none; border-top: 0.5px solid var(--page-border); margin: 0 0 1.25rem; }
 @media (max-width: 720px) {
   .wrap { width: min(100% - 32px, 1040px); padding: 24px 0 36px; }
+  .hero-visual { border-radius: 12px; margin-bottom: 20px; }
+  .hero-visual img { aspect-ratio: 16 / 9; }
   .reader-controls { align-items: flex-start; }
   .section-tabs {
     align-items: center;
@@ -1091,6 +1107,10 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
 <body>
 
 <div class="wrap">
+
+<figure class="hero-visual" aria-label="AI 產業數據觀察主視覺">
+  <img src="assets/ai-industry-data-observation-hero.svg" alt="以產業節點、泡泡圖與趨勢線組成的 AI 產業數據觀察主視覺">
+</figure>
 
 <h1 class="page-title">AI 對產業的數據觀察</h1>
 
@@ -1652,7 +1672,7 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
     <section class="footer-panel" aria-labelledby="copyright-title">
       <div class="footer-title" id="copyright-title">版權宣告</div>
       <div class="footer-copy">
-        本頁內容由 Dino 整理與改寫，僅供產業研究、簡報討論與內部決策參考。外部資料、商標與報告內容之著作權歸原權利人所有；本頁新增的中文分析文字、資料編排與視覺化設計，未經授權請勿整頁轉載、商業散布或移除來源標註。引用本頁觀點時，請保留頁名「AI 對產業的數據觀察」、發布日期 <span data-footer-version-date>2026-07-13</span>、版號 <span data-footer-version-number>v2026.07.13-1</span>。
+        本頁內容由 Dino 整理與改寫，僅供產業研究、簡報討論與內部決策參考。外部資料、商標與報告內容之著作權歸原權利人所有；本頁新增的中文分析文字、資料編排與視覺化設計，未經授權請勿整頁轉載、商業散布或移除來源標註。引用本頁觀點時，請保留頁名「AI 對產業的數據觀察」、發布日期 <span data-footer-version-date>2026-07-14</span>、版號 <span data-footer-version-number>v2026.07.14-1</span>。
       </div>
     </section>
     <section class="footer-panel" aria-labelledby="error-report-title">

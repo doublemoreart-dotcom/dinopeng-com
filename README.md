@@ -4,7 +4,7 @@
 
 ## 檔案
 
-- `index.html`：根網址相容入口，目前同步 `ai_industry_penetration_2026-07-13.html`。
+- `index.html`：根網址相容入口，目前同步 `ai_industry_penetration_2026-07-14.html`。
 - `aidata/index.html`：正式專案網址入口，與根目錄 `index.html` 保持完全同步。
 - `ai_industry_penetration.html`：原本機版視覺化頁面，保留作為初始版本，不因 MVP 上線入口而覆蓋。
 - `ai_industry_penetration_YYYY-MM-DD.html`：週更後的歷史版本檔案，不覆蓋舊版。
