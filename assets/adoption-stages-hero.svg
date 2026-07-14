@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 420" role="img" aria-labelledby="title desc">
+  <title id="title">AI 採用的三大階段分佈主視覺</title>
+  <desc id="desc">以三段堆疊長條呈現 AI 採用從探索評估、局部試行到深度整合的分佈。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fbfbf7"/>
+      <stop offset="0.55" stop-color="#eff6f2"/>
+      <stop offset="1" stop-color="#eef3fb"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#24312c" flood-opacity="0.13"/>
+    </filter>
+  </defs>
+  <rect width="1440" height="420" rx="34" fill="url(#bg)"/>
+  <g opacity="0.38" stroke="#d9ded8" stroke-width="1">
+    <path d="M80 0v420M160 0v420M240 0v420M320 0v420M400 0v420M480 0v420M560 0v420M640 0v420M720 0v420M800 0v420M880 0v420M960 0v420M1040 0v420M1120 0v420M1200 0v420M1280 0v420M1360 0v420"/>
+    <path d="M0 70h1440M0 140h1440M0 210h1440M0 280h1440M0 350h1440"/>
+  </g>
+  <circle cx="1190" cy="86" r="112" fill="#b7d8f0" opacity="0.32"/>
+  <circle cx="175" cy="322" r="136" fill="#bde7d3" opacity="0.34"/>
+  <circle cx="764" cy="80" r="82" fill="#f4c7b0" opacity="0.34"/>
+  <g filter="url(#shadow)">
+    <rect x="118" y="76" width="860" height="278" rx="28" fill="#ffffff" stroke="#e3e1d8"/>
+    <text x="166" y="126" font-family="Anta, Arial, sans-serif" font-size="18" fill="#68665e">AI adoption depth</text>
+    <g transform="translate(166 168)">
+      <text x="0" y="15" font-family="Anta, Arial, sans-serif" font-size="18" fill="#68665e">Technology</text>
+      <rect x="150" y="-4" width="420" height="26" rx="13" fill="#edf0eb"/>
+      <rect x="150" y="-4" width="220" height="26" rx="13" fill="#3b6d11"/>
+      <rect x="370" y="-4" width="128" height="26" fill="#d8a21a"/>
+      <rect x="498" y="-4" width="72" height="26" rx="13" fill="#9f7a2b"/>
+      <text x="604" y="16" font-family="Anta, Arial, sans-serif" font-size="18" fill="#24231f">deep</text>
+    </g>
+    <g transform="translate(166 218)">
+      <text x="0" y="15" font-family="Anta, Arial, sans-serif" font-size="18" fill="#68665e">Finance</text>
+      <rect x="150" y="-4" width="420" height="26" rx="13" fill="#edf0eb"/>
+      <rect x="150" y="-4" width="190" height="26" rx="13" fill="#3b6d11"/>
+      <rect x="340" y="-4" width="152" height="26" fill="#d8a21a"/>
+      <rect x="492" y="-4" width="78" height="26" rx="13" fill="#9f7a2b"/>
+      <text x="604" y="16" font-family="Anta, Arial, sans-serif" font-size="18" fill="#24231f">scaled</text>
+    </g>
+    <g transform="translate(166 268)">
+      <text x="0" y="15" font-family="Anta, Arial, sans-serif" font-size="18" fill="#68665e">Healthcare</text>
+      <rect x="150" y="-4" width="420" height="26" rx="13" fill="#edf0eb"/>
+      <rect x="150" y="-4" width="120" height="26" rx="13" fill="#3b6d11"/>
+      <rect x="270" y="-4" width="178" height="26" fill="#d8a21a"/>
+      <rect x="448" y="-4" width="122" height="26" rx="13" fill="#9f7a2b"/>
+      <text x="604" y="16" font-family="Anta, Arial, sans-serif" font-size="18" fill="#24231f">pilot</text>
+    </g>
+    <g transform="translate(166 318)">
+      <rect width="16" height="16" rx="4" fill="#3b6d11"/><text x="28" y="15" font-family="Anta, Arial, sans-serif" font-size="16" fill="#68665e">深度整合</text>
+      <rect x="148" width="16" height="16" rx="4" fill="#d8a21a"/><text x="176" y="15" font-family="Anta, Arial, sans-serif" font-size="16" fill="#68665e">局部試行</text>
+      <rect x="296" width="16" height="16" rx="4" fill="#9f7a2b"/><text x="324" y="15" font-family="Anta, Arial, sans-serif" font-size="16" fill="#68665e">探索評估</text>
+    </g>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="1034" y="102" width="286" height="222" rx="24" fill="#ffffff" stroke="#e3e1d8"/>
+    <text x="1068" y="148" font-family="Anta, Arial, sans-serif" font-size="18" fill="#68665e">Stage path</text>
+    <g transform="translate(1068 180)">
+      <circle cx="18" cy="18" r="18" fill="#9f7a2b"/>
+      <path d="M40 18h54" stroke="#c9c6bd" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="112" cy="18" r="18" fill="#d8a21a"/>
+      <path d="M134 18h54" stroke="#c9c6bd" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="206" cy="18" r="18" fill="#3b6d11"/>
+    </g>
+    <text x="1068" y="244" font-family="Anta, Arial, sans-serif" font-size="20" fill="#24231f">Explore → Pilot → Integrate</text>
+    <text x="1068" y="282" font-family="Anta, Arial, sans-serif" font-size="17" fill="#68665e">看採用率，也看用到多深</text>
+  </g>
+</svg>
