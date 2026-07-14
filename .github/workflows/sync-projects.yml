@@ -1,0 +1,65 @@
+name: Sync project sites
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-project-sites
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out portal
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: portal
+
+      - name: Check out AI Data
+        uses: actions/checkout@v4
+        with:
+          repository: doublemoreart-dotcom/aidata
+          ref: main
+          path: sources/aidata
+          persist-credentials: false
+
+      - name: Check out TP Trees
+        uses: actions/checkout@v4
+        with:
+          repository: doublemoreart-dotcom/tptrees
+          ref: main
+          path: sources/tptrees
+          persist-credentials: false
+
+      - name: Sync published files
+        working-directory: portal
+        run: ./scripts/sync-projects.sh ../sources/aidata ../sources/tptrees .
+
+      - name: Verify portal routes
+        working-directory: portal
+        run: node --test tests/*.mjs
+
+      - name: Commit updated snapshots
+        working-directory: portal
+        run: |
+          git add aidata tptrees
+          if git diff --cached --quiet; then
+            echo "Published snapshots are already current."
+            exit 0
+          fi
+
+          aidata_sha="$(git -C ../sources/aidata rev-parse --short HEAD)"
+          tptrees_sha="$(git -C ../sources/tptrees rev-parse --short HEAD)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: sync project sites" -m "aidata: ${aidata_sha}\ntptrees: ${tptrees_sha}"
+          git push origin HEAD:main
