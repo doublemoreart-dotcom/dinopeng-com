@@ -44,6 +44,15 @@ test('aidata route includes the hero visual asset used by the page', async () =>
   }
 });
 
+test('hero visual theme rules override the generic image display rule', async () => {
+  const html = await readFile(rootPagePath, 'utf8');
+
+  assert.match(html, /\.hero-visual img \{[^}]*display: block;/);
+  assert.match(html, /\.hero-visual \.hero-visual-image-dark \{ display: none; \}/);
+  assert.match(html, /:root\[data-theme="dark"\] \.hero-visual \.hero-visual-image-light \{ display: none; \}/);
+  assert.match(html, /:root\[data-theme="dark"\] \.hero-visual \.hero-visual-image-dark \{ display: block; \}/);
+});
+
 test('project docs identify /aidata/ as the public project URL and require route sync', async () => {
   const [readme, updateGuide] = await Promise.all([
     readFile(readmePath, 'utf8'),
