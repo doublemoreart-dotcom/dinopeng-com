@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 420" role="img" aria-labelledby="title desc">
+  <title id="title">各產業 AI 滲透率主視覺</title>
+  <desc id="desc">以水平長條、產業節點與排序控制呈現 AI 在不同產業的滲透率差異。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fbfbf7"/>
+      <stop offset="0.58" stop-color="#eef5f1"/>
+      <stop offset="1" stop-color="#eaf1fb"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#69b7ff"/>
+      <stop offset="1" stop-color="#2f7ddb"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8bd9b7"/>
+      <stop offset="1" stop-color="#27a777"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f8b47e"/>
+      <stop offset="1" stop-color="#df6b35"/>
+    </linearGradient>
+    <linearGradient id="pink" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f0a0c0"/>
+      <stop offset="1" stop-color="#ce4d80"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#24312c" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <rect width="1440" height="420" rx="34" fill="url(#bg)"/>
+  <g opacity="0.42" stroke="#d7ddd7" stroke-width="1">
+    <path d="M80 0v420M160 0v420M240 0v420M320 0v420M400 0v420M480 0v420M560 0v420M640 0v420M720 0v420M800 0v420M880 0v420M960 0v420M1040 0v420M1120 0v420M1200 0v420M1280 0v420M1360 0v420"/>
+    <path d="M0 70h1440M0 140h1440M0 210h1440M0 280h1440M0 350h1440"/>
+  </g>
+  <circle cx="1190" cy="86" r="110" fill="#b7d8f0" opacity="0.34"/>
+  <circle cx="195" cy="332" r="145" fill="#bde7d3" opacity="0.36"/>
+  <circle cx="790" cy="78" r="78" fill="#f4c7b0" opacity="0.36"/>
+  <g filter="url(#shadow)">
+    <rect x="120" y="78" width="360" height="270" rx="22" fill="#ffffff" opacity="0.92"/>
+    <rect x="152" y="116" width="142" height="12" rx="6" fill="#d9d9d4"/>
+    <rect x="152" y="148" width="255" height="10" rx="5" fill="#e4e4df"/>
+    <g transform="translate(152 192)">
+      <rect width="278" height="20" rx="10" fill="#ecf0f5"/>
+      <rect width="236" height="20" rx="10" fill="url(#blue)"/>
+      <circle cx="236" cy="10" r="13" fill="#378add"/>
+      <text x="252" y="15" font-family="Anta, Arial, sans-serif" font-size="18" fill="#2f2f2a">85%</text>
+    </g>
+    <g transform="translate(152 237)">
+      <rect width="278" height="20" rx="10" fill="#ecf0f5"/>
+      <rect width="201" height="20" rx="10" fill="url(#green)"/>
+      <circle cx="201" cy="10" r="13" fill="#22a573"/>
+      <text x="217" y="15" font-family="Anta, Arial, sans-serif" font-size="18" fill="#2f2f2a">72%</text>
+    </g>
+    <g transform="translate(152 282)">
+      <rect width="278" height="20" rx="10" fill="#ecf0f5"/>
+      <rect width="162" height="20" rx="10" fill="url(#orange)"/>
+      <circle cx="162" cy="10" r="13" fill="#dd6b35"/>
+      <text x="178" y="15" font-family="Anta, Arial, sans-serif" font-size="18" fill="#2f2f2a">58%</text>
+    </g>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="540" y="64" width="500" height="292" rx="28" fill="#ffffff" opacity="0.9"/>
+    <rect x="580" y="104" width="122" height="14" rx="7" fill="#d7dad4"/>
+    <rect x="580" y="136" width="310" height="10" rx="5" fill="#e5e7e1"/>
+    <g transform="translate(582 186)">
+      <text x="0" y="12" font-family="Anta, Arial, sans-serif" font-size="18" fill="#62655e">Technology</text>
+      <rect x="135" y="-3" width="298" height="20" rx="10" fill="#edf1f6"/>
+      <rect x="135" y="-3" width="253" height="20" rx="10" fill="url(#blue)"/>
+      <text x="450" y="13" font-family="Anta, Arial, sans-serif" font-size="18" fill="#24231f">85</text>
+    </g>
+    <g transform="translate(582 228)">
+      <text x="0" y="12" font-family="Anta, Arial, sans-serif" font-size="18" fill="#62655e">Finance</text>
+      <rect x="135" y="-3" width="298" height="20" rx="10" fill="#edf1f6"/>
+      <rect x="135" y="-3" width="238" height="20" rx="10" fill="url(#blue)"/>
+      <text x="450" y="13" font-family="Anta, Arial, sans-serif" font-size="18" fill="#24231f">80</text>
+    </g>
+    <g transform="translate(582 270)">
+      <text x="0" y="12" font-family="Anta, Arial, sans-serif" font-size="18" fill="#62655e">Healthcare</text>
+      <rect x="135" y="-3" width="298" height="20" rx="10" fill="#edf1f6"/>
+      <rect x="135" y="-3" width="214" height="20" rx="10" fill="url(#green)"/>
+      <text x="450" y="13" font-family="Anta, Arial, sans-serif" font-size="18" fill="#24231f">72</text>
+    </g>
+    <g transform="translate(582 312)">
+      <text x="0" y="12" font-family="Anta, Arial, sans-serif" font-size="18" fill="#62655e">Logistics</text>
+      <rect x="135" y="-3" width="298" height="20" rx="10" fill="#edf1f6"/>
+      <rect x="135" y="-3" width="173" height="20" rx="10" fill="url(#orange)"/>
+      <text x="450" y="13" font-family="Anta, Arial, sans-serif" font-size="18" fill="#24231f">58</text>
+    </g>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="1090" y="112" width="230" height="196" rx="24" fill="#ffffff" opacity="0.9"/>
+    <text x="1124" y="158" font-family="Anta, Arial, sans-serif" font-size="18" fill="#68665e">Sort by</text>
+    <rect x="1124" y="184" width="148" height="34" rx="17" fill="#378add"/>
+    <text x="1144" y="207" font-family="Anta, Arial, sans-serif" font-size="16" fill="#ffffff">High to low</text>
+    <rect x="1124" y="232" width="116" height="34" rx="17" fill="#f3f0e8" stroke="#dedbd1"/>
+    <text x="1144" y="255" font-family="Anta, Arial, sans-serif" font-size="16" fill="#68665e">Market</text>
+  </g>
+</svg>

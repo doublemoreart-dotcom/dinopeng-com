@@ -32,11 +32,13 @@ test('aidata route includes every relative company logo asset used by the page',
 
 test('aidata route includes the hero visual asset used by the page', async () => {
   const html = await readFile(rootPagePath, 'utf8');
-  const paths = [...html.matchAll(/src="(assets\/ai-industry-data-observation-hero(?:-dark)?\.svg)"/g)].map(match => match[1]);
+  const paths = [...html.matchAll(/src="(assets\/(?:ai-industry-data-observation|industry-adoption)-hero(?:-dark)?\.svg)"/g)].map(match => match[1]);
 
   assert.deepEqual(paths.sort(), [
     'assets/ai-industry-data-observation-hero-dark.svg',
     'assets/ai-industry-data-observation-hero.svg',
+    'assets/industry-adoption-hero-dark.svg',
+    'assets/industry-adoption-hero.svg',
   ]);
   for (const path of paths) {
     assert.equal(existsSync(new URL(path, new URL('../', import.meta.url))), true, `${path} should exist below root`);
@@ -51,6 +53,16 @@ test('hero visual theme rules override the generic image display rule', async ()
   assert.match(html, /\.hero-visual \.hero-visual-image-dark \{ display: none; \}/);
   assert.match(html, /:root\[data-theme="dark"\] \.hero-visual \.hero-visual-image-light \{ display: none; \}/);
   assert.match(html, /:root\[data-theme="dark"\] \.hero-visual \.hero-visual-image-dark \{ display: block; \}/);
+});
+
+test('industry adoption visual theme rules override the generic image display rule', async () => {
+  const html = await readFile(rootPagePath, 'utf8');
+
+  assert.match(html, /id="industry-adoption"[\s\S]*class="section-visual"/);
+  assert.match(html, /\.section-visual img \{[^}]*display: block;/);
+  assert.match(html, /\.section-visual \.section-visual-image-dark \{ display: none; \}/);
+  assert.match(html, /:root\[data-theme="dark"\] \.section-visual \.section-visual-image-light \{ display: none; \}/);
+  assert.match(html, /:root\[data-theme="dark"\] \.section-visual \.section-visual-image-dark \{ display: block; \}/);
 });
 
 test('project docs identify /aidata/ as the public project URL and require route sync', async () => {

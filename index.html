@@ -70,6 +70,23 @@ button, select { font-family: inherit; }
 .hero-visual .hero-visual-image-dark { display: none; }
 :root[data-theme="dark"] .hero-visual .hero-visual-image-light { display: none; }
 :root[data-theme="dark"] .hero-visual .hero-visual-image-dark { display: block; }
+.section-visual {
+  width: 100%;
+  margin: 0 0 clamp(18px, 3vw, 28px);
+  border: 0.5px solid var(--page-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--page-surface-alt);
+}
+.section-visual img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1440 / 420;
+  object-fit: cover;
+}
+.section-visual .section-visual-image-dark { display: none; }
+:root[data-theme="dark"] .section-visual .section-visual-image-light { display: none; }
+:root[data-theme="dark"] .section-visual .section-visual-image-dark { display: block; }
 .page-title {
   color: var(--page-text);
   font-size: calc(clamp(28px, 4vw, 44px) * var(--page-font-scale));
@@ -1072,6 +1089,8 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
   .wrap { width: min(100% - 32px, 1040px); padding: 24px 0 36px; }
   .hero-visual { border-radius: 12px; margin-bottom: 20px; }
   .hero-visual img { aspect-ratio: 16 / 9; }
+  .section-visual { border-radius: 10px; margin-bottom: 18px; }
+  .section-visual img { aspect-ratio: 16 / 9; }
   .reader-controls { align-items: flex-start; }
   .section-tabs {
     align-items: center;
@@ -1274,6 +1293,10 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
 </section>
 
 <section class="analysis-section" id="industry-adoption" aria-labelledby="industry-adoption-title">
+<figure class="section-visual" aria-label="各產業 AI 滲透率主視覺">
+  <img class="section-visual-image-light" src="assets/industry-adoption-hero.svg" alt="以水平長條與排序控制呈現各產業 AI 滲透率差異的主視覺">
+  <img class="section-visual-image-dark" src="assets/industry-adoption-hero-dark.svg" alt="" aria-hidden="true">
+</figure>
 <div class="section-heading">
   <div class="section-heading-text">
     <h2 class="section-title" id="industry-adoption-title"><span class="section-title-icon" aria-hidden="true">bar_chart</span>各產業 AI 滲透率</h2>
