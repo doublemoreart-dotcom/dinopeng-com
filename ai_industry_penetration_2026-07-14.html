@@ -67,6 +67,9 @@ button, select { font-family: inherit; }
   aspect-ratio: 1440 / 520;
   object-fit: cover;
 }
+.hero-visual-image-dark { display: none; }
+:root[data-theme="dark"] .hero-visual-image-light { display: none; }
+:root[data-theme="dark"] .hero-visual-image-dark { display: block; }
 .page-title {
   color: var(--page-text);
   font-size: calc(clamp(28px, 4vw, 44px) * var(--page-font-scale));
@@ -1109,7 +1112,8 @@ body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
 <div class="wrap">
 
 <figure class="hero-visual" aria-label="AI 產業數據觀察主視覺">
-  <img src="assets/ai-industry-data-observation-hero.svg" alt="以產業節點、泡泡圖與趨勢線組成的 AI 產業數據觀察主視覺">
+  <img class="hero-visual-image-light" src="assets/ai-industry-data-observation-hero.svg" alt="以產業節點、泡泡圖與趨勢線組成的 AI 產業數據觀察主視覺">
+  <img class="hero-visual-image-dark" src="assets/ai-industry-data-observation-hero-dark.svg" alt="" aria-hidden="true">
 </figure>
 
 <h1 class="page-title">AI 對產業的數據觀察</h1>

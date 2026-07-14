@@ -32,11 +32,16 @@ test('aidata route includes every relative company logo asset used by the page',
 
 test('aidata route includes the hero visual asset used by the page', async () => {
   const html = await readFile(rootPagePath, 'utf8');
-  const match = html.match(/<img src="(assets\/ai-industry-data-observation-hero\.svg)"/);
+  const paths = [...html.matchAll(/src="(assets\/ai-industry-data-observation-hero(?:-dark)?\.svg)"/g)].map(match => match[1]);
 
-  assert.ok(match, 'root page should reference the hero visual asset');
-  assert.equal(existsSync(new URL(match[1], new URL('../', import.meta.url))), true, `${match[1]} should exist below root`);
-  assert.equal(existsSync(new URL(match[1], aidataRootPath)), true, `${match[1]} should load below /aidata/`);
+  assert.deepEqual(paths.sort(), [
+    'assets/ai-industry-data-observation-hero-dark.svg',
+    'assets/ai-industry-data-observation-hero.svg',
+  ]);
+  for (const path of paths) {
+    assert.equal(existsSync(new URL(path, new URL('../', import.meta.url))), true, `${path} should exist below root`);
+    assert.equal(existsSync(new URL(path, aidataRootPath)), true, `${path} should load below /aidata/`);
+  }
 });
 
 test('project docs identify /aidata/ as the public project URL and require route sync', async () => {
