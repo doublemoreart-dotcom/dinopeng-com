@@ -39,19 +39,19 @@
       <rect width="278" height="20" rx="10" fill="#2e332d"/>
       <rect width="236" height="20" rx="10" fill="url(#blue)"/>
       <circle cx="236" cy="10" r="13" fill="#5aa9f0"/>
-      <text x="252" y="15" font-family="Anta, Arial, sans-serif" font-size="18" fill="#f2f1ea">85%</text>
+      <path d="M258 10h32" stroke="#56594f" stroke-width="7" stroke-linecap="round"/>
     </g>
     <g transform="translate(152 237)">
       <rect width="278" height="20" rx="10" fill="#2e332d"/>
       <rect width="201" height="20" rx="10" fill="url(#green)"/>
       <circle cx="201" cy="10" r="13" fill="#56c999"/>
-      <text x="217" y="15" font-family="Anta, Arial, sans-serif" font-size="18" fill="#f2f1ea">72%</text>
+      <path d="M223 10h32" stroke="#56594f" stroke-width="7" stroke-linecap="round"/>
     </g>
     <g transform="translate(152 282)">
       <rect width="278" height="20" rx="10" fill="#2e332d"/>
       <rect width="162" height="20" rx="10" fill="url(#orange)"/>
       <circle cx="162" cy="10" r="13" fill="#e98a4d"/>
-      <text x="178" y="15" font-family="Anta, Arial, sans-serif" font-size="18" fill="#f2f1ea">58%</text>
+      <path d="M184 10h32" stroke="#56594f" stroke-width="7" stroke-linecap="round"/>
     </g>
   </g>
   <g filter="url(#shadow)">
@@ -59,36 +59,43 @@
     <rect x="580" y="104" width="122" height="14" rx="7" fill="#5b5d54"/>
     <rect x="580" y="136" width="310" height="10" rx="5" fill="#44473f"/>
     <g transform="translate(582 186)">
-      <text x="0" y="12" font-family="Anta, Arial, sans-serif" font-size="18" fill="#b8b5a8">Technology</text>
+      <circle cx="10" cy="7" r="7" fill="#5aa9f0"/>
+      <path d="M28 7h76" stroke="#56594f" stroke-width="8" stroke-linecap="round"/>
       <rect x="135" y="-3" width="298" height="20" rx="10" fill="#2e332d"/>
       <rect x="135" y="-3" width="253" height="20" rx="10" fill="url(#blue)"/>
-      <text x="450" y="13" font-family="Anta, Arial, sans-serif" font-size="18" fill="#f2f1ea">85</text>
+      <path d="M450 7h28" stroke="#56594f" stroke-width="8" stroke-linecap="round"/>
     </g>
     <g transform="translate(582 228)">
-      <text x="0" y="12" font-family="Anta, Arial, sans-serif" font-size="18" fill="#b8b5a8">Finance</text>
+      <circle cx="10" cy="7" r="7" fill="#5aa9f0"/>
+      <path d="M28 7h58" stroke="#56594f" stroke-width="8" stroke-linecap="round"/>
       <rect x="135" y="-3" width="298" height="20" rx="10" fill="#2e332d"/>
       <rect x="135" y="-3" width="238" height="20" rx="10" fill="url(#blue)"/>
-      <text x="450" y="13" font-family="Anta, Arial, sans-serif" font-size="18" fill="#f2f1ea">80</text>
+      <path d="M450 7h28" stroke="#56594f" stroke-width="8" stroke-linecap="round"/>
     </g>
     <g transform="translate(582 270)">
-      <text x="0" y="12" font-family="Anta, Arial, sans-serif" font-size="18" fill="#b8b5a8">Healthcare</text>
+      <circle cx="10" cy="7" r="7" fill="#56c999"/>
+      <path d="M28 7h86" stroke="#56594f" stroke-width="8" stroke-linecap="round"/>
       <rect x="135" y="-3" width="298" height="20" rx="10" fill="#2e332d"/>
       <rect x="135" y="-3" width="214" height="20" rx="10" fill="url(#green)"/>
-      <text x="450" y="13" font-family="Anta, Arial, sans-serif" font-size="18" fill="#f2f1ea">72</text>
+      <path d="M450 7h28" stroke="#56594f" stroke-width="8" stroke-linecap="round"/>
     </g>
     <g transform="translate(582 312)">
-      <text x="0" y="12" font-family="Anta, Arial, sans-serif" font-size="18" fill="#b8b5a8">Logistics</text>
+      <circle cx="10" cy="7" r="7" fill="#e98a4d"/>
+      <path d="M28 7h70" stroke="#56594f" stroke-width="8" stroke-linecap="round"/>
       <rect x="135" y="-3" width="298" height="20" rx="10" fill="#2e332d"/>
       <rect x="135" y="-3" width="173" height="20" rx="10" fill="url(#orange)"/>
-      <text x="450" y="13" font-family="Anta, Arial, sans-serif" font-size="18" fill="#f2f1ea">58</text>
+      <path d="M450 7h28" stroke="#56594f" stroke-width="8" stroke-linecap="round"/>
     </g>
   </g>
   <g filter="url(#shadow)">
     <rect x="1090" y="112" width="230" height="196" rx="24" fill="#20221d" stroke="#3a3c34"/>
-    <text x="1124" y="158" font-family="Anta, Arial, sans-serif" font-size="18" fill="#b8b5a8">Sort by</text>
+    <rect x="1124" y="146" width="88" height="12" rx="6" fill="#5b5d54"/>
+    <rect x="1124" y="170" width="134" height="10" rx="5" fill="#44473f"/>
     <rect x="1124" y="184" width="148" height="34" rx="17" fill="#378add"/>
-    <text x="1144" y="207" font-family="Anta, Arial, sans-serif" font-size="16" fill="#ffffff">High to low</text>
+    <circle cx="1144" cy="201" r="7" fill="#ffffff" opacity="0.9"/>
+    <path d="M1162 201h70" stroke="#ffffff" stroke-width="7" stroke-linecap="round" opacity="0.86"/>
     <rect x="1124" y="232" width="116" height="34" rx="17" fill="#292b25" stroke="#3a3c34"/>
-    <text x="1144" y="255" font-family="Anta, Arial, sans-serif" font-size="16" fill="#b8b5a8">Market</text>
+    <circle cx="1144" cy="249" r="7" fill="#56594f"/>
+    <path d="M1162 249h44" stroke="#56594f" stroke-width="7" stroke-linecap="round"/>
   </g>
 </svg>
