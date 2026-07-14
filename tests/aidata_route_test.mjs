@@ -91,11 +91,17 @@ test('industry impact visual is placed in its analysis section', async () => {
   assert.match(html, /id="industry-impact"[\s\S]*src="assets\/industry-impact-hero-dark\.svg"/);
 });
 
-test('adoption stages visual is placed in its analysis section', async () => {
+test('adoption stages visual is placed in its analysis section and has no visible text nodes', async () => {
   const html = await readFile(rootPagePath, 'utf8');
+  const [lightSvg, darkSvg] = await Promise.all([
+    readFile(new URL('../assets/adoption-stages-hero.svg', import.meta.url), 'utf8'),
+    readFile(new URL('../assets/adoption-stages-hero-dark.svg', import.meta.url), 'utf8'),
+  ]);
 
   assert.match(html, /id="adoption-stages"[\s\S]*src="assets\/adoption-stages-hero\.svg"/);
   assert.match(html, /id="adoption-stages"[\s\S]*src="assets\/adoption-stages-hero-dark\.svg"/);
+  assert.doesNotMatch(lightSvg, /<text\b/);
+  assert.doesNotMatch(darkSvg, /<text\b/);
 });
 
 test('industry clusters visual is placed in its analysis section and has no visible text nodes', async () => {
