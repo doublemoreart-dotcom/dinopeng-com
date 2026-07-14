@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 420" role="img" aria-labelledby="title desc">
+  <title id="title">產業分群解讀深色主視覺</title>
+  <desc id="desc">以深色四象限、節點與連線表達不同產業在 AI 滲透、影響、潛力與阻力上的分群。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#141512"/>
+      <stop offset="0.55" stop-color="#18221f"/>
+      <stop offset="1" stop-color="#142031"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#000000" flood-opacity="0.28"/>
+    </filter>
+  </defs>
+  <rect width="1440" height="420" rx="34" fill="url(#bg)"/>
+  <g opacity="0.22" stroke="#f2f1ea" stroke-width="1">
+    <path d="M80 0v420M160 0v420M240 0v420M320 0v420M400 0v420M480 0v420M560 0v420M640 0v420M720 0v420M800 0v420M880 0v420M960 0v420M1040 0v420M1120 0v420M1200 0v420M1280 0v420M1360 0v420"/>
+    <path d="M0 70h1440M0 140h1440M0 210h1440M0 280h1440M0 350h1440"/>
+  </g>
+  <circle cx="1190" cy="86" r="112" fill="#378add" opacity="0.17"/>
+  <circle cx="175" cy="322" r="136" fill="#38b785" opacity="0.16"/>
+  <circle cx="764" cy="80" r="82" fill="#e37a3d" opacity="0.18"/>
+  <g filter="url(#shadow)">
+    <rect x="160" y="62" width="1120" height="296" rx="30" fill="#20221d" stroke="#3a3c34"/>
+    <path d="M720 92v236M210 210h1020" stroke="#5b5d54" stroke-width="2" stroke-dasharray="10 12"/>
+    <g opacity="0.85">
+      <path d="M340 148C430 82 526 126 612 162S789 252 905 156S1070 144 1140 112" fill="none" stroke="#5aa9f0" stroke-width="4" stroke-linecap="round" opacity="0.34"/>
+      <path d="M318 276C420 220 472 292 596 238S790 144 938 252S1072 296 1160 242" fill="none" stroke="#56c999" stroke-width="4" stroke-linecap="round" opacity="0.3"/>
+    </g>
+    <g>
+      <rect x="256" y="100" width="330" height="94" rx="24" fill="#223128" stroke="#3a3c34"/>
+      <circle cx="320" cy="147" r="28" fill="#5aa9f0" opacity="0.88"/>
+      <circle cx="376" cy="147" r="20" fill="#56c999" opacity="0.82"/>
+      <circle cx="424" cy="147" r="16" fill="#e98a4d" opacity="0.78"/>
+      <circle cx="470" cy="147" r="13" fill="#dd6d9d" opacity="0.72"/>
+      <path d="M320 147h196" stroke="#50635b" stroke-width="4" stroke-linecap="round" opacity="0.65"/>
+    </g>
+    <g>
+      <rect x="854" y="100" width="330" height="94" rx="24" fill="#2b2a22" stroke="#3a3c34"/>
+      <circle cx="918" cy="147" r="21" fill="#5aa9f0" opacity="0.86"/>
+      <circle cx="974" cy="147" r="36" fill="#56c999" opacity="0.58"/>
+      <circle cx="1048" cy="147" r="18" fill="#e98a4d" opacity="0.78"/>
+      <path d="M918 147L974 147L1048 147L1120 147" stroke="#5b5545" stroke-width="4" stroke-linecap="round" opacity="0.62"/>
+    </g>
+    <g>
+      <rect x="256" y="228" width="330" height="94" rx="24" fill="#302720" stroke="#3a3c34"/>
+      <circle cx="320" cy="275" r="20" fill="#e98a4d" opacity="0.84"/>
+      <circle cx="382" cy="275" r="33" fill="#56c999" opacity="0.72"/>
+      <circle cx="458" cy="275" r="24" fill="#5aa9f0" opacity="0.78"/>
+      <path d="M320 275C374 232 416 316 458 275S516 244 540 252" fill="none" stroke="#e98a4d" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+    </g>
+    <g>
+      <rect x="854" y="228" width="330" height="94" rx="24" fill="#1f2632" stroke="#3a3c34"/>
+      <circle cx="918" cy="275" r="15" fill="#dd6d9d" opacity="0.72"/>
+      <circle cx="972" cy="275" r="19" fill="#e98a4d" opacity="0.72"/>
+      <circle cx="1038" cy="275" r="13" fill="#5aa9f0" opacity="0.72"/>
+      <circle cx="1094" cy="275" r="22" fill="#56c999" opacity="0.52"/>
+      <path d="M918 275h176" stroke="#3e4c66" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+    </g>
+    <circle cx="720" cy="210" r="20" fill="#20221d" stroke="#5b5d54" stroke-width="4"/>
+    <circle cx="720" cy="210" r="8" fill="#5aa9f0"/>
+  </g>
+</svg>

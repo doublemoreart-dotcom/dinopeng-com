@@ -32,7 +32,7 @@ test('aidata route includes every relative company logo asset used by the page',
 
 test('aidata route includes the hero visual asset used by the page', async () => {
   const html = await readFile(rootPagePath, 'utf8');
-  const paths = [...html.matchAll(/src="(assets\/(?:ai-industry-data-observation|industry-adoption|investment-productivity|industry-impact|adoption-stages)-hero(?:-dark)?\.svg)"/g)].map(match => match[1]);
+  const paths = [...html.matchAll(/src="(assets\/(?:ai-industry-data-observation|industry-adoption|investment-productivity|industry-impact|adoption-stages|industry-clusters)-hero(?:-dark)?\.svg)"/g)].map(match => match[1]);
 
   assert.deepEqual(paths.sort(), [
     'assets/adoption-stages-hero-dark.svg',
@@ -41,6 +41,8 @@ test('aidata route includes the hero visual asset used by the page', async () =>
     'assets/ai-industry-data-observation-hero.svg',
     'assets/industry-adoption-hero-dark.svg',
     'assets/industry-adoption-hero.svg',
+    'assets/industry-clusters-hero-dark.svg',
+    'assets/industry-clusters-hero.svg',
     'assets/industry-impact-hero-dark.svg',
     'assets/industry-impact-hero.svg',
     'assets/investment-productivity-hero-dark.svg',
@@ -90,6 +92,19 @@ test('adoption stages visual is placed in its analysis section', async () => {
 
   assert.match(html, /id="adoption-stages"[\s\S]*src="assets\/adoption-stages-hero\.svg"/);
   assert.match(html, /id="adoption-stages"[\s\S]*src="assets\/adoption-stages-hero-dark\.svg"/);
+});
+
+test('industry clusters visual is placed in its analysis section and has no visible text nodes', async () => {
+  const html = await readFile(rootPagePath, 'utf8');
+  const [lightSvg, darkSvg] = await Promise.all([
+    readFile(new URL('../assets/industry-clusters-hero.svg', import.meta.url), 'utf8'),
+    readFile(new URL('../assets/industry-clusters-hero-dark.svg', import.meta.url), 'utf8'),
+  ]);
+
+  assert.match(html, /id="industry-clusters"[\s\S]*src="assets\/industry-clusters-hero\.svg"/);
+  assert.match(html, /id="industry-clusters"[\s\S]*src="assets\/industry-clusters-hero-dark\.svg"/);
+  assert.doesNotMatch(lightSvg, /<text\b/);
+  assert.doesNotMatch(darkSvg, /<text\b/);
 });
 
 test('project docs identify /aidata/ as the public project URL and require route sync', async () => {
