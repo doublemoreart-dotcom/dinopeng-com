@@ -19,13 +19,13 @@ jobs:
 
     steps:
       - name: Check out portal
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: main
           path: portal
 
       - name: Check out AI Data
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: doublemoreart-dotcom/aidata
           ref: main
@@ -33,7 +33,7 @@ jobs:
           persist-credentials: false
 
       - name: Check out TP Trees
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: doublemoreart-dotcom/tptrees
           ref: main
@@ -41,7 +41,7 @@ jobs:
           persist-credentials: false
 
       - name: Check out SportTech deployment
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: doublemoreart-dotcom/sporttech
           ref: gh-pages
