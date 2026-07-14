@@ -11,6 +11,7 @@
 - `index.html`（dinopeng.com 專案入口）
 - `aidata/index.html`（由獨立 AI Data repo 同步的正式入口）
 - `tptrees/index.html`（由獨立 TP Trees repo 同步的正式入口）
+- `sporttech/index.html`（由獨立 SportTech repo 的 gh-pages 分支同步）
 - `scripts/sync-projects.sh`（來源 repo 到入口網站的允許清單同步）
 - `DATA_UPDATE.md`
 - `WEB_SPEC.md`
@@ -148,7 +149,7 @@ const groupColors = {
 
 - 主要檔案保持為單檔 HTML，除非使用者要求改成框架專案。
 - `https://dinopeng.com/` 為跨專案入口，`https://dinopeng.com/aidata/` 為 AI Data 正式網址；更新 AI Data 時只同步日期版本至 `aidata/index.html` 與 `aidata/assets/`，不要覆蓋根目錄入口。
-- AI Data 與 TP Trees 的網站內容應分別在 `doublemoreart-dotcom/aidata`、`doublemoreart-dotcom/tptrees` 維護；本 repo 的同名子目錄是部署快照，不是主要編輯來源。
+- AI Data、TP Trees 與 SportTech 的網站內容應分別在 `doublemoreart-dotcom/aidata`、`doublemoreart-dotcom/tptrees`、`doublemoreart-dotcom/sporttech` 維護；本 repo 的同名子目錄是部署快照，不是主要編輯來源。
 - `dinopeng.com` 的 `CNAME` 只保留在本 repo。修改同步腳本或 workflow 後，需確認來源驗證、路由測試與無變更時不提交的行為仍成立。
 - 每次本機端更新任何項目時，無論是資料、UI、文案、樣式或資源，都必須檢查 `AI 公司估值排行榜` 是否仍為最新可追溯數據；若有新的公司公告、投資方公告、一線媒體報導或上市公司市值基準日，需同步更新頁面、資料整理時間、來源連結與公開報告來源池。
 - 週更時必須建立新日期檔，格式為 `ai_industry_penetration_YYYY-MM-DD.html`。

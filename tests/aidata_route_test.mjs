@@ -6,6 +6,8 @@ import test from 'node:test';
 const portalPagePath = new URL('../index.html', import.meta.url);
 const aidataPagePath = new URL('../aidata/index.html', import.meta.url);
 const aidataRootPath = new URL('../aidata/', import.meta.url);
+const sporttechPagePath = new URL('../sporttech/index.html', import.meta.url);
+const sporttechRootPath = new URL('../sporttech/', import.meta.url);
 const readmePath = new URL('../README.md', import.meta.url);
 const updateGuidePath = new URL('../DATA_UPDATE.md', import.meta.url);
 
@@ -18,9 +20,20 @@ test('root publishes a project portal while /aidata/ keeps the AI report', async
   assert.match(portalPage, /Dino Peng — Projects/);
   assert.match(portalPage, /href="\/tptrees\/"/);
   assert.match(portalPage, /href="\/aidata\/"/);
-  assert.doesNotMatch(portalPage, /href="\/sporttech\/"/);
+  assert.match(portalPage, /href="\/sporttech\/"/);
   assert.match(aidataPage, /AI 對產業的數據觀察/);
   assert.notEqual(aidataPage, portalPage);
+});
+
+test('sporttech route publishes its static page and local assets', async () => {
+  const html = await readFile(sporttechPagePath, 'utf8');
+  assert.match(html, /2022-2026 運動X科技預算查詢小幫手/);
+
+  const paths = [...html.matchAll(/(?:src|href)="(assets\/[^"]+)"/g)].map(match => match[1]);
+  assert.ok(paths.length >= 3, `expected SportTech local asset references, got ${paths.length}`);
+  for (const path of paths) {
+    assert.equal(existsSync(new URL(path, sporttechRootPath)), true, `${path} should load below /sporttech/`);
+  }
 });
 
 test('aidata route includes every relative company logo asset used by the page', async () => {

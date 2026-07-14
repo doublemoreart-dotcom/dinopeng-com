@@ -40,9 +40,17 @@ jobs:
           path: sources/tptrees
           persist-credentials: false
 
+      - name: Check out SportTech deployment
+        uses: actions/checkout@v4
+        with:
+          repository: doublemoreart-dotcom/sporttech
+          ref: gh-pages
+          path: sources/sporttech
+          persist-credentials: false
+
       - name: Sync published files
         working-directory: portal
-        run: ./scripts/sync-projects.sh ../sources/aidata ../sources/tptrees .
+        run: ./scripts/sync-projects.sh ../sources/aidata ../sources/tptrees ../sources/sporttech .
 
       - name: Verify portal routes
         working-directory: portal
@@ -51,7 +59,7 @@ jobs:
       - name: Commit updated snapshots
         working-directory: portal
         run: |
-          git add aidata tptrees
+          git add aidata tptrees sporttech
           if git diff --cached --quiet; then
             echo "Published snapshots are already current."
             exit 0
@@ -59,7 +67,8 @@ jobs:
 
           aidata_sha="$(git -C ../sources/aidata rev-parse --short HEAD)"
           tptrees_sha="$(git -C ../sources/tptrees rev-parse --short HEAD)"
+          sporttech_sha="$(git -C ../sources/sporttech rev-parse --short HEAD)"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: sync project sites" -m "aidata: ${aidata_sha}\ntptrees: ${tptrees_sha}"
+          git commit -m "chore: sync project sites" -m "aidata: ${aidata_sha}\ntptrees: ${tptrees_sha}\nsporttech: ${sporttech_sha}"
           git push origin HEAD:main
