@@ -8,7 +8,8 @@
 
 - `ai_industry_penetration.html`
 - `ai_industry_penetration_YYYY-MM-DD.html`
-- `index.html` 與 `aidata/index.html`（正式入口同步副本）
+- `index.html`（dinopeng.com 專案入口）
+- `aidata/index.html`（AI Data 正式入口）
 - `DATA_UPDATE.md`
 - `WEB_SPEC.md`
 
@@ -144,7 +145,7 @@ const groupColors = {
 ## 實作規範
 
 - 主要檔案保持為單檔 HTML，除非使用者要求改成框架專案。
-- `https://dinopeng.com/aidata/` 為正式專案網址；每次推版需讓 `aidata/index.html` 與根目錄 `index.html` 完全同步，並同步相對資源。
+- `https://dinopeng.com/` 為跨專案入口，`https://dinopeng.com/aidata/` 為 AI Data 正式網址；更新 AI Data 時只同步日期版本至 `aidata/index.html` 與 `aidata/assets/`，不要覆蓋根目錄入口。
 - 每次本機端更新任何項目時，無論是資料、UI、文案、樣式或資源，都必須檢查 `AI 公司估值排行榜` 是否仍為最新可追溯數據；若有新的公司公告、投資方公告、一線媒體報導或上市公司市值基準日，需同步更新頁面、資料整理時間、來源連結與公開報告來源池。
 - 週更時必須建立新日期檔，格式為 `ai_industry_penetration_YYYY-MM-DD.html`。
 - 第一次週更以 `ai_industry_penetration.html` 作為範本；後續週更以最近一期日期版本作為範本。
