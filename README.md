@@ -51,6 +51,19 @@ https://dinopeng.com/aidata/
 
 根網址 `https://dinopeng.com/` 為獨立專案入口。`aidata/index.html` 與 `aidata/assets/` 是 `/aidata/` 的發布內容；更新 AI Data 時需同步日期版本與相關資源，但不得覆蓋根目錄入口。
 
+### 獨立來源 repo 與同步
+
+各專案的正式來源已拆分：
+
+- AI Data：https://github.com/doublemoreart-dotcom/aidata
+- TP Trees：https://github.com/doublemoreart-dotcom/tptrees
+
+本 repo 保留 `dinopeng.com` 的唯一 `CNAME` 與 GitHub Pages 發布責任。`.github/workflows/sync-projects.yml` 每小時及手動執行時，會從兩個來源 repo 的 `main` 同步公開網站檔案至 `aidata/`、`tptrees/`，通過既有路由測試後才提交更新。同步腳本也可在本機執行：
+
+```bash
+./scripts/sync-projects.sh ../aidata ../tptrees .
+```
+
 自訂網域由根目錄的 `CNAME` 管理。網域供應商的 DNS 需另外設定：
 
 - 根網域 `@`：四筆 `A` 紀錄，分別指向 `185.199.108.153`、`185.199.109.153`、`185.199.110.153`、`185.199.111.153`。
