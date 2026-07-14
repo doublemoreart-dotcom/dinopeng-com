@@ -50,8 +50,8 @@ async function assertRemoteMatches(relativePath, urlPath) {
   console.log(`${urlPath} matches ${relativePath}`);
 }
 
-const indexHtml = await readText('index.html');
-const versionDate = extractMeta(indexHtml, 'page-version-date');
+const aidataHtml = await readText('aidata/index.html');
+const versionDate = extractMeta(aidataHtml, 'page-version-date');
 const snapshotName = dateSnapshotName(versionDate);
 
 await assertRemoteMatches('aidata/index.html', '/aidata/');

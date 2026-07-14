@@ -3,25 +3,42 @@ import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-const rootPagePath = new URL('../index.html', import.meta.url);
+const portalPagePath = new URL('../index.html', import.meta.url);
 const aidataPagePath = new URL('../aidata/index.html', import.meta.url);
 const aidataRootPath = new URL('../aidata/', import.meta.url);
+const sporttechPagePath = new URL('../sporttech/index.html', import.meta.url);
+const sporttechRootPath = new URL('../sporttech/', import.meta.url);
 const readmePath = new URL('../README.md', import.meta.url);
 const updateGuidePath = new URL('../DATA_UPDATE.md', import.meta.url);
 
-test('aidata route publishes the same page as the root entry', async () => {
-  assert.equal(existsSync(aidataPagePath), true, 'aidata/index.html should exist');
-
-  const [rootPage, aidataPage] = await Promise.all([
-    readFile(rootPagePath, 'utf8'),
+test('root publishes a project portal while /aidata/ keeps the AI report', async () => {
+  const [portalPage, aidataPage] = await Promise.all([
+    readFile(portalPagePath, 'utf8'),
     readFile(aidataPagePath, 'utf8'),
   ]);
 
-  assert.equal(aidataPage, rootPage, 'aidata/index.html should stay byte-identical to index.html');
+  assert.match(portalPage, /Dino Peng — Projects/);
+  assert.match(portalPage, /href="\/tptrees\/"/);
+  assert.match(portalPage, /href="\/aidata\/"/);
+  assert.match(portalPage, /href="\/sporttech\/"/);
+  assert.match(aidataPage, /AI 對產業的數據觀察/);
+  assert.notEqual(aidataPage, portalPage);
+});
+
+test('sporttech route publishes its static page and local assets', async () => {
+  const html = await readFile(sporttechPagePath, 'utf8');
+  assert.match(html, /2022-2026 運動X科技預算查詢小幫手/);
+
+  const paths = [...html.matchAll(/(?:src|href)="(assets\/[^"]+)"/g)].map(match => match[1]);
+  assert.ok(paths.length >= 3, `expected SportTech local asset references, got ${paths.length}`);
+  for (const path of paths) {
+    assert.equal(existsSync(new URL(path, sporttechRootPath)), true, `${path} should load below /sporttech/`);
+  }
 });
 
 test('aidata route includes every relative company logo asset used by the page', async () => {
-  const html = await readFile(rootPagePath, 'utf8');
+  assert.equal(existsSync(aidataPagePath), true, 'aidata/index.html should exist');
+  const html = await readFile(aidataPagePath, 'utf8');
   const paths = [...html.matchAll(/'([^']*assets\/company-logos\/[^']+)'/g)].map(match => match[1]);
 
   assert.ok(paths.length >= 7, `expected at least 7 logo paths, got ${paths.length}`);
@@ -31,7 +48,7 @@ test('aidata route includes every relative company logo asset used by the page',
 });
 
 test('aidata route includes the hero visual asset used by the page', async () => {
-  const html = await readFile(rootPagePath, 'utf8');
+  const html = await readFile(aidataPagePath, 'utf8');
   const paths = [...html.matchAll(/src="(assets\/(?:ai-industry-data-observation|industry-adoption|investment-productivity|industry-impact|adoption-stages|industry-clusters|hybrid-talent|hybrid-influence)-hero(?:-dark)?\.svg)"/g)].map(match => match[1]);
 
   assert.deepEqual(paths.sort(), [
@@ -59,7 +76,7 @@ test('aidata route includes the hero visual asset used by the page', async () =>
 });
 
 test('hero visual theme rules override the generic image display rule', async () => {
-  const html = await readFile(rootPagePath, 'utf8');
+  const html = await readFile(aidataPagePath, 'utf8');
 
   assert.match(html, /\.hero-visual img \{[^}]*display: block;/);
   assert.match(html, /\.hero-visual \.hero-visual-image-dark \{ display: none; \}/);
@@ -68,7 +85,7 @@ test('hero visual theme rules override the generic image display rule', async ()
 });
 
 test('industry adoption visual theme rules override the generic image display rule', async () => {
-  const html = await readFile(rootPagePath, 'utf8');
+  const html = await readFile(aidataPagePath, 'utf8');
   const [lightSvg, darkSvg] = await Promise.all([
     readFile(new URL('../assets/industry-adoption-hero.svg', import.meta.url), 'utf8'),
     readFile(new URL('../assets/industry-adoption-hero-dark.svg', import.meta.url), 'utf8'),
@@ -84,7 +101,7 @@ test('industry adoption visual theme rules override the generic image display ru
 });
 
 test('investment productivity visual is placed in its analysis section and has no visible text nodes', async () => {
-  const html = await readFile(rootPagePath, 'utf8');
+  const html = await readFile(aidataPagePath, 'utf8');
   const [lightSvg, darkSvg] = await Promise.all([
     readFile(new URL('../assets/investment-productivity-hero.svg', import.meta.url), 'utf8'),
     readFile(new URL('../assets/investment-productivity-hero-dark.svg', import.meta.url), 'utf8'),
@@ -97,7 +114,7 @@ test('investment productivity visual is placed in its analysis section and has n
 });
 
 test('industry impact visual is placed in its analysis section and has no visible text nodes', async () => {
-  const html = await readFile(rootPagePath, 'utf8');
+  const html = await readFile(aidataPagePath, 'utf8');
   const [lightSvg, darkSvg] = await Promise.all([
     readFile(new URL('../assets/industry-impact-hero.svg', import.meta.url), 'utf8'),
     readFile(new URL('../assets/industry-impact-hero-dark.svg', import.meta.url), 'utf8'),
@@ -110,7 +127,7 @@ test('industry impact visual is placed in its analysis section and has no visibl
 });
 
 test('adoption stages visual is placed in its analysis section and has no visible text nodes', async () => {
-  const html = await readFile(rootPagePath, 'utf8');
+  const html = await readFile(aidataPagePath, 'utf8');
   const [lightSvg, darkSvg] = await Promise.all([
     readFile(new URL('../assets/adoption-stages-hero.svg', import.meta.url), 'utf8'),
     readFile(new URL('../assets/adoption-stages-hero-dark.svg', import.meta.url), 'utf8'),
@@ -123,7 +140,7 @@ test('adoption stages visual is placed in its analysis section and has no visibl
 });
 
 test('industry clusters visual is placed in its analysis section and has no visible text nodes', async () => {
-  const html = await readFile(rootPagePath, 'utf8');
+  const html = await readFile(aidataPagePath, 'utf8');
   const [lightSvg, darkSvg] = await Promise.all([
     readFile(new URL('../assets/industry-clusters-hero.svg', import.meta.url), 'utf8'),
     readFile(new URL('../assets/industry-clusters-hero-dark.svg', import.meta.url), 'utf8'),
@@ -136,7 +153,7 @@ test('industry clusters visual is placed in its analysis section and has no visi
 });
 
 test('hybrid talent visual is placed in its analysis section and has no visible text nodes', async () => {
-  const html = await readFile(rootPagePath, 'utf8');
+  const html = await readFile(aidataPagePath, 'utf8');
   const [lightSvg, darkSvg] = await Promise.all([
     readFile(new URL('../assets/hybrid-talent-hero.svg', import.meta.url), 'utf8'),
     readFile(new URL('../assets/hybrid-talent-hero-dark.svg', import.meta.url), 'utf8'),
@@ -149,7 +166,7 @@ test('hybrid talent visual is placed in its analysis section and has no visible 
 });
 
 test('hybrid influence visual is placed in its analysis section and has no visible text nodes', async () => {
-  const html = await readFile(rootPagePath, 'utf8');
+  const html = await readFile(aidataPagePath, 'utf8');
   const [lightSvg, darkSvg] = await Promise.all([
     readFile(new URL('../assets/hybrid-influence-hero.svg', import.meta.url), 'utf8'),
     readFile(new URL('../assets/hybrid-influence-hero-dark.svg', import.meta.url), 'utf8'),
@@ -161,13 +178,14 @@ test('hybrid influence visual is placed in its analysis section and has no visib
   assert.doesNotMatch(darkSvg, /<text\b/);
 });
 
-test('project docs identify /aidata/ as the public project URL and require route sync', async () => {
+test('project docs identify the portal and /aidata/ as separate public entries', async () => {
   const [readme, updateGuide] = await Promise.all([
     readFile(readmePath, 'utf8'),
     readFile(updateGuidePath, 'utf8'),
   ]);
 
+  assert.match(readme, /https:\/\/dinopeng\.com\//);
   assert.match(readme, /https:\/\/dinopeng\.com\/aidata\//);
   assert.match(updateGuide, /aidata\/index\.html/);
-  assert.match(updateGuide, /index\.html.*同步|同步.*index\.html/);
+  assert.doesNotMatch(updateGuide, /aidata\/index\.html.*index\.html.*完全同步/);
 });

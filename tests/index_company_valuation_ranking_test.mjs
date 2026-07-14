@@ -4,8 +4,8 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import vm from 'node:vm';
 
-const pagePath = new URL('../index.html', import.meta.url);
-const rootPath = new URL('../', import.meta.url);
+const pagePath = new URL('../aidata/index.html', import.meta.url);
+const rootPath = new URL('../aidata/', import.meta.url);
 
 const extractValuationData = html => {
   const match = html.match(/const mainCompanyValuationData = (\[[\s\S]*?\n\]);/);

@@ -14,17 +14,23 @@ import {
   rootPath,
 } from './release-utils.mjs';
 
-const indexHtml = await readText('index.html');
-const versionDate = extractMeta(indexHtml, 'page-version-date');
-const versionNumber = extractMeta(indexHtml, 'page-version-number');
+const portalHtml = await readText('index.html');
+const aidataHtml = await readText('aidata/index.html');
+const versionDate = extractMeta(aidataHtml, 'page-version-date');
+const versionNumber = extractMeta(aidataHtml, 'page-version-number');
 const currentSnapshot = dateSnapshotName(versionDate);
 
 requireFile('index.html');
 requireFile('aidata/index.html');
 requireFile(currentSnapshot);
 
-await assertSameFile('index.html', 'aidata/index.html');
-await assertSameFile('index.html', currentSnapshot);
+if (!/Dino Peng — Projects/.test(portalHtml)) {
+  throw new Error('index.html should remain the dinopeng.com project portal');
+}
+if (!/AI 對產業的數據觀察/.test(aidataHtml)) {
+  throw new Error('aidata/index.html should remain the AI Data report');
+}
+await assertSameFile('aidata/index.html', currentSnapshot);
 
 for (const file of ['index.html', 'aidata/index.html', currentSnapshot]) {
   const scriptCount = checkInlineScripts(await readText(file), file);
@@ -51,7 +57,7 @@ for (const snapshot of snapshots) {
   }
 }
 
-const logoPaths = extractCompanyLogoPaths(indexHtml);
+const logoPaths = extractCompanyLogoPaths(aidataHtml);
 if (logoPaths.length === 0) {
   throw new Error('No company logo paths found in index.html');
 }

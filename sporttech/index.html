@@ -1,0 +1,2159 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>2022-2026 運動X科技預算查詢小幫手</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="shortcut icon" href="assets/favicon.svg" />
+    <style>
+      :root {
+        --paper: #f4efe5;
+        --paper-2: #fbf8ef;
+        --ink: #15191b;
+        --text: #263236;
+        --muted: #657174;
+        --line: #d8d0c0;
+        --teal: #2e7068;
+        --red: #963d35;
+        --gold: #a16c19;
+        --blue: #385f87;
+        --green: #48724d;
+        --shadow: rgba(21, 25, 27, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background:
+          linear-gradient(90deg, rgba(21, 25, 27, 0.035) 1px, transparent 1px),
+          linear-gradient(180deg, rgba(21, 25, 27, 0.025) 1px, transparent 1px),
+          var(--paper);
+        background-size: 36px 36px;
+        color: var(--text);
+        font-family: Arial, "Noto Sans TC", sans-serif;
+      }
+
+      button {
+        font: inherit;
+      }
+
+      .preloader {
+        align-items: center;
+        background:
+          linear-gradient(90deg, rgba(21, 25, 27, 0.035) 1px, transparent 1px),
+          linear-gradient(180deg, rgba(21, 25, 27, 0.025) 1px, transparent 1px),
+          rgba(244, 239, 229, 0.96);
+        background-size: 36px 36px;
+        display: grid;
+        inset: 0;
+        justify-items: center;
+        padding: 24px;
+        position: fixed;
+        z-index: 20;
+      }
+
+      .preloader.hidden {
+        display: none;
+      }
+
+      .preloader-card {
+        background: var(--paper-2);
+        border: 1px solid var(--ink);
+        border-radius: 8px;
+        box-shadow: 8px 8px 0 var(--shadow);
+        display: grid;
+        gap: 16px;
+        max-width: 620px;
+        padding: clamp(22px, 5vw, 40px);
+        width: min(100%, 620px);
+      }
+
+      .preloader-kicker {
+        color: var(--teal);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .preloader h2 {
+        color: var(--ink);
+        font-size: clamp(32px, 7vw, 66px);
+        line-height: 0.98;
+        margin: 0;
+      }
+
+      .preloader-flow {
+        display: grid;
+        gap: 8px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .preloader-flow span {
+        background: #eee6d7;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--ink);
+        font-weight: 800;
+        padding: 9px 12px;
+        text-align: center;
+      }
+
+      .preloader-bar {
+        background: #e7decc;
+        border-radius: 999px;
+        height: 8px;
+        overflow: hidden;
+      }
+
+      .preloader-bar span {
+        animation: preload-progress 1.35s ease-out forwards;
+        background: linear-gradient(90deg, var(--teal), var(--gold));
+        display: block;
+        height: 100%;
+        width: 0;
+      }
+
+      .preloader p {
+        color: var(--muted);
+        line-height: 1.7;
+        margin: 0;
+      }
+
+      .preloader button {
+        background: var(--ink);
+        border: 1px solid var(--ink);
+        border-radius: 999px;
+        color: var(--paper-2);
+        cursor: pointer;
+        font-weight: 800;
+        justify-self: start;
+        padding: 10px 16px;
+      }
+
+      .shell {
+        width: min(1240px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 24px 0 42px;
+      }
+
+      .masthead {
+        border-bottom: 4px double var(--ink);
+        border-top: 4px solid var(--ink);
+        display: grid;
+        gap: 18px;
+        grid-template-columns: minmax(0, 1fr) 310px;
+        padding: 20px 0 24px;
+      }
+
+      .hero-visual {
+        background: var(--paper-2);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        grid-column: 1 / -1;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      .hero-visual img {
+        aspect-ratio: 16 / 6;
+        display: block;
+        height: auto;
+        object-fit: cover;
+        object-position: center;
+        width: 100%;
+      }
+
+      .kicker,
+      .label,
+      .tag,
+      .metric span,
+      .year,
+      .status {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .kicker {
+        color: var(--teal);
+        font-size: 13px;
+        font-weight: 800;
+        margin: 0 0 10px;
+      }
+
+      h1 {
+        color: var(--ink);
+        font-size: clamp(46px, 8vw, 104px);
+        line-height: 0.92;
+        margin: 0;
+        max-width: 900px;
+      }
+
+      .dek {
+        color: #354044;
+        font-size: 17px;
+        line-height: 1.85;
+        margin: 18px 0 0;
+        max-width: 820px;
+      }
+
+      .brief {
+        align-self: stretch;
+        background: var(--paper-2);
+        border: 1px solid var(--ink);
+        border-radius: 8px;
+        box-shadow: 7px 7px 0 var(--shadow);
+        display: grid;
+        gap: 14px;
+        padding: 18px;
+      }
+
+      .brief strong {
+        color: var(--ink);
+        display: block;
+        font-size: 22px;
+        line-height: 1.28;
+      }
+
+      .brief p {
+        color: var(--muted);
+        line-height: 1.65;
+        margin: 0;
+      }
+
+      .metrics {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(4, 1fr);
+        margin: 18px 0 22px;
+      }
+
+      .metric {
+        background: var(--paper-2);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        cursor: pointer;
+        min-height: 92px;
+        padding: 14px;
+        text-align: left;
+        transition:
+          border-color 160ms ease,
+          box-shadow 160ms ease,
+          transform 160ms ease;
+      }
+
+      .metric:hover,
+      .metric:focus-visible {
+        border-color: var(--ink);
+        box-shadow: 6px 6px 0 var(--shadow);
+        outline: none;
+        transform: translate(-2px, -2px);
+      }
+
+      .metric:active {
+        box-shadow: 3px 3px 0 var(--shadow);
+        transform: translate(0, 0);
+      }
+
+      .metric span {
+        color: var(--muted);
+        display: block;
+        font-size: 12px;
+        font-weight: 800;
+        margin-bottom: 8px;
+      }
+
+      .metric strong {
+        color: var(--ink);
+        display: block;
+        font-size: 25px;
+        line-height: 1.1;
+      }
+
+      .metric small {
+        color: var(--muted);
+        display: block;
+        line-height: 1.45;
+        margin-top: 8px;
+      }
+
+      .metric::after {
+        color: var(--teal);
+        content: "查看說明";
+        display: block;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0;
+        margin-top: 10px;
+        opacity: 0;
+        text-transform: uppercase;
+        transform: translateY(4px);
+        transition:
+          opacity 160ms ease,
+          transform 160ms ease;
+      }
+
+      .metric:hover::after,
+      .metric:focus-visible::after {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .query-flow {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin: 0 0 18px;
+      }
+
+      .query-flow div {
+        background: rgba(251, 248, 239, 0.9);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        display: grid;
+        gap: 8px;
+        grid-template-columns: 32px minmax(0, 1fr);
+        padding: 13px 14px;
+      }
+
+      .query-flow span {
+        align-items: center;
+        background: var(--ink);
+        border-radius: 999px;
+        color: var(--paper-2);
+        display: inline-flex;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 13px;
+        font-weight: 900;
+        height: 28px;
+        justify-content: center;
+        width: 28px;
+      }
+
+      .query-flow strong {
+        align-self: center;
+        color: var(--ink);
+        font-size: 16px;
+      }
+
+      .query-flow p {
+        color: var(--muted);
+        grid-column: 2;
+        line-height: 1.5;
+        margin: 0;
+      }
+
+      .workbench {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: minmax(0, 1fr);
+        align-items: start;
+      }
+
+      .panel {
+        background: rgba(251, 248, 239, 0.9);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      .panel-inner {
+        padding: 16px;
+      }
+
+      .panel-status {
+        align-items: center;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        padding-bottom: 14px;
+      }
+
+      .panel-status .label {
+        margin-bottom: 3px;
+      }
+
+      .panel-status strong {
+        color: var(--ink);
+        display: block;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 17px;
+      }
+
+      .panel-status button,
+      .empty button {
+        background: transparent;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--ink);
+        cursor: pointer;
+        font-weight: 800;
+        min-height: 34px;
+        padding: 6px 12px;
+      }
+
+      .panel-status button:hover,
+      .empty button:hover {
+        background: var(--ink);
+        border-color: var(--ink);
+        color: var(--paper-2);
+      }
+
+      .label {
+        color: var(--muted);
+        display: block;
+        font-size: 12px;
+        font-weight: 800;
+        margin-bottom: 10px;
+      }
+
+      .filter-grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin-bottom: 18px;
+      }
+
+      .select-menu {
+        position: relative;
+      }
+
+      .select-menu summary {
+        align-items: center;
+        background: transparent;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        color: var(--text);
+        cursor: pointer;
+        display: grid;
+        gap: 5px;
+        list-style: none;
+        min-height: 58px;
+        padding: 9px 38px 9px 12px;
+        position: relative;
+      }
+
+      .select-menu summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .select-menu summary::after {
+        color: var(--muted);
+        content: "⌄";
+        font-size: 20px;
+        font-weight: 800;
+        position: absolute;
+        right: 13px;
+        top: calc(50% - 0.7em);
+      }
+
+      .select-menu[open] summary {
+        border-color: var(--ink);
+        box-shadow: 4px 4px 0 var(--shadow);
+      }
+
+      .select-menu[open] summary::after {
+        content: "⌃";
+      }
+
+      .select-menu summary span {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .select-menu summary strong {
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.25;
+      }
+
+      .select-options {
+        background: var(--paper-2);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: 6px 6px 0 var(--shadow);
+        display: grid;
+        gap: 4px;
+        left: 0;
+        margin-top: 6px;
+        max-height: min(360px, 60vh);
+        min-width: 100%;
+        overflow: auto;
+        padding: 8px;
+        position: absolute;
+        top: 100%;
+        z-index: 12;
+      }
+
+      .select-options label {
+        align-items: center;
+        border-radius: 6px;
+        cursor: pointer;
+        display: grid;
+        gap: 8px;
+        grid-template-columns: 16px minmax(0, 1fr);
+        line-height: 1.35;
+        padding: 8px;
+      }
+
+      .select-options label:has(input:checked) {
+        background: #efe6d7;
+      }
+
+      .select-options .stage-option {
+        grid-template-columns: 16px 12px minmax(0, 1fr);
+      }
+
+      .select-options .stage-option .dot {
+        height: 11px;
+        width: 11px;
+      }
+
+      .select-options label:hover {
+        background: #efe6d7;
+      }
+
+      .select-options input {
+        accent-color: var(--ink);
+        height: 16px;
+        margin: 0;
+        width: 16px;
+      }
+
+      .legend {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+      }
+
+      .legend-row {
+        align-items: center;
+        display: inline-flex;
+        gap: 7px;
+        line-height: 1.45;
+        white-space: nowrap;
+      }
+
+      .dot {
+        border-radius: 999px;
+        height: 12px;
+        width: 12px;
+      }
+
+      .proposal {
+        background: var(--gold);
+      }
+
+      .executing {
+        background: var(--teal);
+      }
+
+      .verified {
+        background: var(--green);
+      }
+
+      .unknown {
+        background: var(--red);
+      }
+
+      .central {
+        background: #2f5f7a;
+      }
+
+      .research {
+        background: #6c5b8e;
+      }
+
+      .local {
+        background: #6d7f45;
+      }
+
+      .industry {
+        background: #9a6a24;
+      }
+
+      .association {
+        background: #8b413c;
+      }
+
+      .results-panel {
+        display: grid;
+        gap: 12px;
+      }
+
+      .results-toolbar {
+        align-items: center;
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+      }
+
+      .results-toolbar .label {
+        margin-bottom: 3px;
+      }
+
+      .results-toolbar strong {
+        color: var(--ink);
+        display: block;
+        font-size: 16px;
+        line-height: 1.35;
+      }
+
+      .view-switcher {
+        align-items: center;
+        display: flex;
+        gap: 10px;
+      }
+
+      .view-switcher .label {
+        margin: 0;
+      }
+
+      .view-toggle {
+        align-items: center;
+        background: rgba(251, 248, 239, 0.78);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        display: inline-flex;
+        gap: 4px;
+        padding: 4px;
+      }
+
+      .view-toggle button {
+        background: transparent;
+        border: 0;
+        border-radius: 999px;
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 800;
+        min-height: 34px;
+        padding: 6px 13px;
+      }
+
+      .view-toggle button[aria-pressed="true"] {
+        background: var(--ink);
+        color: var(--paper-2);
+      }
+
+      .lane-map {
+        display: grid;
+        gap: 12px;
+      }
+
+      .lane-map.card-view {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .lane {
+        background: var(--paper-2);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        cursor: pointer;
+        display: grid;
+        gap: 12px;
+        grid-template-areas:
+          "dot year"
+          ". title"
+          ". amount";
+        grid-template-columns: 16px minmax(0, 1fr);
+        min-height: 0;
+        padding: 16px;
+        text-align: left;
+        width: 100%;
+      }
+
+      .card-view .lane {
+        align-content: start;
+        min-height: 210px;
+      }
+
+      .lane.active,
+      .lane:hover {
+        border-color: var(--ink);
+        box-shadow: 5px 5px 0 var(--shadow);
+      }
+
+      .lane .dot {
+        grid-area: dot;
+        margin-top: 5px;
+      }
+
+      .year {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+        grid-area: year;
+      }
+
+      .lane > span:nth-child(3) {
+        grid-area: title;
+      }
+
+      .lane-title {
+        color: var(--ink);
+        display: block;
+        font-size: 18px;
+        font-weight: 800;
+        line-height: 1.35;
+      }
+
+      .lane-note {
+        color: var(--muted);
+        display: block;
+        line-height: 1.5;
+        margin-top: 5px;
+      }
+
+      .amount {
+        align-self: start;
+        background: #efe6d7;
+        border-radius: 8px;
+        color: var(--ink);
+        font-weight: 800;
+        grid-area: amount;
+        justify-self: start;
+        padding: 8px;
+        text-align: left;
+      }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 0;
+      }
+
+      .tag {
+        background: #efe6d7;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--ink);
+        font-size: 12px;
+        font-weight: 800;
+        padding: 5px 9px;
+      }
+
+      h2 {
+        color: var(--ink);
+        font-size: clamp(28px, 4vw, 54px);
+        line-height: 1.15;
+        margin: 0 0 14px;
+        text-wrap: balance;
+      }
+
+      .fact-grid {
+        display: grid;
+        gap: 7px;
+        margin-bottom: 16px;
+      }
+
+      .fact {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: 58px minmax(0, 1fr);
+      }
+
+      .fact span {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .fact strong {
+        color: var(--ink);
+        line-height: 1.55;
+      }
+
+      .flow {
+        display: grid;
+        gap: 6px;
+        grid-template-columns: repeat(4, 1fr);
+        margin: 0;
+      }
+
+      .flow span {
+        background: #efe6d7;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--ink);
+        display: grid;
+        min-height: 38px;
+        padding: 7px 9px;
+        place-items: center;
+        position: relative;
+        text-align: center;
+      }
+
+      .flow span:not(:last-child)::after {
+        color: var(--muted);
+        content: "→";
+        font-weight: 800;
+        position: absolute;
+        right: -11px;
+        top: calc(50% - 0.75em);
+        z-index: 1;
+      }
+
+      .detail-groups {
+        display: grid;
+        gap: 12px;
+      }
+
+      .detail-groups h3,
+      .audit-summary h3,
+      .public-info h3,
+      .source-links h3 {
+        color: var(--ink);
+        font-size: 16px;
+        margin: 0 0 8px;
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+
+      li {
+        line-height: 1.7;
+      }
+
+      .inline-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .inline-list li {
+        background: #f0e6d6;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: #354145;
+        line-height: 1.35;
+        padding: 5px 9px;
+      }
+
+      .audit-summary {
+        background: #f0e6d6;
+        border-left: 5px solid var(--red);
+        line-height: 1.75;
+        margin: 16px 0 0;
+        padding: 13px 15px;
+      }
+
+      .compact-summary {
+        margin-top: 14px;
+      }
+
+      .audit-summary p {
+        margin: 0 0 10px;
+      }
+
+      .status {
+        color: var(--muted);
+        display: block;
+        font-size: 12px;
+        font-weight: 800;
+        margin-bottom: 10px;
+      }
+
+      .audit-summary dl {
+        display: grid;
+        gap: 8px;
+        margin: 0;
+      }
+
+      .audit-summary div {
+        border-top: 1px solid rgba(21, 25, 27, 0.16);
+        padding-top: 8px;
+      }
+
+      .audit-summary dt {
+        color: var(--ink);
+        font-weight: 800;
+        margin-bottom: 2px;
+      }
+
+      .audit-summary dd {
+        color: var(--muted);
+        line-height: 1.55;
+        margin: 0;
+      }
+
+      .secondary-summary {
+        margin-top: 0;
+      }
+
+      .public-info {
+        display: grid;
+        gap: 10px;
+      }
+
+      .public-info-grid {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .public-info-grid section {
+        background: rgba(240, 230, 214, 0.58);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px 13px;
+      }
+
+      .public-info h4 {
+        color: var(--ink);
+        font-size: 15px;
+        margin: 0 0 7px;
+      }
+
+      .public-info ul {
+        color: #354145;
+        font-size: 15px;
+        padding-left: 18px;
+      }
+
+      .source-links {
+        display: grid;
+        gap: 10px;
+      }
+
+      .source-links ul {
+        display: grid;
+        gap: 8px;
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .source-links li {
+        align-items: start;
+        background: rgba(251, 248, 239, 0.72);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        display: grid;
+        gap: 4px;
+        padding: 11px 12px;
+      }
+
+      .source-links a {
+        color: var(--ink);
+        font-weight: 900;
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 3px;
+      }
+
+      .source-links span {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      .drawer-layer {
+        display: none;
+        inset: 0;
+        position: fixed;
+        z-index: 30;
+      }
+
+      .drawer-layer.open {
+        display: block;
+      }
+
+      .drawer-backdrop {
+        background: rgba(21, 25, 27, 0.28);
+        border: 0;
+        inset: 0;
+        padding: 0;
+        position: absolute;
+        width: 100%;
+      }
+
+      .drawer-panel {
+        animation: drawer-rise 220ms ease-out;
+        background: var(--paper-2);
+        border: 1px solid var(--line);
+        border-radius: 8px 8px 0 0;
+        bottom: 0;
+        box-shadow: 0 -18px 46px rgba(21, 25, 27, 0.22);
+        height: 70vh;
+        left: 50%;
+        overflow: hidden;
+        position: absolute;
+        transform: translateX(-50%);
+        width: min(1240px, calc(100% - 32px));
+      }
+
+      .drawer-handle {
+        background: rgba(21, 25, 27, 0.28);
+        border-radius: 999px;
+        height: 4px;
+        left: 50%;
+        position: absolute;
+        top: 10px;
+        transform: translateX(-50%);
+        width: 58px;
+      }
+
+      .drawer-topline {
+        align-items: center;
+        background: rgba(251, 248, 239, 0.96);
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+        padding: 22px 24px 14px;
+      }
+
+      .close-button {
+        background: transparent;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--ink);
+        cursor: pointer;
+        font-weight: 800;
+        min-height: 34px;
+        padding: 6px 12px;
+      }
+
+      .close-button:hover {
+        background: var(--ink);
+        border-color: var(--ink);
+        color: var(--paper-2);
+      }
+
+      .drawer-scroll {
+        height: calc(70vh - 71px);
+        overflow: auto;
+        padding: 20px 24px 28px;
+      }
+
+      .drawer-detail-grid {
+        border-top: 1px solid var(--line);
+        display: grid;
+        gap: 18px;
+        margin-top: 18px;
+        padding-top: 18px;
+      }
+
+      .metric-drawer-layer {
+        display: none;
+        inset: 0;
+        position: fixed;
+        z-index: 16;
+      }
+
+      .metric-drawer-layer.open {
+        display: block;
+      }
+
+      .metric-drawer-backdrop {
+        background: rgba(21, 25, 27, 0.26);
+        border: 0;
+        inset: 0;
+        position: absolute;
+        width: 100%;
+      }
+
+      .metric-drawer-panel {
+        animation: metric-drawer-slide 220ms ease-out;
+        background: var(--paper-2);
+        border-left: 1px solid var(--line);
+        box-shadow: -18px 0 46px rgba(21, 25, 27, 0.22);
+        height: 100%;
+        max-width: calc(100% - 28px);
+        overflow: hidden;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: min(460px, 42vw);
+      }
+
+      .metric-drawer-panel .drawer-topline {
+        padding: 15px 18px 12px;
+      }
+
+      .metric-drawer-panel .tags {
+        font-size: 12px;
+        gap: 8px;
+      }
+
+      .metric-drawer-scroll {
+        height: calc(100vh - 71px);
+        overflow: auto;
+        padding: 18px 20px 24px;
+      }
+
+      .metric-drawer-label {
+        background: #eee6d7;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        color: var(--ink);
+        display: inline-flex;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 13px;
+        font-weight: 900;
+        line-height: 1;
+        margin-bottom: 14px;
+        padding: 7px 10px;
+      }
+
+      .metric-drawer-scroll h2 {
+        color: var(--ink);
+        font-size: clamp(30px, 3.1vw, 41px);
+        line-height: 1.08;
+        margin: 0 0 14px;
+      }
+
+      .metric-drawer-scroll h3 {
+        color: var(--ink);
+        font-size: 17px;
+        margin-bottom: 8px;
+      }
+
+      .metric-drawer-scroll p,
+      .metric-drawer-scroll li {
+        color: #354145;
+        line-height: 1.65;
+      }
+
+      .metric-drawer-scroll p {
+        margin: 0 0 18px;
+      }
+
+      .metric-drawer-scroll section {
+        background: #f0e6d6;
+        border-left: 5px solid var(--red);
+        margin-top: 4px;
+        padding: 13px 15px;
+      }
+
+      .metric-drawer-scroll ul {
+        display: grid;
+        gap: 6px;
+        margin: 0;
+        padding-left: 20px;
+      }
+
+      @keyframes drawer-rise {
+        from {
+          transform: translate(-50%, 100%);
+        }
+
+        to {
+          transform: translate(-50%, 0);
+        }
+      }
+
+      @keyframes metric-drawer-slide {
+        from {
+          transform: translateX(100%);
+        }
+
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes preload-progress {
+        from {
+          width: 0;
+        }
+
+        to {
+          width: 100%;
+        }
+      }
+
+      .site-footer {
+        border-top: 4px double var(--ink);
+        color: var(--muted);
+        display: grid;
+        gap: 18px;
+        font-size: 14px;
+        grid-template-columns: minmax(0, 1fr) minmax(220px, 0.34fr);
+        line-height: 1.7;
+        margin-top: 14px;
+        padding-top: 18px;
+      }
+
+      .site-footer strong {
+        color: var(--ink);
+        font-size: 15px;
+      }
+
+      .footer-copy {
+        display: grid;
+        gap: 8px;
+      }
+
+      .footer-copy p {
+        margin: 0;
+        max-width: 960px;
+      }
+
+      .footer-meta {
+        align-content: start;
+        color: var(--ink);
+        display: grid;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12px;
+        font-weight: 800;
+        gap: 8px;
+        justify-items: end;
+        letter-spacing: 0;
+        text-align: right;
+        text-transform: uppercase;
+      }
+
+      .footer-meta span {
+        color: var(--ink);
+      }
+
+      .footer-meta small {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.55;
+        max-width: 320px;
+      }
+
+      .empty {
+        color: var(--muted);
+        display: none;
+        gap: 8px;
+        padding: 18px;
+      }
+
+      .empty strong {
+        color: var(--ink);
+      }
+
+      .empty p {
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      .empty button {
+        justify-self: start;
+      }
+
+      @media (max-width: 1040px) {
+        .masthead {
+          grid-template-columns: 1fr;
+        }
+
+        .metrics {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .query-flow {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .lane-map.card-view {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+      }
+
+      @media (max-width: 700px) {
+        .shell {
+          width: min(100% - 22px, 1240px);
+        }
+
+        .metrics,
+        .query-flow,
+        .preloader-flow,
+        .flow {
+          grid-template-columns: 1fr;
+        }
+
+        .query-flow div {
+          grid-template-columns: 28px minmax(0, 1fr);
+        }
+
+        .hero-visual img {
+          aspect-ratio: 16 / 8;
+        }
+
+        .filter-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .results-toolbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .view-switcher,
+        .panel-status {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .view-switcher {
+          gap: 6px;
+        }
+
+        .lane-map.card-view {
+          grid-template-columns: 1fr;
+        }
+
+        .flow span:not(:last-child)::after {
+          content: "↓";
+          bottom: -10px;
+          left: calc(50% - 0.35em);
+          right: auto;
+          top: auto;
+        }
+
+        .public-info-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .site-footer {
+          grid-template-columns: 1fr;
+        }
+
+        .footer-meta {
+          justify-items: start;
+          text-align: left;
+        }
+
+        .drawer-panel {
+          height: 70vh;
+          width: 100%;
+        }
+
+        .metric-drawer-panel {
+          width: min(100%, 390px);
+        }
+
+        .drawer-scroll {
+          height: calc(70vh - 72px);
+          padding: 18px 16px 26px;
+        }
+
+        .drawer-topline {
+          padding-inline: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section
+      aria-label="運動X科技預算查詢小幫手載入中"
+      aria-live="polite"
+      class="preloader"
+      id="preloader"
+      role="status"
+    >
+      <div class="preloader-card">
+        <span class="preloader-kicker">budget query assistant</span>
+        <h2>整理運動X科技預算線索</h2>
+        <div class="preloader-flow" aria-hidden="true">
+          <span>公開資料</span>
+          <span>預算身分</span>
+          <span>查核路徑</span>
+        </div>
+        <div class="preloader-bar" aria-hidden="true">
+          <span></span>
+        </div>
+        <p>正在標記政策總額、年度科目、地方場域與協會應用端。</p>
+        <button id="skipPreloader" type="button">略過導入</button>
+      </div>
+    </section>
+
+    <main class="shell">
+      <section class="masthead">
+        <figure class="hero-visual">
+          <img src="assets/sporttech-budget-hero-small.jpg" alt="運動場域、資料節點與預算流向的主視覺" />
+        </figure>
+        <div>
+          <p class="kicker">budget query assistant / static v2</p>
+          <h1>運動X科技預算查詢小幫手</h1>
+          <p class="dek">
+            想查一筆運動科技相關預算時，先用這個頁面確認它比較像政策總額、年度科目、基金補助、地方場域，
+            還是協會端應用。點選項目後，可以快速查看來源、執行狀態、合作單位與下一步查核問題。
+          </p>
+        </div>
+        <aside class="brief">
+          <span class="status">查詢提醒</span>
+          <strong>先判斷預算身分，再看協會是否直接承接。</strong>
+          <p>目前公開資料更常見的是政府、國科會或基金先到學研、地方、法人與新創，再進入場域或協會應用。</p>
+        </aside>
+      </section>
+
+      <section class="metrics" aria-label="總覽數字">
+        <button class="metric" data-metric="policy" type="button" aria-label="查看政策總額說明">
+          <span>政策總額</span>
+          <strong>46 億元</strong>
+          <small>跨部會、跨年度政策總額，不能直接視為運動部單一預算。</small>
+        </button>
+        <button class="metric" data-metric="research" type="button" aria-label="查看科研線索說明">
+          <span>科研線索</span>
+          <strong>2.4 億元級</strong>
+          <small>精準運動科學歷史科研專案，重點在國家隊與競技表現。</small>
+        </button>
+        <button class="metric" data-metric="local" type="button" aria-label="查看地方案例說明">
+          <span>地方案例</span>
+          <strong>14 縣市 / 30 案</strong>
+          <small>地方場域實證需分別查核核定、決標、驗收與維運。</small>
+        </button>
+        <button class="metric" data-metric="association" type="button" aria-label="查看協會角色說明">
+          <span>協會角色</span>
+          <strong>應用端居多</strong>
+          <small>協會常提供選手、場域與賽事脈絡，不一定直接拿科技預算。</small>
+        </button>
+      </section>
+
+      <section class="query-flow" aria-label="建議查詢流程">
+        <div>
+          <span>1</span>
+          <strong>先選預算身分</strong>
+          <p>從中央、科研、地方、產業或協會應用端縮小範圍。</p>
+        </div>
+        <div>
+          <span>2</span>
+          <strong>再看執行程度</strong>
+          <p>區分提案、執行中、已有成果與仍待公開對帳的項目。</p>
+        </div>
+        <div>
+          <span>3</span>
+          <strong>最後打開詳情</strong>
+          <p>核對來源連結、公開資訊進度與下一步查核問題。</p>
+        </div>
+      </section>
+
+      <section class="workbench">
+        <aside class="panel">
+          <div class="panel-inner">
+            <div class="panel-status">
+              <div>
+                <span class="label">目前查詢</span>
+                <strong id="resultCount">8 / 8 項</strong>
+              </div>
+              <button id="resetFilters" type="button">清除篩選</button>
+            </div>
+            <div class="filter-grid" aria-label="查詢篩選">
+              <details class="select-menu" id="layerMenu"></details>
+              <details class="select-menu" id="stageMenu"></details>
+              <details class="select-menu" id="cityMenu"></details>
+            </div>
+            <span class="label">圖例</span>
+            <div class="legend" id="legend"></div>
+          </div>
+        </aside>
+
+        <section class="results-panel" aria-label="預算項目">
+          <div class="results-toolbar">
+            <div>
+              <span class="label">查詢結果</span>
+              <strong id="resultSummary">顯示 8 筆公開線索</strong>
+            </div>
+            <div class="view-switcher">
+              <span class="label">切換分類</span>
+              <div class="view-toggle" role="group" aria-label="預算項目顯示方式">
+                <button id="viewList" type="button" aria-pressed="true">列表</button>
+                <button id="viewCard" type="button" aria-pressed="false">卡片</button>
+              </div>
+            </div>
+          </div>
+          <div class="lane-map" id="laneMap"></div>
+          <div class="empty panel" id="empty">
+            <strong>目前沒有符合這組條件的公開可辨識項目。</strong>
+            <p>建議先回到全部項目，再逐一縮小預算層級、執行程度或縣市。</p>
+            <button id="resetEmpty" type="button">重設查詢條件</button>
+          </div>
+        </section>
+
+      </section>
+
+      <div class="metric-drawer-layer" id="metricDrawer" role="dialog" aria-modal="true" aria-label="總覽指標說明">
+        <button class="metric-drawer-backdrop" id="metricDrawerBackdrop" aria-label="關閉總覽說明"></button>
+        <aside class="metric-drawer-panel">
+          <div class="drawer-topline">
+            <div class="tags" id="metricDrawerTags"></div>
+            <button class="close-button" id="metricDrawerClose">關閉</button>
+          </div>
+          <div class="metric-drawer-scroll" id="metricDrawerDetail"></div>
+        </aside>
+      </div>
+
+      <div class="drawer-layer" id="drawer" role="dialog" aria-modal="true" aria-label="查詢結果">
+        <button class="drawer-backdrop" id="drawerBackdrop" aria-label="關閉查詢結果"></button>
+        <article class="drawer-panel">
+          <div class="drawer-handle" aria-hidden="true"></div>
+          <div class="drawer-topline">
+            <div class="tags" id="drawerTags"></div>
+            <button class="close-button" id="drawerClose">關閉</button>
+          </div>
+          <div class="drawer-scroll" id="detail"></div>
+        </article>
+      </div>
+
+      <footer class="site-footer" aria-label="公開資料與版權聲明">
+        <div class="footer-copy">
+          <strong>公開資料與版權聲明</strong>
+          <p>
+            本頁整理政府公開資訊、open data、新聞報導、中央與地方府會公告，以及可公開查詢之採購與研究計畫線索，
+            供公共討論、新聞查核、政策研究與公民監督使用。
+          </p>
+          <p>
+            資料僅作為查詢輔助與脈絡整理，不代表主管機關之正式預算對帳、決算審定或完整授權清單；引用時請回到原始公開來源確認最新版本、授權條款與更新日期。
+          </p>
+        </div>
+        <div class="footer-meta" aria-label="版本與授權用途">
+          <span>版號 v0.2.2</span>
+          <span>更新日期 2026-07-14</span>
+          <small>Copyright 2026. Open data for public interest research and non-commercial civic use.</small>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+      const preloader = document.getElementById("preloader");
+      const skipPreloader = document.getElementById("skipPreloader");
+      const hidePreloader = () => preloader?.classList.add("hidden");
+      const preloadTimer = window.setTimeout(hidePreloader, 1400);
+      skipPreloader?.addEventListener("click", () => {
+        window.clearTimeout(preloadTimer);
+        hidePreloader();
+      });
+
+      const stages = {
+        proposal: "提案/爭取",
+        executing: "執行中",
+        verified: "已有成果",
+        unknown: "待公開對帳",
+      };
+
+      const layers = {
+        central: "中央預算",
+        research: "科研/學研",
+        local: "地方場域",
+        industry: "產業新創",
+        association: "協會應用端",
+      };
+
+      const metricDetails = {
+        policy: {
+          label: "政策總額",
+          value: "46 億元",
+          title: "政策總額怎麼讀",
+          detail:
+            "46 億元是 2022-2026 運動X科技跨部會政策總盤，重點是辨識它分散在哪些部會、年度科目與地方分案，而不是把它當成單一機關的一筆支出。",
+          checks: ["查行政院或科技會報核定計畫", "拆年度預算與科技預算科目", "比對地方核定、採購與驗收資料"],
+        },
+        research: {
+          label: "科研線索",
+          value: "2.4 億元級",
+          title: "科研線索怎麼追",
+          detail:
+            "科研預算常出現在國科會、GRB、學研計畫與國家隊支援成果中。它通常不會直接長成民眾看到的場館系統，而是先成為模型、感測、分析工具或訓練支援。",
+          checks: ["查 GRB 計畫名稱、主持人與成果摘要", "比對國科會新聞與補助公告", "確認成果是否進入國訓、協會或場域應用"],
+        },
+        local: {
+          label: "地方案例",
+          value: "14 縣市 / 30 案",
+          title: "地方案例怎麼對帳",
+          detail:
+            "地方場域通常是中央補助、地方配合款與委外廠商共同形成。看到案數時，要繼續追核定金額、決標金額、驗收狀態、維運費與實際使用量。",
+          checks: ["查地方府會預算書與議會質詢", "查政府採購決標公告", "確認系統上線、維運與使用人次"],
+        },
+        association: {
+          label: "協會角色",
+          value: "應用端居多",
+          title: "協會角色怎麼判斷",
+          detail:
+            "協會在運動科技中常是應用端、場域端或選手資料的合作窗口。要判斷是否直接承接預算，需看補助名單、委辦契約、採購得標與成果報告，而不是只看協會是否出現在活動或新聞中。",
+          checks: ["查協會是否列為受補助或得標單位", "區分合作露出與實際經費承接", "比對選手、賽事、場域資料提供角色"],
+        },
+      };
+
+      const sourceCatalog = {
+        ey: {
+          label: "行政院全球資訊網",
+          url: "https://www.ey.gov.tw/",
+          note: "政策新聞、院會與跨部會計畫線索。",
+        },
+        nstc: {
+          label: "國科會全球資訊網",
+          url: "https://www.nstc.gov.tw/",
+          note: "科技計畫、研究補助、新聞資料與查詢入口。",
+        },
+        gstp: {
+          label: "政府科技計畫資訊網",
+          url: "https://gstp.stpi.narl.org.tw/",
+          note: "跨部會科技計畫與年度科技預算查詢入口。",
+        },
+        grb: {
+          label: "政府研究資訊系統 GRB",
+          url: "https://www.grb.gov.tw/",
+          note: "研究計畫名稱、主持人、關鍵字與成果摘要查詢。",
+        },
+        sports: {
+          label: "運動部全民運動署",
+          url: "https://www.sa.gov.tw/",
+          note: "運動科技、場域、補助與政策公告入口。",
+        },
+        dgbas: {
+          label: "行政院主計總處",
+          url: "https://www.dgbas.gov.tw/",
+          note: "中央政府預算、決算與補捐助資訊入口。",
+        },
+        pcc: {
+          label: "公共工程委員會",
+          url: "https://www.pcc.gov.tw/",
+          note: "政府採購、決標與委辦案追蹤入口。",
+        },
+        data: {
+          label: "政府資料開放平臺",
+          url: "https://data.gov.tw/",
+          note: "open data 資料集與 API 查詢入口。",
+        },
+      };
+
+      const flows = [
+        {
+          id: "taiwan-sporttech",
+          year: "2022-2026",
+          title: "台灣運動 x 科技行動計畫",
+          amount: "46 億元",
+          source: "行政院跨部會科技預算",
+          actors: ["運動部/前體育署", "國科會", "經濟部", "地方政府", "學研單位"],
+          associations: ["棒球", "羽球", "桌球", "自由車", "游泳", "田徑"],
+          locations: ["全國/跨縣市", "待逐案整理"],
+          stage: "executing",
+          layer: "central",
+          publicness: "政策總額明確，逐年逐案流向仍需對帳。",
+          note: "政策總額，分散於跨部會與跨年度項目，不宜直接視為運動部單一預算。",
+          sourceRefs: ["ey", "nstc", "gstp", "dgbas", "data"],
+          publicInfo: {
+            news: ["新聞與政策報導多以 2022-2026、46 億元跨部會投入為主，較少逐案列明年度支出。"],
+            announcements: ["中央層級以行政院、科技會報、國科會與運動部政策說明為主要線索。"],
+            openData: ["尚未見單一公開資料集可逐年對帳 46 億元流向；需拆到部會、年度與地方分案。"],
+          },
+        },
+        {
+          id: "precision-sport-science",
+          year: "2017-2024",
+          title: "精準運動科學研究專案",
+          amount: "2.4 億元級",
+          source: "科技部/國科會科研預算",
+          actors: ["大學研究團隊", "國家隊支援系統", "國家運動科學中心"],
+          associations: ["羽球", "桌球", "棒球", "舉重", "自由車"],
+          locations: ["全國/跨縣市"],
+          stage: "verified",
+          layer: "research",
+          publicness: "歷史專案與成果可辨識，但分年支出仍需細表。",
+          note: "重點在 AI 訓練、動作分析、疲勞監控、傷害預防與競技表現。",
+          sourceRefs: ["nstc", "grb", "gstp", "sports"],
+          publicInfo: {
+            news: ["公開討論包含精準運動科學研究、國科會補助與國家隊科技支援成果。"],
+            announcements: ["中央線索在科技部/國科會研究計畫、學校研究公告與國家運動科學中心成果。"],
+            openData: ["可查研究計畫名稱、主持人、補助金額與成果摘要，但完整運動別分年支出仍需逐案整理。"],
+          },
+        },
+        {
+          id: "field-proof",
+          year: "2022-2025",
+          title: "地方運動科技場域實證",
+          amount: "分案補助",
+          source: "運動部公務預算 + 地方配合款",
+          actors: ["14 縣市", "場館營運者", "科技廠商", "地方體育局"],
+          associations: ["游泳", "田徑", "棒球", "全民運動"],
+          locations: ["台北市", "新北市", "桃園市", "嘉義市", "高雄市", "待逐案整理"],
+          stage: "executing",
+          layer: "local",
+          publicness: "案件數可辨識，逐案決標、驗收、維運需另查。",
+          note: "公開資料顯示累計約 30 案；各案核定、決標、驗收、維運狀態不一致。",
+          sourceRefs: ["sports", "pcc", "dgbas", "data"],
+          publicInfo: {
+            news: ["地方案例常以智慧走跑、科技防溺、智慧場館或運動科技體驗活動形式出現在地方新聞。"],
+            announcements: ["地方政府體育局、教育局公告、議會預算與政府採購決標是主要追蹤路徑。"],
+            openData: ["已知有縣市與案件數線索，但每案核定、決標、驗收、維運、使用人次尚未形成統一 open data。"],
+          },
+        },
+        {
+          id: "sports-fund",
+          year: "年度型",
+          title: "運動發展基金創新研發與數位轉型",
+          amount: "約 3,000 萬元年度科目案例",
+          source: "運動發展基金",
+          actors: ["運動產業", "新創團隊", "法人", "地方政府"],
+          associations: ["依合作案而定"],
+          locations: ["全國/跨縣市", "待逐案整理"],
+          stage: "executing",
+          layer: "industry",
+          publicness: "年度科目可辨識，受補助名單與成果需逐案整理。",
+          note: "偏向產品、服務、數位轉型、產學合作和商業模式驗證。",
+          sourceRefs: ["sports", "dgbas", "pcc", "data"],
+          publicInfo: {
+            news: ["較常出現在運動產業創新、數位轉型、新創補助與產學合作報導。"],
+            announcements: ["線索集中在運動發展基金年度預算、補助要點、受補助名單或成果發表。"],
+            openData: ["年度科目可辨識，但受補助團隊、補助額、成果與後續營收需逐案公開對帳。"],
+          },
+        },
+        {
+          id: "application-budget",
+          year: "年度型",
+          title: "運動科技應用發展",
+          amount: "約 3,567 萬元年度科目案例",
+          source: "體育署/運動部年度公務預算",
+          actors: ["地方政府", "學校", "委辦團隊", "場域夥伴"],
+          associations: ["依場域而定"],
+          locations: ["全國/跨縣市", "待逐案整理"],
+          stage: "verified",
+          layer: "central",
+          publicness: "科目案例清楚，但非所有運動科技經費總額。",
+          note: "用於地方科技場域、跨域人才與應用推廣；只是特定年度可辨識科目。",
+          sourceRefs: ["sports", "dgbas", "pcc", "data"],
+          publicInfo: {
+            news: ["多以運動科技應用、地方場域、人才培育、體驗競賽等活動型新聞出現。"],
+            announcements: ["主要查運動部/前體育署年度預算、單位預算與相關委辦、補助公告。"],
+            openData: ["科目案例可辨識，但不是完整運動科技總額；需和資訊服務費、場館設備、委辦費分開查。"],
+          },
+        },
+        {
+          id: "baseball-made",
+          year: "2025-2026",
+          title: "國球國造：棒球運動科技場域淬鍊",
+          amount: "待核定公開",
+          source: "爭取 115 年度國科會科技預算",
+          actors: ["國科會", "運動部", "天母棒球場經驗模型", "縣市場館"],
+          associations: ["棒球"],
+          locations: ["台北市", "待擴散縣市"],
+          stage: "proposal",
+          layer: "research",
+          publicness: "目前宜列提案/爭取，不宜寫成已全面執行。",
+          note: "目前較適合列為提案/預算爭取，不宜描述為已全面執行。",
+          sourceRefs: ["nstc", "gstp", "sports", "pcc"],
+          publicInfo: {
+            news: ["目前公開資訊多指向天母棒球場經驗、棒球科技場域與國產技術驗證構想。"],
+            announcements: ["應追蹤 115 年度國科會科技預算、運動部提案與後續採購或補助公告。"],
+            openData: ["尚屬提案/爭取與模型規劃階段；未見完整核定金額、得標廠商與擴散縣市清單。"],
+          },
+        },
+        {
+          id: "aspn",
+          year: "2025-2026",
+          title: "ASPN 國際運動科技創新加速器",
+          amount: "委辦與補助細目待公開",
+          source: "運動部產業與科技相關預算",
+          actors: ["陽明交通大學 IAPS", "新創團隊", "國際市場夥伴"],
+          associations: ["依場域測試而定"],
+          locations: ["全國/跨縣市", "待逐案整理"],
+          stage: "executing",
+          layer: "industry",
+          publicness: "活動與成果可見，完整成本拆分仍待公開。",
+          note: "可見活動與成果，但完整委辦金額、新創補助與行政成本仍需對帳。",
+          sourceRefs: ["sports", "pcc", "dgbas", "data"],
+          publicInfo: {
+            news: ["公開資訊以 ASPN 國際運動科技創新加速器徵案、入選團隊、國際展會與 Demo Day 為主。"],
+            announcements: ["可追陽明交通大學 IAPS、運動部產業科技計畫、委辦或徵案公告。"],
+            openData: ["活動成果可見，但委辦金額、新創補助、展會費用與場域驗證成本仍需拆帳。"],
+          },
+        },
+        {
+          id: "association-use",
+          year: "持續",
+          title: "協會端科技導入與國家隊應用",
+          amount: "多非直接預算主體",
+          source: "大學/研究中心/國科會/運動部計畫轉介",
+          actors: ["單項協會", "教練", "選手", "研究團隊"],
+          associations: ["棒球", "羽球", "桌球", "舉重", "自由車"],
+          locations: ["全國/跨縣市", "待逐案整理"],
+          stage: "unknown",
+          layer: "association",
+          publicness: "需逐案釐清協會是受補助者、合作方或應用場域。",
+          note: "協會多為合作場域、選手資料與應用端，不一定是科技預算直接受補助者。",
+          sourceRefs: ["sports", "nstc", "grb", "data"],
+          publicInfo: {
+            news: ["協會端多出現在特定運動科技導入、國家隊訓練、選手數據分析或賽事情蒐報導。"],
+            announcements: ["需比對單項協會、國訓中心、國家運動科學中心與研究團隊合作公告。"],
+            openData: ["目前應標為應用端線索；需逐案確認協會是受補助者、合作方、資料提供者或場域使用者。"],
+          },
+        },
+      ];
+
+      const cities = Object.fromEntries(
+        [...new Set(flows.flatMap((flow) => flow.locations))].map((city) => [city, city]),
+      );
+
+      let selectedLayers = [];
+      let selectedStages = [];
+      let selectedCities = [];
+      let activeId = flows[0].id;
+      let drawerOpen = false;
+      let viewMode = "list";
+      let lastTrigger = null;
+      let activeMetricId = null;
+      let lastMetricTrigger = null;
+
+      function selectionSummary(selected, labels) {
+        if (!selected.length) return "全部";
+        if (selected.length === 1) return labels[selected[0]];
+        return `已選 ${selected.length} 項`;
+      }
+
+      function renderSelectMenu(id, title, values, selected, onToggle, onClear, showStageColors = false) {
+        const root = document.getElementById(id);
+        root.innerHTML = `
+          <summary><span>${title}</span><strong>${selectionSummary(selected, values)}</strong></summary>
+          <div class="select-options">
+            <label>
+              <input type="checkbox" ${selected.length ? "" : "checked"} data-clear="true" />
+              <span>全部</span>
+            </label>
+            ${Object.entries(values)
+              .map(
+                ([key, label]) => `
+                  <label class="${showStageColors ? "stage-option" : ""}">
+                    <input type="checkbox" ${selected.includes(key) ? "checked" : ""} data-value="${key}" />
+                    ${showStageColors ? `<span class="dot ${key}"></span>` : ""}
+                    <span>${label}</span>
+                  </label>
+                `,
+              )
+              .join("")}
+          </div>
+        `;
+
+        root.querySelectorAll("input").forEach((input) => {
+          input.addEventListener("change", () => {
+            if (input.dataset.clear) {
+              onClear();
+            } else if (input.dataset.value) {
+              onToggle(input.dataset.value);
+            }
+          });
+        });
+      }
+
+      function filteredFlows() {
+        return flows.filter((flow) => {
+          const layerMatch = !selectedLayers.length || selectedLayers.includes(flow.layer);
+          const stageMatch = !selectedStages.length || selectedStages.includes(flow.stage);
+          const cityMatch = !selectedCities.length || flow.locations.some((city) => selectedCities.includes(city));
+          return layerMatch && stageMatch && cityMatch;
+        });
+      }
+
+      function hasActiveFilters() {
+        return selectedLayers.length > 0 || selectedStages.length > 0 || selectedCities.length > 0;
+      }
+
+      function resetFilters() {
+        selectedLayers = [];
+        selectedStages = [];
+        selectedCities = [];
+        drawerOpen = false;
+        activeId = flows[0].id;
+        render();
+      }
+
+      function renderLegend() {
+        const root = document.getElementById("legend");
+        root.innerHTML = Object.entries(stages)
+          .map(([key, label]) => `<div class="legend-row"><span class="dot ${key}"></span><span>${label}</span></div>`)
+          .join("");
+      }
+
+      function renderLanes(items) {
+        const laneMap = document.getElementById("laneMap");
+        const empty = document.getElementById("empty");
+        laneMap.className = `lane-map ${viewMode === "card" ? "card-view" : "list-view"}`;
+        laneMap.innerHTML = "";
+        empty.style.display = items.length ? "none" : "grid";
+
+        items.forEach((flow) => {
+          const button = document.createElement("button");
+          button.className = flow.id === activeId ? "lane active" : "lane";
+          button.innerHTML = `
+            <span class="dot ${flow.stage}"></span>
+            <span class="year">${flow.year}</span>
+            <span>
+              <span class="lane-title">${flow.title}</span>
+              <span class="lane-note">${layers[flow.layer]} / ${stages[flow.stage]}</span>
+            </span>
+            <span class="amount">${flow.amount}</span>
+          `;
+          button.onclick = () => {
+            lastTrigger = button;
+            activeId = flow.id;
+            drawerOpen = true;
+            render();
+          };
+          laneMap.appendChild(button);
+        });
+      }
+
+      function list(items) {
+        return items.map((item) => `<li>${item}</li>`).join("");
+      }
+
+      function renderDetail(active) {
+        const drawer = document.getElementById("drawer");
+        drawer.classList.toggle("open", drawerOpen && Boolean(active));
+        document.getElementById("drawerTags").innerHTML = active
+          ? `<span class="tag">${layers[active.layer]}</span><span class="tag">${stages[active.stage]}</span>`
+          : "";
+        if (!active) {
+          document.getElementById("detail").innerHTML = "";
+          return;
+        }
+
+        document.getElementById("detail").innerHTML = `
+          <h2>${active.title}</h2>
+          <div class="fact-grid">
+            <div class="fact"><span>期間</span><strong>${active.year}</strong></div>
+            <div class="fact"><span>金額</span><strong>${active.amount}</strong></div>
+            <div class="fact"><span>來源</span><strong>${active.source}</strong></div>
+          </div>
+          <div class="audit-summary compact-summary">
+            <h3>查核摘要</h3>
+            <p>${active.publicness}</p>
+          </div>
+          <div class="drawer-detail-grid">
+            <div class="flow" aria-label="預算路徑">
+              <span>中央/基金</span>
+              <span>執行單位</span>
+              <span>場域/協會</span>
+              <span>選手/民眾</span>
+            </div>
+            <div class="detail-groups">
+              <section>
+                <h3>主要執行或合作單位</h3>
+                <ul class="inline-list">${list(active.actors)}</ul>
+              </section>
+              <section>
+                <h3>對應協會或運動種類</h3>
+                <ul class="inline-list">${list(active.associations)}</ul>
+              </section>
+              <section>
+                <h3>對應縣市</h3>
+                <ul class="inline-list">${list(active.locations)}</ul>
+              </section>
+            </div>
+            <section class="public-info">
+              <h3>公開資訊進度</h3>
+              <div class="public-info-grid">
+                <section>
+                  <h4>新聞/報導線索</h4>
+                  <ul>${list(active.publicInfo.news)}</ul>
+                </section>
+                <section>
+                  <h4>中央或地方府會公告</h4>
+                  <ul>${list(active.publicInfo.announcements)}</ul>
+                </section>
+                <section>
+                  <h4>open data / 對帳進度</h4>
+                  <ul>${list(active.publicInfo.openData)}</ul>
+                </section>
+              </div>
+            </section>
+            <section class="source-links">
+              <h3>相關數據與連結來源</h3>
+              <ul>
+                ${active.sourceRefs
+                  .map((sourceKey) => {
+                    const source = sourceCatalog[sourceKey];
+                    return `
+                      <li>
+                        <a href="${source.url}" target="_blank" rel="noreferrer">${source.label}</a>
+                        <span>${source.note}</span>
+                      </li>
+                    `;
+                  })
+                  .join("")}
+              </ul>
+            </section>
+            <div class="audit-summary secondary-summary">
+              <h3>補充判斷</h3>
+              <p>${active.note}</p>
+              <dl>
+                <div>
+                  <dt>下一步問法</dt>
+                  <dd>這筆錢是政策總額、年度科目、委辦案、地方配合款，還是協會直接補助？</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        `;
+      }
+
+      function closeDrawer() {
+        drawerOpen = false;
+        renderDetail(flows.find((flow) => flow.id === activeId));
+        requestAnimationFrame(() => lastTrigger?.focus());
+      }
+
+      function renderMetricDrawer() {
+        const drawer = document.getElementById("metricDrawer");
+        const detail = activeMetricId ? metricDetails[activeMetricId] : null;
+        drawer.classList.toggle("open", Boolean(detail));
+        document.getElementById("metricDrawerTags").innerHTML = detail
+          ? `<span>總覽指標</span><span>${detail.label}</span>`
+          : "";
+        document.getElementById("metricDrawerDetail").innerHTML = detail
+          ? `
+            <span class="metric-drawer-label">${detail.value}</span>
+            <h2>${detail.title}</h2>
+            <p>${detail.detail}</p>
+            <section>
+              <h3>查核重點</h3>
+              <ul>
+                ${detail.checks.map((check) => `<li>${check}</li>`).join("")}
+              </ul>
+            </section>
+          `
+          : "";
+      }
+
+      function closeMetricDrawer() {
+        activeMetricId = null;
+        renderMetricDrawer();
+        requestAnimationFrame(() => lastMetricTrigger?.focus());
+      }
+
+      document.getElementById("drawerClose").onclick = closeDrawer;
+      document.getElementById("drawerBackdrop").onclick = closeDrawer;
+      document.getElementById("metricDrawerClose").onclick = closeMetricDrawer;
+      document.getElementById("metricDrawerBackdrop").onclick = closeMetricDrawer;
+      document.getElementById("resetFilters").onclick = resetFilters;
+      document.getElementById("resetEmpty").onclick = resetFilters;
+      document.getElementById("viewList").onclick = () => {
+        viewMode = "list";
+        render();
+      };
+      document.getElementById("viewCard").onclick = () => {
+        viewMode = "card";
+        render();
+      };
+      document.querySelectorAll("[data-metric]").forEach((button) => {
+        button.addEventListener("click", () => {
+          activeMetricId = button.dataset.metric;
+          drawerOpen = false;
+          lastMetricTrigger = button;
+          renderDetail(flows.find((flow) => flow.id === activeId));
+          renderMetricDrawer();
+          document.getElementById("metricDrawerClose").focus();
+        });
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && activeMetricId) {
+          event.preventDefault();
+          closeMetricDrawer();
+          return;
+        }
+        if (event.key === "Escape" && drawerOpen) {
+          event.preventDefault();
+          closeDrawer();
+        }
+      });
+
+      function render() {
+        renderSelectMenu(
+          "layerMenu",
+          "預算層級",
+          layers,
+          selectedLayers,
+          (value) => {
+            selectedLayers = selectedLayers.includes(value)
+              ? selectedLayers.filter((item) => item !== value)
+              : [...selectedLayers, value];
+            drawerOpen = false;
+            const next = filteredFlows()[0];
+            if (next) activeId = next.id;
+            render();
+          },
+          () => {
+            selectedLayers = [];
+            drawerOpen = false;
+            const next = filteredFlows()[0];
+            if (next) activeId = next.id;
+            render();
+          },
+        );
+
+        renderSelectMenu(
+          "stageMenu",
+          "執行程度",
+          stages,
+          selectedStages,
+          (value) => {
+            selectedStages = selectedStages.includes(value)
+              ? selectedStages.filter((item) => item !== value)
+              : [...selectedStages, value];
+            drawerOpen = false;
+            const next = filteredFlows()[0];
+            if (next) activeId = next.id;
+            render();
+          },
+          () => {
+            selectedStages = [];
+            drawerOpen = false;
+            const next = filteredFlows()[0];
+            if (next) activeId = next.id;
+            render();
+          },
+          true,
+        );
+
+        renderSelectMenu(
+          "cityMenu",
+          "縣市",
+          cities,
+          selectedCities,
+          (value) => {
+            selectedCities = selectedCities.includes(value)
+              ? selectedCities.filter((item) => item !== value)
+              : [...selectedCities, value];
+            drawerOpen = false;
+            const next = filteredFlows()[0];
+            if (next) activeId = next.id;
+            render();
+          },
+          () => {
+            selectedCities = [];
+            drawerOpen = false;
+            const next = filteredFlows()[0];
+            if (next) activeId = next.id;
+            render();
+          },
+        );
+
+        const items = filteredFlows();
+        if (!items.some((flow) => flow.id === activeId) && items[0]) activeId = items[0].id;
+        if (!items.length) drawerOpen = false;
+        renderLegend();
+        renderLanes(items);
+        renderDetail(flows.find((flow) => flow.id === activeId) || null);
+        document.getElementById("resultCount").textContent = `${items.length} / ${flows.length} 項`;
+        document.getElementById("resultSummary").textContent = items.length
+          ? `顯示 ${items.length} 筆公開線索`
+          : "沒有符合項目";
+        document.getElementById("resetFilters").style.display = hasActiveFilters() ? "inline-flex" : "none";
+        document.getElementById("viewList").setAttribute("aria-pressed", viewMode === "list" ? "true" : "false");
+        document.getElementById("viewCard").setAttribute("aria-pressed", viewMode === "card" ? "true" : "false");
+        if (drawerOpen) document.getElementById("drawerClose").focus();
+      }
+
+      render();
+    </script>
+  </body>
+</html>

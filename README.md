@@ -4,8 +4,8 @@
 
 ## 檔案
 
-- `index.html`：根網址相容入口，目前同步 `ai_industry_penetration_2026-07-14.html`。
-- `aidata/index.html`：正式專案網址入口，與根目錄 `index.html` 保持完全同步。
+- `index.html`：`dinopeng.com` 專案入口，導向 TP Trees、AI Data 與後續專案。
+- `aidata/index.html`：AI Data 正式專案網址入口，目前同步 `ai_industry_penetration_2026-07-14.html`。
 - `ai_industry_penetration.html`：原本機版視覺化頁面，保留作為初始版本，不因 MVP 上線入口而覆蓋。
 - `ai_industry_penetration_YYYY-MM-DD.html`：週更後的歷史版本檔案，不覆蓋舊版。
 - `AGENTS.md`：給 Codex / Claude Code / Cursor Agent 讀取的專案規範與任務指引。
@@ -19,10 +19,10 @@
 
 ## 如何查看
 
-直接用瀏覽器開啟：
+直接用瀏覽器開啟 AI Data：
 
 ```bash
-open index.html
+open aidata/index.html
 ```
 
 若要查看原本機版，可開啟：
@@ -31,13 +31,13 @@ open index.html
 open ai_industry_penetration.html
 ```
 
-頁面使用 Chart.js CDN，需有網路連線才能正常載入泡泡圖與採用階段圖表。`index.html` 已加入載入失敗提示；若 CDN 受阻，文字內容、KPI、產業滲透率長條與互動卡片仍可閱讀。
+AI Data 使用 Chart.js CDN，需有網路連線才能正常載入泡泡圖與採用階段圖表。`aidata/index.html` 已加入載入失敗提示；若 CDN 受阻，文字內容、KPI、產業滲透率長條與互動卡片仍可閱讀。
 
 ## 本機 MVP 與 GitHub Pages
 
-`index.html` 是目前建議上線入口。若要部署到 GitHub Pages，可使用下列設定：
+根目錄 `index.html` 是專案入口，AI Data 則由 `aidata/index.html` 發布。GitHub Pages 使用下列設定：
 
-- 建立 GitHub repo，例如 `ai-industry-penetration-analysis`。
+- 入口網站 repo：[`doublemoreart-dotcom/dinopeng-com`](https://github.com/doublemoreart-dotcom/dinopeng-com)。
 - 將本專案推到 `main` branch。
 - 在 GitHub repo 的 Settings → Pages 設定：
   - Source：Deploy from a branch
@@ -50,7 +50,21 @@ open ai_industry_penetration.html
 https://dinopeng.com/aidata/
 ```
 
-根網址 `https://dinopeng.com/` 暫時保留相同內容，避免既有連結失效；未來可改為個人首頁。`aidata/index.html` 與 `aidata/assets/` 是 `/aidata/` 路徑的發布副本，每次推版必須和根目錄入口及資源同步。
+根網址 `https://dinopeng.com/` 為獨立專案入口。`aidata/index.html` 與 `aidata/assets/` 是 `/aidata/` 的發布內容；更新 AI Data 時需同步日期版本與相關資源，但不得覆蓋根目錄入口。
+
+### 獨立來源 repo 與同步
+
+各專案的正式來源已拆分：
+
+- AI Data：https://github.com/doublemoreart-dotcom/aidata
+- TP Trees：https://github.com/doublemoreart-dotcom/tptrees
+- SportTech：https://github.com/doublemoreart-dotcom/sporttech
+
+本 repo 保留 `dinopeng.com` 的唯一 `CNAME` 與 GitHub Pages 發布責任。`.github/workflows/sync-projects.yml` 每小時及手動執行時，會從 AI Data、TP Trees 的 `main` 與 SportTech 的 `gh-pages` 同步公開網站檔案至 `aidata/`、`tptrees/`、`sporttech/`，通過既有路由測試後才提交更新。同步腳本也可在本機執行：
+
+```bash
+./scripts/sync-projects.sh ../aidata ../tptrees ../sporttech-gh-pages .
+```
 
 自訂網域由根目錄的 `CNAME` 管理。網域供應商的 DNS 需另外設定：
 

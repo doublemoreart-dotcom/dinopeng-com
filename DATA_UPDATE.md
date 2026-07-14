@@ -117,8 +117,8 @@ ai_industry_penetration_2026-06-09.html
 ## 更新步驟
 
 1. 找出最近一期日期版本；若尚無日期版本，使用 `ai_industry_penetration.html`。
-2. 更新根目錄 `index.html` 後，執行 `npm run release:prepare`，同步複製至 `aidata/index.html`、當期日期檔與 `aidata/assets/`。
-3. 確認新的日期檔格式為 `ai_industry_penetration_YYYY-MM-DD.html`，日期需對應 `index.html` 的 `page-version-date`。
+2. 更新 `aidata/index.html` 後，執行 `npm run release:prepare`，同步建立當期日期檔並將相對資源同步至 `aidata/assets/`；根目錄 `index.html` 是跨專案入口，不得由 AI Data 發布流程覆蓋。
+3. 確認新的日期檔格式為 `ai_industry_penetration_YYYY-MM-DD.html`，日期需對應 `aidata/index.html` 的 `page-version-date`。
 4. 執行推版前低強度來源確認，並必查 `AI 公司估值排行榜` 是否仍為最新數據；若發現重大新資料，再升級為中強度更新。
 5. 查核固定來源池與當週重要 AI 產業資料。
 6. 更新新日期檔中的 KPI、圖表資料、文字敘事與來源註記。

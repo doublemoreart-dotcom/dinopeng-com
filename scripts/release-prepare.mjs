@@ -8,13 +8,12 @@ import {
   rootPath,
 } from './release-utils.mjs';
 
-const indexHtml = await readText('index.html');
-const versionDate = extractMeta(indexHtml, 'page-version-date');
+const aidataHtml = await readText('aidata/index.html');
+const versionDate = extractMeta(aidataHtml, 'page-version-date');
 const snapshotName = dateSnapshotName(versionDate);
 
 await mkdir(rootPath('aidata'), { recursive: true });
-await writeFile(rootPath('aidata/index.html'), indexHtml);
-await writeFile(rootPath(snapshotName), indexHtml);
+await writeFile(rootPath(snapshotName), aidataHtml);
 
 await mkdir(rootPath('aidata/assets'), { recursive: true });
 await cp(rootPath('assets'), rootPath('aidata/assets'), {
@@ -24,6 +23,5 @@ await cp(rootPath('assets'), rootPath('aidata/assets'), {
 });
 
 console.log(`Prepared release ${versionDate}`);
-console.log(`- synced index.html -> aidata/index.html`);
-console.log(`- synced index.html -> ${path.relative(projectRootPath, rootPath(snapshotName))}`);
+console.log(`- synced aidata/index.html -> ${path.relative(projectRootPath, rootPath(snapshotName))}`);
 console.log(`- synced assets/ -> aidata/assets/`);

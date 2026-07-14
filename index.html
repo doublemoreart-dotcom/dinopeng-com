@@ -1,2494 +1,307 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI 對產業的數據觀察</title>
-<meta name="description" content="以單頁資料視覺化分析 AI 對各大產業的滲透率、投資強度、生產力影響，以及混合型人才如何重組職能系統。">
-<meta name="page-version-date" content="2026-07-14">
-<meta name="page-version-number" content="v2026.07.14-1">
-<meta property="og:type" content="website">
-<meta property="og:title" content="AI 對各大產業的滲透率與實際影響">
-<meta property="og:description" content="從產業採用率、投資強度、生產力提升，到混合型人才如何重組設計、產品、工程、行銷與商業流程。">
-<meta property="og:locale" content="zh_TW">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anta&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400&display=swap" rel="stylesheet">
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-:root {
-  --page-font-scale: 1;
-  --font-latin: "Anta";
-  --page-bg: #F8F8F5;
-  --page-surface: #FFFFFF;
-  --page-surface-alt: #EFEFE9;
-  --page-text: #24231F;
-  --page-text-muted: #68665E;
-  --page-border: #D9D7CF;
-}
-:root[data-theme="dark"] {
-  --page-bg: #141512;
-  --page-surface: #1D1E1A;
-  --page-surface-alt: #292B25;
-  --page-text: #F2F1EA;
-  --page-text-muted: #B8B5A8;
-  --page-border: #3A3C34;
-}
-:root[data-font-size="small"] { --page-font-scale: 1; }
-:root[data-font-size="medium"] { --page-font-scale: 1.25; }
-:root[data-font-size="large"] { --page-font-scale: 1.75; }
-body {
-  background: var(--page-bg);
-  color: var(--page-text);
-  font-family: var(--font-latin), var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
-  line-height: 1.5;
-}
-button, select { font-family: inherit; }
-.wrap {
-  width: min(100% - clamp(32px, 7vw, 104px), 1040px);
-  margin: 0 auto;
-  padding: clamp(24px, 5vw, 56px) 0;
-  font-size: calc(1rem * var(--page-font-scale));
-}
-.hero-visual {
-  width: 100%;
-  margin: 0 0 clamp(22px, 4vw, 36px);
-  border: 0.5px solid var(--page-border);
-  border-radius: 18px;
-  overflow: hidden;
-  background: var(--page-surface-alt);
-}
-.hero-visual img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 1440 / 520;
-  object-fit: cover;
-}
-.hero-visual .hero-visual-image-dark { display: none; }
-:root[data-theme="dark"] .hero-visual .hero-visual-image-light { display: none; }
-:root[data-theme="dark"] .hero-visual .hero-visual-image-dark { display: block; }
-.section-visual {
-  width: 100%;
-  margin: 0 0 clamp(18px, 3vw, 28px);
-  border: 0.5px solid var(--page-border);
-  border-radius: 14px;
-  overflow: hidden;
-  background: var(--page-surface-alt);
-}
-.section-visual img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 1440 / 420;
-  object-fit: cover;
-}
-.section-visual .section-visual-image-dark { display: none; }
-:root[data-theme="dark"] .section-visual .section-visual-image-light { display: none; }
-:root[data-theme="dark"] .section-visual .section-visual-image-dark { display: block; }
-.page-title {
-  color: var(--page-text);
-  font-size: calc(clamp(28px, 4vw, 44px) * var(--page-font-scale));
-  font-weight: 650;
-  line-height: 1.15;
-  margin-bottom: 1.25rem;
-}
-.reader-controls { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 1.5rem; }
-.control-group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.reader-control-btn {
-  appearance: none;
-  border: 0.5px solid var(--page-border);
-  background: var(--page-surface-alt);
-  color: var(--page-text);
-  border-radius: 6px;
-  min-height: 32px;
-  padding: 0 10px;
-  font-size: calc(12px * var(--page-font-scale));
-  cursor: pointer;
-}
-.reader-control-btn[aria-pressed="true"] {
-  background: #378ADD;
-  border-color: #378ADD;
-  color: #FFFFFF;
-}
-.section-tabs {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  overflow: visible;
-  padding: 10px 0;
-  margin-bottom: 1.5rem;
-  background: var(--page-bg);
-  background: color-mix(in srgb, var(--page-bg) 92%, transparent);
-  border-top: 0.5px solid var(--page-border);
-  border-bottom: 0.5px solid var(--page-border);
-  backdrop-filter: blur(12px);
-}
-.section-tab {
-  flex: 0 1 auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 34px;
-  padding: 0 12px;
-  border: 0.5px solid var(--page-border);
-  border-radius: 6px;
-  background: var(--page-surface-alt);
-  color: var(--page-text);
-  font-size: calc(12px * var(--page-font-scale));
-  line-height: 1.2;
-  text-decoration: none;
-  white-space: normal;
-  overflow-wrap: anywhere;
-  text-align: center;
-}
-.section-tab:hover,
-.section-tab:focus-visible {
-  border-color: #378ADD;
-  color: #378ADD;
-  outline: none;
-}
-.analysis-section { scroll-margin-top: calc(84px * var(--page-font-scale)); }
-.analysis-section + .analysis-section { margin-top: clamp(44px, 7vw, 72px); }
-.section-heading {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 12px 18px;
-  align-items: flex-end;
-  margin-bottom: 1.25rem;
-}
-.section-heading-text {
-  flex: 1 1 620px;
-  max-width: none;
-}
-.section-heading-text-wide {
-  flex: 1 1 100%;
-  max-width: none;
-}
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--page-text);
-  font-size: calc(clamp(20px, 2.4vw, 28px) * var(--page-font-scale));
-  font-weight: 650;
-  line-height: 1.2;
-  margin-bottom: 6px;
-  scroll-margin-top: calc(84px * var(--page-font-scale));
-}
-.section-title-icon {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: calc(28px * var(--page-font-scale));
-  height: calc(28px * var(--page-font-scale));
-  border: 0.5px solid var(--page-border);
-  border-radius: 8px;
-  background: var(--page-surface-alt);
-  color: #378ADD;
-  font-family: "Material Symbols Outlined";
-  font-size: calc(17px * var(--page-font-scale));
-  font-weight: 400;
-  line-height: 1;
-}
-.section-description {
-  color: var(--page-text-muted);
-  font-size: calc(12px * var(--page-font-scale));
-  line-height: 1.65;
-}
-.section-description,
-.update-note-body,
-.source-list li,
-.weekly-focus-body,
-.section-inline-note-list li,
-.bubble-explanation-item,
-.stage-explanation-item,
-.impact-desc,
-.impact-explanation-list li,
-.cluster-body,
-.talent-body,
-.influence-body,
-.cluster-detail-list li,
-.quote-block,
-.source-pool-body,
-.source-pool-links li,
-.footer-list li,
-.footer-copy,
-.footer-report-copy,
-.drawer-summary,
-.drawer-list li {
-  text-align: justify;
-  text-align-last: left;
-  text-justify: inter-ideograph;
-}
-.section-inline-note {
-  color: var(--page-text-muted);
-  font-size: calc(12px * var(--page-font-scale));
-  line-height: 1.65;
-  margin-top: 10px;
-  width: 100%;
-}
-.section-inline-note-title {
-  color: var(--page-text);
-  font-size: calc(13px * var(--page-font-scale));
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-.section-inline-note-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
-  gap: 10px 22px;
-  list-style: none;
-  padding-left: 0;
-}
-.section-inline-note-list li + li {
-  margin-top: 0;
-}
-.section-inline-note-list li {
-  min-width: 0;
-  padding-left: 12px;
-  border-left: 2px solid color-mix(in srgb, var(--page-border) 82%, transparent);
-}
-.section-inline-note strong {
-  color: var(--page-text);
-  font-weight: 600;
-}
-.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
-.metric-card { appearance: none; font-family: inherit; text-align: left; width: 100%; border: 0.5px solid transparent; background: var(--page-surface-alt); border-radius: 8px; padding: 1rem; cursor: pointer; position: relative; }
-.metric-card:hover, .metric-card:focus-visible { border-color: #378ADD; box-shadow: 0 10px 24px rgba(55,138,221,0.12); outline: none; }
-.card-click-icon {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: calc(28px * var(--page-font-scale));
-  height: calc(28px * var(--page-font-scale));
-  border: 0.5px solid var(--page-border);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--page-surface) 74%, transparent);
-  color: var(--page-text-muted);
-  font-family: "Material Symbols Outlined";
-  font-size: calc(17px * var(--page-font-scale));
-  font-weight: 400;
-  line-height: 1;
-  opacity: 0.78;
-  transition: color 0.16s ease, border-color 0.16s ease, transform 0.16s ease, opacity 0.16s ease;
-}
-.metric-card:hover .card-click-icon,
-.metric-card:focus-visible .card-click-icon,
-.impact-card:hover .card-click-icon,
-.impact-card:focus-visible .card-click-icon,
-.cluster-card:hover .card-click-icon,
-.cluster-card:focus-visible .card-click-icon {
-  border-color: #378ADD;
-  color: #378ADD;
-  opacity: 1;
-  transform: translate(1px, -1px);
-}
-.metric-label { font-size: calc(12px * var(--page-font-scale)); color: var(--page-text-muted); margin-bottom: 4px; padding-right: calc(38px * var(--page-font-scale)); }
-.metric-val { font-size: calc(22px * var(--page-font-scale)); font-weight: 500; color: var(--page-text); }
-.metric-sub { font-size: calc(12px * var(--page-font-scale)); color: var(--page-text-muted); margin-top: 2px; }
-.update-note { background: var(--page-surface-alt); border: 0.5px solid var(--page-border); border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; }
-.update-note-title { font-size: calc(13px * var(--page-font-scale)); font-weight: 500; color: var(--page-text); margin-bottom: 6px; }
-.update-note-body { font-size: calc(12px * var(--page-font-scale)); line-height: 1.6; color: var(--page-text-muted); }
-.source-list { font-size: calc(11px * var(--page-font-scale)); line-height: 1.55; color: var(--page-text-muted); margin-top: 8px; padding-left: 1rem; }
-.source-pool-grid {
-  display: grid;
-  gap: 8px;
-}
-.source-pool-card {
-  background: var(--page-surface);
-  border: 0.5px solid var(--page-border);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.source-pool-card > summary {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 12px;
-  align-items: center;
-  padding: 12px 14px;
-  cursor: pointer;
-  list-style: none;
-}
-.source-pool-card > summary::-webkit-details-marker { display: none; }
-.source-pool-card > summary::after {
-  content: "expand_more";
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: calc(24px * var(--page-font-scale));
-  height: calc(24px * var(--page-font-scale));
-  border: 0.5px solid var(--page-border);
-  border-radius: 999px;
-  color: var(--page-text-muted);
-  font-family: "Material Symbols Outlined";
-  font-size: calc(17px * var(--page-font-scale));
-  transition: transform 0.16s ease, color 0.16s ease, border-color 0.16s ease;
-}
-.source-pool-card[open] > summary::after {
-  transform: rotate(180deg);
-  color: #378ADD;
-  border-color: #378ADD;
-}
-.source-pool-card:hover,
-.source-pool-card:focus-within {
-  border-color: #378ADD;
-}
-.source-pool-content {
-  border-top: 0.5px solid var(--page-border);
-  padding: 0 14px 14px;
-}
-.source-pool-kicker {
-  display: block;
-  color: var(--page-text-muted);
-  font-size: calc(10px * var(--page-font-scale));
-  margin-bottom: 4px;
-}
-.source-pool-title {
-  display: block;
-  color: var(--page-text);
-  font-size: calc(14px * var(--page-font-scale));
-  font-weight: 600;
-  line-height: 1.35;
-  margin-bottom: 8px;
-}
-.source-pool-body {
-  color: var(--page-text-muted);
-  font-size: calc(12px * var(--page-font-scale));
-  line-height: 1.65;
-  margin-top: 12px;
-}
-.source-pool-links {
-  padding-left: 1rem;
-  margin-top: 8px;
-  font-size: calc(11px * var(--page-font-scale));
-  line-height: 1.6;
-}
-.source-pool-links li + li { margin-top: 4px; }
-.source-pool-links a,
-.source-inline-link {
-  color: var(--page-text);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.weekly-focus { background: var(--page-surface); border: 0.5px solid var(--page-border); border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; }
-.weekly-focus-title { font-size: calc(14px * var(--page-font-scale)); font-weight: 500; color: var(--page-text); margin-bottom: 8px; }
-.weekly-focus-body { font-size: calc(13px * var(--page-font-scale)); line-height: 1.65; color: var(--page-text-muted); }
-.weekly-focus-body strong { color: var(--page-text); font-weight: 500; }
-.chart-wrap { position: relative; width: 100%; height: clamp(280px, 42vw, 340px); margin-bottom: 1.5rem; }
-.chart-wrap2 { position: relative; width: 100%; height: clamp(260px, 38vw, 300px); margin-bottom: 1.5rem; }
-.chart-fallback {
-  display: none;
-  background: #FFF4D8;
-  border: 0.5px solid #E0B657;
-  color: #6F4700;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  font-size: calc(12px * var(--page-font-scale));
-  line-height: 1.65;
-}
-:root[data-theme="dark"] .chart-fallback {
-  background: #3D2F0D;
-  border-color: #8A6821;
-  color: #F6D88A;
-}
-.stage-explanation,
-.bubble-explanation {
-  background: var(--page-surface);
-  border: 0.5px solid var(--page-border);
-  border-radius: 8px;
-  padding: 0;
-  margin-top: -0.5rem;
-  color: var(--page-text-muted);
-  overflow: hidden;
-}
-.stage-explanation-title,
-.bubble-explanation-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  color: var(--page-text);
-  font-size: calc(13px * var(--page-font-scale));
-  font-weight: 600;
-  padding: 14px 1rem;
-  cursor: pointer;
-  list-style: none;
-}
-.stage-explanation-title::-webkit-details-marker,
-.bubble-explanation-title::-webkit-details-marker {
-  display: none;
-}
-.stage-explanation-title::after,
-.bubble-explanation-title::after {
-  content: "expand_more";
-  flex: 0 0 auto;
-  width: calc(24px * var(--page-font-scale));
-  height: calc(24px * var(--page-font-scale));
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 0.5px solid var(--page-border);
-  border-radius: 999px;
-  color: var(--page-text-muted);
-  font-family: "Material Symbols Outlined";
-  font-size: calc(18px * var(--page-font-scale));
-  font-weight: 400;
-  line-height: 1;
-  transition: transform 0.16s ease, color 0.16s ease, border-color 0.16s ease;
-}
-.stage-explanation[open] .stage-explanation-title::after,
-.bubble-explanation[open] .bubble-explanation-title::after {
-  transform: rotate(180deg);
-}
-.stage-explanation-title:hover::after,
-.stage-explanation-title:focus-visible::after,
-.bubble-explanation-title:hover::after,
-.bubble-explanation-title:focus-visible::after {
-  border-color: #378ADD;
-  color: #378ADD;
-}
-.stage-explanation-grid,
-.bubble-explanation-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  padding: 0 1rem 1rem;
-}
-.stage-explanation-item,
-.bubble-explanation-item {
-  font-size: calc(11px * var(--page-font-scale));
-  line-height: 1.6;
-}
-.stage-explanation-item strong,
-.bubble-explanation-item strong {
-  color: var(--page-text);
-  font-weight: 600;
-}
-.stage-explanation-note,
-.bubble-explanation-note {
-  border-top: 0.5px solid var(--page-border);
-  padding-top: 10px;
-  font-size: calc(12px * var(--page-font-scale));
-  line-height: 1.65;
-}
-.chart-note-list { padding-left: 1rem; }
-.chart-note-list li + li { margin-top: 6px; }
-.chart-note-list strong { color: var(--page-text); font-weight: 600; }
-.chart-note-source { display: block; color: var(--page-text-muted); font-size: calc(11px * var(--page-font-scale)); margin-top: 2px; }
-#industry-impact .section-heading {
-  margin-bottom: clamp(28px, 4vw, 44px);
-}
-#industry-impact .section-inline-note {
-  margin-top: 14px;
-}
-#industry-impact .section-inline-note-list {
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-.page-footer {
-  border-top: 0.5px solid var(--page-border);
-  margin-top: 2rem;
-  padding-top: 1.25rem;
-  color: var(--page-text-muted);
-  opacity: 0.62;
-}
-.footer-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(20px, 4vw, 48px);
-  align-items: start;
-}
-.footer-panel {
-  min-width: 0;
-}
-.footer-title {
-  font-size: calc(10px * var(--page-font-scale));
-  font-weight: 500;
-  color: var(--page-text-muted);
-  margin-bottom: 6px;
-}
-.footer-copy {
-  font-size: calc(9px * var(--page-font-scale));
-  line-height: 1.65;
-}
-.footer-report-copy {
-  color: var(--page-text-muted);
-  font-size: calc(9px * var(--page-font-scale));
-  line-height: 1.65;
-  margin-bottom: 10px;
-}
-.footer-report-btn,
-.report-form button {
-  appearance: none;
-  border: 0.5px solid var(--page-border);
-  border-radius: 6px;
-  background: var(--page-surface-alt);
-  color: var(--page-text);
-  min-height: 32px;
-  padding: 0 12px;
-  cursor: pointer;
-  font-size: calc(10px * var(--page-font-scale));
-}
-.footer-report-btn:hover,
-.footer-report-btn:focus-visible,
-.report-form button:hover,
-.report-form button:focus-visible {
-  border-color: #378ADD;
-  color: #378ADD;
-  outline: none;
-}
-.report-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  display: grid;
-  place-items: center;
-  padding: 18px;
-  background: rgba(0,0,0,0.42);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.18s ease;
-}
-.report-modal[aria-hidden="false"] {
-  opacity: 1;
-  pointer-events: auto;
-}
-.report-dialog {
-  width: min(520px, 100%);
-  background: var(--page-surface);
-  border: 0.5px solid var(--page-border);
-  border-radius: 8px;
-  box-shadow: 0 24px 60px rgba(0,0,0,0.28);
-  padding: clamp(18px, 4vw, 24px);
-}
-.report-dialog-header {
-  display: flex;
-  gap: 12px;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 12px;
-}
-.report-dialog-title {
-  color: var(--page-text);
-  font-size: calc(18px * var(--page-font-scale));
-  font-weight: 600;
-  line-height: 1.3;
-}
-.report-dialog-desc,
-.report-recipient-note {
-  color: var(--page-text-muted);
-  font-size: calc(11px * var(--page-font-scale));
-  line-height: 1.65;
-}
-.report-close {
-  appearance: none;
-  border: 0.5px solid var(--page-border);
-  border-radius: 999px;
-  background: var(--page-surface-alt);
-  color: var(--page-text-muted);
-  width: calc(30px * var(--page-font-scale));
-  height: calc(30px * var(--page-font-scale));
-  cursor: pointer;
-  font-family: "Material Symbols Outlined";
-  font-size: calc(18px * var(--page-font-scale));
-  line-height: 1;
-}
-.report-form {
-  display: grid;
-  gap: 10px;
-  margin-top: 14px;
-}
-.report-field {
-  display: grid;
-  gap: 5px;
-}
-.report-field label {
-  color: var(--page-text);
-  font-size: calc(11px * var(--page-font-scale));
-  font-weight: 500;
-}
-.report-field input,
-.report-field select,
-.report-field textarea {
-  width: 100%;
-  border: 0.5px solid var(--page-border);
-  border-radius: 6px;
-  background: var(--page-surface-alt);
-  color: var(--page-text);
-  font: inherit;
-  font-size: calc(11px * var(--page-font-scale));
-  padding: 8px 10px;
-}
-.report-field textarea {
-  min-height: 112px;
-  resize: vertical;
-  line-height: 1.55;
-}
-.report-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 4px;
-}
-.page-footer a {
-  color: var(--page-text-muted);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 8px; font-size: calc(12px * var(--page-font-scale)); color: var(--page-text-muted); }
-.legend span { display: flex; align-items: center; gap: 5px; }
-.leg-sq { width: 10px; height: 10px; border-radius: 2px; }
-.adoption-sort { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.sort-select {
-  appearance: none;
-  border: 0.5px solid var(--page-border);
-  background: var(--page-surface-alt);
-  color: var(--page-text);
-  border-radius: 6px;
-  min-height: 34px;
-  padding: 0 34px 0 10px;
-  font-size: calc(12px * var(--page-font-scale));
-  cursor: pointer;
-  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
-  background-position: calc(100% - 16px) 14px, calc(100% - 11px) 14px;
-  background-size: 5px 5px, 5px 5px;
-  background-repeat: no-repeat;
-}
-.bars-wrap { position: relative; }
-.industry-row { display: grid; grid-template-columns: 110px 1fr 60px; align-items: center; gap: 10px; margin-bottom: 10px; position: relative; border-radius: 6px; outline: none; }
-.industry-row:hover, .industry-row:focus-visible { background: color-mix(in srgb, #378ADD 10%, transparent); }
-.industry-name { font-size: calc(13px * var(--page-font-scale)); color: var(--page-text-muted); text-align: right; }
-.bar-bg { background: var(--page-surface-alt); border-radius: 4px; height: 20px; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
-.pct { font-size: calc(13px * var(--page-font-scale)); font-weight: 500; color: var(--page-text); }
-.adoption-tooltip {
-  position: absolute;
-  z-index: 5;
-  right: 0;
-  top: calc(100% + 6px);
-  width: min(320px, calc(100vw - 40px));
-  padding: 10px 12px;
-  background: var(--page-surface);
-  border: 0.5px solid var(--page-border);
-  border-radius: 8px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.16);
-  color: var(--page-text);
-  font-size: calc(12px * var(--page-font-scale));
-  line-height: 1.55;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-4px);
-  transition: opacity 0.16s ease, transform 0.16s ease;
-}
-.industry-row:hover .adoption-tooltip,
-.industry-row:focus-visible .adoption-tooltip { opacity: 1; transform: translateY(0); }
-.tooltip-title { font-weight: 600; margin-bottom: 4px; }
-.tooltip-meta { color: var(--page-text-muted); }
-.impact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 15px; margin-bottom: 1.5rem; }
-.impact-card { appearance: none; font-family: inherit; text-align: left; width: 100%; background: var(--page-surface); border: 0.5px solid var(--page-border); border-radius: 8px; padding: 21px; padding-right: calc(58px * var(--page-font-scale)); cursor: pointer; position: relative; }
-.impact-card:hover, .impact-card:focus-visible { border-color: #378ADD; box-shadow: 0 10px 24px rgba(55,138,221,0.12); outline: none; }
-.impact-icon { font-size: calc(20px * var(--page-font-scale)); margin-bottom: 8px; color: var(--page-text-muted); }
-.impact-industry { font-size: calc(11px * var(--page-font-scale)); color: var(--page-text-muted); margin-bottom: 4px; padding-right: calc(20px * var(--page-font-scale)); }
-.impact-title { font-size: calc(13px * var(--page-font-scale)); font-weight: 500; color: var(--page-text); margin-bottom: 4px; }
-.impact-stat { font-size: calc(27px * var(--page-font-scale)); font-weight: 500; color: var(--page-text); }
-:root[data-theme="dark"] .impact-stat { color: var(--page-text); }
-.impact-desc { font-size: calc(11px * var(--page-font-scale)); line-height: 1.55; color: var(--page-text-muted); margin-top: 8px; }
-.impact-explanation {
-  background: var(--page-surface);
-  border: 0.5px solid var(--page-border);
-  border-radius: 8px;
-  padding: 1rem;
-  margin-top: -0.25rem;
-  color: var(--page-text-muted);
-}
-.impact-explanation-title {
-  color: var(--page-text);
-  font-size: calc(13px * var(--page-font-scale));
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-.impact-explanation-list { padding-left: 1rem; font-size: calc(12px * var(--page-font-scale)); line-height: 1.65; }
-.impact-explanation-list li + li { margin-top: 6px; }
-.impact-explanation-list strong { color: var(--page-text); font-weight: 600; }
-.cluster-grid,
-.talent-grid,
-.influence-map {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 15px;
-  margin-bottom: 1.5rem;
-}
-.cluster-card,
-.talent-card,
-.influence-card {
-  background: var(--page-surface);
-  border: 0.5px solid var(--page-border);
-  border-radius: 8px;
-  padding: 1rem;
-}
-.cluster-card {
-  appearance: none;
-  display: grid;
-  grid-template-rows: minmax(calc(28px * var(--page-font-scale)), auto) auto 1fr;
-  align-content: start;
-  row-gap: 10px;
-  font-family: inherit;
-  position: relative;
-  text-align: left;
-  width: 100%;
-  padding-right: calc(64px * var(--page-font-scale));
-  cursor: pointer;
-}
-.cluster-card:hover,
-.cluster-card:focus-visible {
-  border-color: #378ADD;
-  box-shadow: 0 10px 24px rgba(55,138,221,0.12);
-  outline: none;
-}
-.cluster-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  align-items: center;
-  padding-right: calc(38px * var(--page-font-scale));
-}
-.cluster-kicker,
-.talent-kicker,
-.influence-kicker {
-  display: inline-flex;
-  align-items: center;
-  min-height: calc(24px * var(--page-font-scale));
-  width: fit-content;
-  max-width: calc(100% - 42px * var(--page-font-scale));
-  border: 0.5px solid color-mix(in srgb, var(--page-border) 82%, transparent);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--page-surface-alt) 72%, transparent);
-  color: var(--page-text-muted);
-  font-size: calc(11px * var(--page-font-scale));
-  line-height: 1.2;
-  padding: 3px 10px;
-  margin-bottom: 10px;
-}
-.cluster-badges .badge {
-  margin-top: 0;
-}
-.cluster-card .cluster-kicker {
-  margin-bottom: 0;
-}
-.influence-kicker {
-  gap: 6px;
-}
-.influence-depth-icons {
-  display: inline-flex;
-  gap: 1px;
-  color: #378ADD;
-}
-.influence-depth-icons .material-symbol {
-  font-family: "Material Symbols Outlined";
-  font-size: calc(13px * var(--page-font-scale));
-  font-weight: 400;
-  line-height: 1;
-}
-.talent-kicker {
-  gap: 6px;
-}
-.talent-icon,
-.talent-title-arrow {
-  flex: 0 0 auto;
-  color: #378ADD;
-  font-family: "Material Symbols Outlined";
-  font-weight: 400;
-  line-height: 1;
-}
-.talent-icon {
-  font-size: calc(15px * var(--page-font-scale));
-}
-.talent-title {
-  display: flex;
-  align-items: flex-start;
-  gap: 7px;
-}
-.talent-title-arrow {
-  margin-top: 0.12em;
-  font-size: calc(16px * var(--page-font-scale));
-}
-.cluster-title,
-.talent-title,
-.influence-title {
-  color: var(--page-text);
-  font-size: calc(14px * var(--page-font-scale));
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-.cluster-card .cluster-title {
-  margin-bottom: 0;
-}
-.cluster-body,
-.talent-body,
-.influence-body {
-  color: var(--page-text-muted);
-  font-size: calc(12px * var(--page-font-scale));
-  line-height: 1.65;
-}
-.cluster-body strong,
-.talent-body strong,
-.influence-body strong { color: var(--page-text); font-weight: 600; }
-.cluster-detail-list {
-  border-top: 0.5px solid var(--page-border);
-  margin-top: 12px;
-  padding-top: 10px;
-  padding-left: 1rem;
-  color: var(--page-text-muted);
-  font-size: calc(11px * var(--page-font-scale));
-  line-height: 1.65;
-}
-.cluster-detail-list li + li { margin-top: 6px; }
-.cluster-detail-list strong { color: var(--page-text); font-weight: 600; }
-.quote-block {
-  background: var(--page-surface-alt);
-  border-left: 4px solid #378ADD;
-  border-radius: 8px;
-  color: var(--page-text);
-  font-size: calc(15px * var(--page-font-scale));
-  line-height: 1.65;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-}
-.tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-}
-.tag-list-label {
-  color: var(--page-text-muted);
-  font-size: calc(10px * var(--page-font-scale));
-  margin-top: 12px;
-  margin-bottom: 6px;
-}
-.tag {
-  border: 0.5px solid var(--page-border);
-  border-radius: 999px;
-  color: var(--page-text-muted);
-  font-size: calc(11px * var(--page-font-scale));
-  padding: 4px 9px;
-}
-.influence-radar {
-  border-top: 0.5px solid var(--page-border);
-  margin-top: 12px;
-  padding-top: 10px;
-}
-.influence-radar-title {
-  color: var(--page-text-muted);
-  font-size: calc(10px * var(--page-font-scale));
-  margin-bottom: 6px;
-}
-.influence-radar-canvas {
-  position: relative;
-  min-height: 0;
-}
-.influence-radar-canvas canvas {
-  display: none;
-  width: 100%;
-  height: 100%;
-}
-.radar-static {
-  display: block;
-  width: min(100%, clamp(180px, 16vw, 220px));
-  height: auto;
-  margin: 0 auto;
-}
-.radar-static-grid {
-  fill: none;
-  stroke: color-mix(in srgb, var(--page-border) 84%, transparent);
-  stroke-width: 1;
-}
-.radar-static-axis {
-  stroke: color-mix(in srgb, var(--page-border) 70%, transparent);
-  stroke-width: 0.8;
-}
-.radar-static-area {
-  fill-opacity: 0.18;
-  stroke-width: 2.4;
-}
-.radar-static-point {
-  stroke: var(--page-surface);
-  stroke-width: 1.5;
-}
-.radar-static-label {
-  fill: var(--page-text-muted);
-  font-size: 9px;
-  text-anchor: middle;
-}
-.badge {
-  display: inline-flex;
-  align-items: center;
-  min-height: calc(24px * var(--page-font-scale));
-  width: fit-content;
-  border: 0.5px solid transparent;
-  border-radius: 999px;
-  font-size: calc(11px * var(--page-font-scale));
-  line-height: 1.2;
-  padding: 3px 10px;
-  margin-top: 6px;
-}
-.drawer-backdrop { position: fixed; inset: 0; z-index: 30; background: rgba(0,0,0,0.36); opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
-.impact-detail-drawer {
-  position: fixed;
-  z-index: 31;
-  top: 0;
-  right: 0;
-  width: min(440px, 100vw);
-  height: 100dvh;
-  overflow-y: auto;
-  background: var(--page-surface);
-  border-left: 0.5px solid var(--page-border);
-  box-shadow: -20px 0 48px rgba(0,0,0,0.22);
-  padding: clamp(20px, 4vw, 32px);
-  transform: translateX(100%);
-  transition: transform 0.24s ease;
-}
-body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
-.impact-detail-drawer[aria-hidden="false"] { transform: translateX(0); }
-.drawer-close { appearance: none; border: 0.5px solid var(--page-border); background: var(--page-surface-alt); color: var(--page-text); border-radius: 6px; min-height: 32px; padding: 0 10px; cursor: pointer; margin-bottom: 1rem; }
-.drawer-kicker { font-size: calc(11px * var(--page-font-scale)); color: var(--page-text-muted); margin-bottom: 4px; }
-.drawer-title { font-size: calc(22px * var(--page-font-scale)); color: var(--page-text); line-height: 1.2; margin-bottom: 8px; }
-.drawer-stat { font-size: calc(30px * var(--page-font-scale)); font-weight: 600; color: var(--page-text); margin-bottom: 12px; }
-.drawer-summary { font-size: calc(13px * var(--page-font-scale)); line-height: 1.65; color: var(--page-text-muted); margin-bottom: 1rem; }
-.drawer-section { border-top: 0.5px solid var(--page-border); padding-top: 1rem; margin-top: 1rem; }
-.drawer-section-title { font-size: calc(12px * var(--page-font-scale)); color: var(--page-text); font-weight: 600; margin-bottom: 8px; }
-.drawer-list { padding-left: 1.1rem; color: var(--page-text-muted); font-size: calc(12px * var(--page-font-scale)); line-height: 1.65; }
-.drawer-list li + li { margin-top: 6px; }
-.article-link-list a { color: var(--page-text); text-decoration: underline; text-underline-offset: 3px; }
-.article-link-source, .note-source { display: block; color: var(--page-text-muted); font-size: calc(11px * var(--page-font-scale)); margin-top: 2px; }
-.note-list strong { color: var(--page-text); font-weight: 600; }
-.badge-high { background: #EAF3DE; border-color: #C9E3AF; color: #3B6D11; }
-.badge-mid { background: #FAEEDA; border-color: #EBCB97; color: #854F0B; }
-.badge-low { background: #E6F1FB; border-color: #BBD7EF; color: #185FA5; }
-.valuation-ranking-tabs {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin-bottom: 1rem;
-  padding: 6px;
-  border: 0.5px solid var(--page-border);
-  border-radius: 8px;
-  background: var(--page-surface-alt);
-}
-.valuation-tab {
-  appearance: none;
-  min-height: 44px;
-  border: 0.5px solid transparent;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--page-text-muted);
-  cursor: pointer;
-  font-size: calc(12px * var(--page-font-scale));
-}
-.valuation-tab[aria-selected="true"] {
-  border-color: var(--page-border);
-  background: var(--page-surface);
-  color: var(--page-text);
-}
-.valuation-panel[hidden] { display: none; }
-.valuation-top-three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.valuation-company-card {
-  appearance: none;
-  width: 100%;
-  min-height: 198px;
-  border: 0.5px solid var(--page-border);
-  border-radius: 8px;
-  background: var(--page-surface);
-  color: var(--page-text);
-  cursor: pointer;
-  padding: 1rem;
-  text-align: left;
-}
-.valuation-company-card:hover,
-.valuation-company-card:focus-visible,
-.valuation-row-button:hover,
-.valuation-row-button:focus-visible {
-  border-color: #378ADD;
-  color: #378ADD;
-  outline: none;
-}
-.valuation-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-.valuation-rank { color: #378ADD; font-size: calc(12px * var(--page-font-scale)); font-weight: 700; }
-.valuation-logo { position: relative; display: inline-flex; align-items: center; justify-content: center; overflow: hidden; border: 0.5px solid var(--page-border); border-radius: 8px; background: #fff; color: #378ADD; font-weight: 700; line-height: 1; }
-.valuation-logo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 6px; background: #fff; }
-.valuation-logo-fallback { position: relative; z-index: 0; font-size: 10px; }
-.valuation-logo-card { width: 44px; height: 44px; margin-top: 12px; }
-.valuation-logo-row { width: 30px; height: 30px; margin-right: 0; }
-.valuation-logo-drawer { width: 46px; height: 46px; border-radius: 10px; }
-.valuation-company-name { display: block; margin-top: 10px; font-size: calc(18px * var(--page-font-scale)); font-weight: 650; line-height: 1.2; overflow-wrap: anywhere; }
-.valuation-company-value { display: block; margin-top: 6px; font-size: calc(24px * var(--page-font-scale)); font-weight: 650; line-height: 1; }
-.valuation-change { display: inline-flex; align-items: center; min-height: 24px; margin-top: 10px; border-radius: 999px; padding: 3px 9px; font-size: calc(10px * var(--page-font-scale)); font-weight: 600; }
-.valuation-change.positive { background: #EAF3DE; color: #3B6D11; }
-.valuation-change.negative { background: #FAEEDA; color: #854F0B; }
-.valuation-change.neutral { background: var(--page-surface-alt); color: var(--page-text-muted); }
-.valuation-tag-list { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
-.valuation-tag { border: 0.5px solid var(--page-border); border-radius: 999px; padding: 2px 7px; color: var(--page-text-muted); font-size: calc(10px * var(--page-font-scale)); }
-.valuation-table-wrap { margin-top: 12px; border: 0.5px solid var(--page-border); border-radius: 8px; overflow: hidden; background: var(--page-surface); }
-.valuation-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-.valuation-table th { height: 38px; padding: 0 12px; background: var(--page-surface-alt); color: var(--page-text-muted); font-size: calc(10px * var(--page-font-scale)); font-weight: 600; text-align: left; }
-.valuation-table th:nth-child(1) { width: 58px; text-align: center; }
-.valuation-table th:nth-child(3), .valuation-table th:nth-child(4) { width: 140px; text-align: right; }
-.valuation-table td { height: 56px; padding: 8px 12px; border-top: 0.5px solid var(--page-border); font-size: calc(12px * var(--page-font-scale)); vertical-align: middle; }
-.valuation-table td:nth-child(1) { text-align: center; color: var(--page-text-muted); font-weight: 700; }
-.valuation-table td:nth-child(3), .valuation-table td:nth-child(4) { text-align: right; }
-.valuation-row-button { appearance: none; display: inline-flex; align-items: center; gap: 9px; width: 100%; min-height: 36px; border: 0; background: transparent; color: inherit; cursor: pointer; text-align: left; }
-.valuation-methodology { margin-top: 14px; border: 0.5px solid var(--page-border); border-radius: 8px; background: var(--page-surface); overflow: hidden; }
-.valuation-methodology > summary { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 12px 14px; cursor: pointer; list-style: none; color: var(--page-text); font-size: calc(12px * var(--page-font-scale)); font-weight: 600; }
-.valuation-methodology > summary::-webkit-details-marker { display: none; }
-.valuation-methodology > summary::after { content: "expand_more"; font-family: "Material Symbols Outlined"; color: var(--page-text-muted); transition: transform 0.16s ease; }
-.valuation-methodology[open] > summary::after { transform: rotate(180deg); }
-.valuation-methodology-body { padding: 0 14px 14px; color: var(--page-text-muted); font-size: calc(11px * var(--page-font-scale)); line-height: 1.65; }
-.valuation-data-note {
-  display: grid;
-  gap: 10px;
-  margin-top: 12px;
-  padding: 12px 14px;
-  border-top: 0.5px solid var(--page-border);
-  color: var(--page-text-muted);
-  font-size: calc(10px * var(--page-font-scale));
-  line-height: 1.65;
-}
-.valuation-data-note-row { display: grid; grid-template-columns: calc(18px * var(--page-font-scale)) minmax(0, 1fr); gap: 8px; align-items: start; }
-.valuation-data-note-icon { display: inline-flex; align-items: center; justify-content: center; width: calc(18px * var(--page-font-scale)); height: calc(16.5px * var(--page-font-scale)); color: #378ADD; font-family: "Material Symbols Outlined"; font-size: calc(16px * var(--page-font-scale)); line-height: 1; }
-.valuation-data-note strong { color: var(--page-text); font-weight: 600; }
-.valuation-data-links { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 4px; list-style: none; }
-.valuation-data-links a { color: var(--page-text-muted); text-underline-offset: 3px; }
-.valuation-data-links a:hover, .valuation-data-links a:focus-visible { color: #378ADD; }
-.valuation-data-status { margin-top: 4px; }
-.valuation-company-drawer-heading { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: center; margin-bottom: 8px; }
-.valuation-company-detail-drawer .drawer-list a { color: var(--page-text); text-underline-offset: 3px; }
-.valuation-company-detail-drawer .drawer-list a:hover,
-.valuation-company-detail-drawer .drawer-list a:focus-visible { color: #378ADD; }
-@media (prefers-color-scheme: dark) {
-  .badge-high { background: #27500A; border-color: #416E1B; color: #C0DD97; }
-  .badge-mid { background: #633806; border-color: #8F5A12; color: #FAC775; }
-  .badge-low { background: #0C447C; border-color: #185FA5; color: #B5D4F4; }
-}
-:root[data-theme="dark"] .badge-high { background: #27500A; border-color: #416E1B; color: #C0DD97; }
-:root[data-theme="dark"] .badge-mid { background: #633806; border-color: #8F5A12; color: #FAC775; }
-:root[data-theme="dark"] .badge-low { background: #0C447C; border-color: #185FA5; color: #B5D4F4; }
-.divider { border: none; border-top: 0.5px solid var(--page-border); margin: 0 0 1.25rem; }
-@media (max-width: 720px) {
-  .wrap { width: min(100% - 32px, 1040px); padding: 24px 0 36px; }
-  .hero-visual { border-radius: 12px; margin-bottom: 20px; }
-  .hero-visual img { aspect-ratio: 16 / 9; }
-  .section-visual { border-radius: 10px; margin-bottom: 18px; }
-  .section-visual img { aspect-ratio: 16 / 9; }
-  .reader-controls { align-items: flex-start; }
-  .section-tabs {
-    align-items: center;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    overscroll-behavior-inline: contain;
-    scrollbar-width: thin;
-  }
-  .section-tab {
-    flex: 0 0 auto;
-    white-space: nowrap;
-    overflow-wrap: normal;
-  }
-  .footer-grid { grid-template-columns: 1fr; }
-  .stage-explanation-grid, .bubble-explanation-grid { grid-template-columns: 1fr; }
-  .grid-2 { grid-template-columns: 1fr; }
-  .cluster-grid, .talent-grid, .influence-map { grid-template-columns: 1fr; }
-  .valuation-top-three { grid-template-columns: 1fr; }
-  .valuation-table th:nth-child(5), .valuation-table td:nth-child(5) { display: none; }
-  .valuation-table th:nth-child(3), .valuation-table th:nth-child(4) { width: 104px; }
-  .industry-row { grid-template-columns: 84px 1fr 46px; gap: 8px; }
-  .industry-name { text-align: left; }
-  .adoption-tooltip { left: 0; right: auto; }
-  .impact-grid { grid-template-columns: 1fr; }
-}
-@media (max-width: 480px) {
-  .reader-controls { display: grid; grid-template-columns: 1fr; }
-  .control-group { width: 100%; }
-  .reader-control-btn { flex: 1; }
-  .chart-wrap { height: 280px; }
-  .chart-wrap2 { height: 280px; }
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Dino Peng 的研究與數位產品入口，聚焦城市資料、AI 產業與運動科技。">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:title" content="Dino Peng — Projects">
+  <meta property="og:description" content="研究問題，也設計理解問題的方式。">
+  <meta property="og:url" content="https://dinopeng.com/">
+  <title>Dino Peng — Projects</title>
+  <style>
+    :root {
+      --ink: #171714;
+      --paper: #f2efe8;
+      --line: rgba(23, 23, 20, 0.22);
+      --muted: #66645d;
+      --accent: #e4522d;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    }
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+    main { min-height: 100vh; overflow: hidden; }
+
+    .site-header,
+    .hero,
+    .projects,
+    .about,
+    footer {
+      width: min(calc(100% - 48px), 1440px);
+      margin-inline: auto;
+    }
+
+    .site-header {
+      min-height: 88px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--ink);
+    }
+    .wordmark { font-size: 24px; font-weight: 800; letter-spacing: -0.06em; }
+    .wordmark-dot { color: var(--accent); }
+    .site-header nav { display: flex; gap: 32px; font-size: 14px; font-weight: 650; }
+    .site-header nav a { border-bottom: 1px solid transparent; }
+    .site-header nav a:hover { border-color: currentColor; }
+
+    .hero {
+      min-height: min(760px, calc(100vh - 88px));
+      padding: clamp(56px, 9vw, 136px) 0 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .kicker,
+    .section-heading p,
+    .section-heading span {
+      margin: 0;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .hero h1 {
+      max-width: 1200px;
+      margin: 28px 0 64px;
+      font-size: clamp(54px, 8.4vw, 128px);
+      font-weight: 620;
+      letter-spacing: -0.075em;
+      line-height: 0.96;
+    }
+    .hero h1 span { display: block; color: var(--accent); }
+    .hero-footer {
+      display: grid;
+      grid-template-columns: minmax(280px, 560px) auto;
+      align-items: end;
+      justify-content: space-between;
+      gap: 32px;
+      border-top: 1px solid var(--line);
+      padding-top: 24px;
+    }
+    .hero-footer p,
+    .about-copy p { margin: 0; font-size: clamp(17px, 1.6vw, 22px); line-height: 1.65; }
+    .jump-link { display: inline-flex; align-items: center; gap: 28px; font-weight: 650; }
+
+    .projects { padding: 104px 0 120px; }
+    .section-heading {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      align-items: end;
+      margin-bottom: 32px;
+    }
+    .section-heading h2 {
+      margin: 0;
+      font-size: clamp(48px, 6vw, 88px);
+      font-weight: 620;
+      letter-spacing: -0.065em;
+      line-height: 0.9;
+    }
+    .section-heading span { text-align: right; }
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+    }
+    .project-card {
+      min-height: 610px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--ink);
+      transition: transform 180ms ease, background-color 180ms ease;
+    }
+    .project-card:last-child { border-right: 0; }
+    a.project-card:hover { transform: translateY(-8px); }
+    .card-topline,
+    .card-action {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .card-mark {
+      position: relative;
+      height: 190px;
+      margin: 44px 0 40px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.32);
+      border: 1px solid currentColor;
+    }
+    .card-mark span { position: absolute; display: block; }
+    .trees .card-mark span:first-child {
+      width: 68%; height: 240%; left: 20%; top: -70%;
+      background: #cbc3a8; transform: rotate(37deg);
+    }
+    .trees .card-mark span:nth-child(2),
+    .trees .card-mark span:nth-child(3) {
+      width: 48px; height: 48px; border: 7px solid var(--paper);
+      border-radius: 50%; background: #214e3e;
+    }
+    .trees .card-mark span:nth-child(2) { left: 17%; top: 24%; }
+    .trees .card-mark span:nth-child(3) { right: 16%; bottom: 18%; background: #7a9d48; }
+    .ai .card-mark { background: #171714; }
+    .ai .card-mark span {
+      height: 2px; left: 10%; background: #7ca8ff; transform-origin: left center;
+    }
+    .ai .card-mark span:first-child { width: 72%; top: 66%; transform: rotate(-28deg); }
+    .ai .card-mark span:nth-child(2) { width: 56%; top: 42%; transform: rotate(14deg); }
+    .ai .card-mark span:nth-child(3) { width: 36%; top: 31%; left: 52%; transform: rotate(54deg); }
+    .sport .card-mark { background: #d7eb65; }
+    .sport .card-mark span:first-child {
+      width: 140px; height: 140px; left: 50%; top: 50%;
+      border: 2px solid var(--ink); border-radius: 50%; transform: translate(-50%, -50%);
+    }
+    .sport .card-mark span:nth-child(2) { width: 2px; height: 100%; left: 50%; background: var(--ink); }
+    .sport .card-mark span:nth-child(3) { width: 100%; height: 2px; top: 50%; background: var(--ink); }
+    .card-copy h3 { margin: 0 0 18px; font-size: clamp(38px, 4vw, 58px); font-weight: 620; letter-spacing: -0.06em; }
+    .card-copy p { margin: 0; color: #494841; line-height: 1.7; }
+    .project-card ul { display: flex; flex-wrap: wrap; gap: 8px; margin: auto 0 32px; padding: 32px 0 0; list-style: none; }
+    .project-card li { padding: 6px 9px; border: 1px solid var(--line); font-size: 12px; }
+    .card-action { padding-top: 18px; border-top: 1px solid var(--ink); font-size: 13px; }
+    .is-disabled { color: #55554e; }
+
+    .about { padding: 120px 0; border-top: 1px solid var(--ink); }
+    .about h2 {
+      max-width: 1100px;
+      margin: 32px 0 88px;
+      font-size: clamp(48px, 7vw, 104px);
+      font-weight: 620;
+      letter-spacing: -0.07em;
+      line-height: 1;
+    }
+    .about-copy { width: min(100%, 680px); margin-left: auto; }
+    .about-copy a { display: inline-block; margin-top: 36px; padding-bottom: 4px; border-bottom: 1px solid currentColor; font-weight: 650; }
+    footer {
+      min-height: 104px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      align-items: center;
+      border-top: 1px solid var(--ink);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    footer span:nth-child(2) { text-align: center; }
+    footer a { text-align: right; }
+
+    @media (max-width: 900px) {
+      .project-grid { grid-template-columns: 1fr; }
+      .project-card { min-height: 560px; border-right: 0; border-bottom: 1px solid var(--ink); }
+      .project-card:last-child { border-bottom: 0; }
+    }
+    @media (max-width: 640px) {
+      .site-header, .hero, .projects, .about, footer { width: min(calc(100% - 32px), 1440px); }
+      .site-header { min-height: 72px; }
+      .site-header nav { gap: 20px; }
+      .hero { min-height: calc(100svh - 72px); padding-top: 48px; }
+      .hero h1 { margin-top: 24px; font-size: clamp(48px, 15vw, 68px); }
+      .hero-footer { grid-template-columns: 1fr; align-items: start; }
+      .jump-link { justify-content: space-between; }
+      .projects, .about { padding-block: 80px; }
+      .section-heading { grid-template-columns: 1fr auto; }
+      .section-heading h2 { grid-column: 1 / -1; grid-row: 2; margin-top: 20px; }
+      .project-card { min-height: 600px; padding-inline: 0; }
+      .about h2 { margin-bottom: 56px; }
+      footer { grid-template-columns: 1fr auto; gap: 12px; padding-block: 28px; }
+      footer span:nth-child(2) { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .project-card { transition: none; }
+    }
+  </style>
 </head>
 <body>
+  <main>
+    <header class="site-header">
+      <a class="wordmark" href="#top" aria-label="回到頁首">DP<span class="wordmark-dot">.</span></a>
+      <nav aria-label="主要導覽">
+        <a href="#projects">Projects</a>
+        <a href="mailto:doublemore.art@gmail.com">Contact</a>
+      </nav>
+    </header>
 
-<div class="wrap">
-
-<figure class="hero-visual" aria-label="AI 產業數據觀察主視覺">
-  <img class="hero-visual-image-light" src="assets/ai-industry-data-observation-hero.svg" alt="以產業節點、泡泡圖與趨勢線組成的 AI 產業數據觀察主視覺">
-  <img class="hero-visual-image-dark" src="assets/ai-industry-data-observation-hero-dark.svg" alt="" aria-hidden="true">
-</figure>
-
-<h1 class="page-title">AI 對產業的數據觀察</h1>
-
-<div class="reader-controls" aria-label="閱讀設定">
-  <div class="control-group" aria-label="主題模式">
-    <button class="reader-control-btn theme-toggle" type="button" data-theme-choice="light" aria-pressed="false">Light</button>
-    <button class="reader-control-btn theme-toggle" type="button" data-theme-choice="dark" aria-pressed="false">Dark</button>
-  </div>
-  <div class="control-group" aria-label="字級大小">
-    <button class="reader-control-btn font-size-control" type="button" data-font-size-choice="small" aria-pressed="false">小</button>
-    <button class="reader-control-btn font-size-control" type="button" data-font-size-choice="medium" aria-pressed="true">中</button>
-    <button class="reader-control-btn font-size-control" type="button" data-font-size-choice="large" aria-pressed="false">大</button>
-  </div>
-</div>
-
-<nav class="section-tabs" aria-label="頁面段落">
-  <a class="section-tab" href="#weekly-observation-title">重點摘要</a>
-  <a class="section-tab" href="#ai-company-valuation-title">AI 公司估值排行榜</a>
-  <a class="section-tab" href="#industry-adoption-title">各產業 AI 滲透率</a>
-  <a class="section-tab" href="#investment-productivity-title">AI 投資規模 vs. 生產力提升預估</a>
-  <a class="section-tab" href="#industry-impact-title">各產業 AI 應用實際影響</a>
-  <a class="section-tab" href="#adoption-stages-title">AI 採用的三大階段分佈</a>
-  <a class="section-tab" href="#industry-clusters-title">產業分群解讀</a>
-  <a class="section-tab" href="#hybrid-talent-title">重構人才定義</a>
-  <a class="section-tab" href="#hybrid-influence-title">混合型職能發展能力</a>
-  <a class="section-tab" href="#source-pool-title">公開報告來源池</a>
-</nav>
-
-<div class="chart-fallback" data-chart-fallback role="status">
-  部分互動圖表暫時無法顯示。文字分析、關鍵指標、產業長條圖與互動卡片仍可正常閱讀；請確認網路連線後重新整理頁面，即可再次載入泡泡圖與採用階段圖表。
-</div>
-
-<section class="analysis-section" id="weekly-observation" aria-labelledby="weekly-observation-title">
-<div class="section-heading">
-  <div class="section-heading-text">
-    <h2 class="section-title" id="weekly-observation-title"><span class="section-title-icon" aria-hidden="true">insights</span>重點摘要</h2>
-    <p class="section-description">彙整企業 AI 採用、規模化部署與產業分析的主要指標，作為理解後續圖表與分群內容的入口。</p>
-  </div>
-</div>
-<div class="update-note">
-  <div class="update-note-title">資料摘要</div>
-  <div class="update-note-body">
-    資料顯示企業 AI 使用已快速普及，但跨部門規模化仍明顯落後。以下數據可用來區分「開始使用」、「進入實驗」與「完成流程整合」，並從產業、人才與治理三個角度理解落差。
-  </div>
-  <ul class="source-list">
-    <li>全球企業 AI 採用率：McKinsey 2025 Global Survey 顯示 88% 受訪者表示其組織在至少一個業務功能中定期使用 AI，較前一年 78% 上升；Stanford AI Index 2026 經濟章亦收錄此趨勢。</li>
-    <li>Agentic AI：McKinsey 2025 顯示 23% 受訪者表示組織已在企業內某處規模化 agentic AI，另有 39% 已開始實驗。</li>
-    <li>AI 對全球 GDP 貢獻預測：沿用 PwC 對 2030 年 US$15.7 兆的估計。</li>
-    <li>延伸閱讀：OECD、Microsoft、WEF、Deloitte、BCG、EY、Wharton 與 Anthropic 可分別補充企業採用、全球擴散、投資回報、人才任務與治理條件；尚未確認調查口徑的數字不納入本頁比較。</li>
-    <li>產業滲透率、投資規模、生產力與採用階段仍屬分析估計，適合比較相對位置，不宜視為單一企業的實際成果。</li>
-  </ul>
-</div>
-
-<div class="weekly-focus">
-  <div class="weekly-focus-title">主要結論：AI 已普及，規模化編排能力仍是關鍵</div>
-  <div class="weekly-focus-body">
-    2025 年資料顯示，企業 AI 使用已從個人或單點流程逐步進入跨部門工作流。採用率升到 <strong>88%</strong> 代表 AI 已成為常態工具；但使用率不等於規模化部署，自主型 AI 的規模化仍只有 <strong>23%</strong>，顯示多數組織仍卡在實驗、治理、資料品質與流程整合。這項落差可從企業準備度、任務層級重組，以及治理與信任三個面向判讀。
-  </div>
-</div>
-
-<div class="grid-2">
-  <button class="metric-card" type="button" data-metric-index="0" aria-label="查看組織定期使用 AI 相關文章">
-    <span class="card-click-icon" aria-hidden="true">arrow_outward</span>
-    <div class="metric-label">組織定期使用 AI</div>
-    <div class="metric-val">88%</div>
-    <div class="metric-sub">2025 年，至少一個業務功能（McKinsey）</div>
-  </button>
-  <button class="metric-card" type="button" data-metric-index="1" aria-label="查看 AI 對全球 GDP 貢獻預測相關文章">
-    <span class="card-click-icon" aria-hidden="true">arrow_outward</span>
-    <div class="metric-label">AI 對全球 GDP 貢獻預測</div>
-    <div class="metric-val">$15.7 兆</div>
-    <div class="metric-sub">2030 年估計（PwC）</div>
-  </button>
-  <button class="metric-card" type="button" data-metric-index="2" aria-label="查看 Agentic AI 規模化相關文章">
-    <span class="card-click-icon" aria-hidden="true">arrow_outward</span>
-    <div class="metric-label">Agentic AI 規模化</div>
-    <div class="metric-val">23%</div>
-    <div class="metric-sub">2025 年，已在企業某處擴大部署（McKinsey）</div>
-  </button>
-  <button class="metric-card" type="button" data-metric-index="3" aria-label="查看 Agentic AI 實驗中相關文章">
-    <span class="card-click-icon" aria-hidden="true">arrow_outward</span>
-    <div class="metric-label">Agentic AI 實驗中</div>
-    <div class="metric-val">39%</div>
-    <div class="metric-sub">2025 年，已開始實驗 AI agents（McKinsey）</div>
-  </button>
-</div>
-</section>
-
-<section class="analysis-section valuation-ranking-section" id="ai-company-valuation" aria-labelledby="ai-company-valuation-title">
-<hr class="divider">
-<div class="section-heading">
-  <div class="section-heading-text section-heading-text-wide">
-    <h2 class="section-title" id="ai-company-valuation-title"><span class="section-title-icon" aria-hidden="true">leaderboard</span>AI 公司估值排行榜</h2>
-    <p class="section-description">分開比較私人 AI 公司的最近一輪融資估值，以及涵蓋 AI 晶片、雲端、平台與應用的上市科技公司整體市值。兩榜採不同定價口徑，不合併排名。</p>
-  </div>
-</div>
-<div class="valuation-ranking-tabs" role="tablist" aria-label="AI 公司估值排行榜">
-  <button class="valuation-tab" type="button" id="main-private-valuation-tab" data-valuation-tab="private" role="tab" aria-controls="main-private-valuation" aria-selected="true" tabindex="0">私人 AI 原生公司</button>
-  <button class="valuation-tab" type="button" id="main-public-valuation-tab" data-valuation-tab="public" role="tab" aria-controls="main-public-valuation" aria-selected="false" tabindex="-1">上市科技公司</button>
-</div>
-<section class="valuation-panel" id="main-private-valuation" data-valuation-panel="private" role="tabpanel" aria-labelledby="main-private-valuation-tab">
-  <div class="section-heading">
-    <div class="section-heading-text">
-      <h3 class="section-inline-note-title">私人 AI 原生公司 Top 10</h3>
-      <p class="section-description">以最近一輪可追溯的 post-money valuation 排序；變動率與前一輪可比估值比較。</p>
-    </div>
-  </div>
-  <div class="valuation-top-three" data-valuation-top-three="private"></div>
-  <div class="valuation-table-wrap">
-    <table class="valuation-table">
-      <thead><tr><th scope="col">排名</th><th scope="col">公司</th><th scope="col">估值</th><th scope="col">較前輪</th><th scope="col">核心業務</th></tr></thead>
-      <tbody data-valuation-list="private"></tbody>
-    </table>
-  </div>
-</section>
-<section class="valuation-panel" id="main-public-valuation" data-valuation-panel="public" role="tabpanel" aria-labelledby="main-public-valuation-tab" hidden>
-  <div class="section-heading">
-    <div class="section-heading-text">
-      <h3 class="section-inline-note-title">上市 AI 與多元科技公司 Top 10</h3>
-      <p class="section-description">上市公司目前沿用 2026-06-30 公司整體市值排序；30 日股價變動比較 2026-06-01 與 2026-06-30 收盤價，待取得同口徑市場資料後整批重算。</p>
-    </div>
-  </div>
-  <div class="valuation-top-three" data-valuation-top-three="public"></div>
-  <div class="valuation-table-wrap">
-    <table class="valuation-table">
-      <thead><tr><th scope="col">排名</th><th scope="col">公司</th><th scope="col">整體市值</th><th scope="col">30 日股價變動</th><th scope="col">AI 關聯</th></tr></thead>
-      <tbody data-valuation-list="public"></tbody>
-    </table>
-  </div>
-</section>
-<details class="valuation-methodology">
-  <summary>估值來源與計算方式</summary>
-  <div class="valuation-methodology-body">
-    私人公司採最近一輪已完成且可追溯的融資估值；仍在洽談、二級市場報價、收購選擇權與未完成交易不納入。上市公司目前沿用 Nasdaq 於 2026-06-30 共同基準日提供的公司整體市值，並以 2026-06-01 與 2026-06-30 收盤價計算股價變動；2026-07-13 已查核到 Nvidia、Apple 等大型科技股市值出現近期變動，待取得可機器讀取且同口徑的市場資料後再整批重算。私人估值與公開市值的定價機制不同，僅適合分榜比較，不代表 AI 業務本身價值，亦不構成投資建議。
-  </div>
-</details>
-<div class="valuation-data-note" aria-label="估值排行榜資料更新與引用來源">
-  <div class="valuation-data-note-row">
-    <span class="valuation-data-note-icon" aria-hidden="true">update</span>
-    <div>資料整理時間：<time datetime="2026-07-13">2026-07-13</time>；私人公司估值已更新至最新可追溯輪次。上市公司市值仍沿用 <time datetime="2026-06-30">2026-06-30</time> Nasdaq 基準日，待取得同口徑市場資料後整批重算。</div>
-  </div>
-  <div class="valuation-data-note-row">
-    <span class="valuation-data-note-icon" aria-hidden="true">library_books</span>
-    <div>
-      <strong>引用來源：</strong>私人公司優先採公司或投資方公告，無公告時採 Reuters、Financial Times、Wall Street Journal 等一線媒體；上市公司市值與歷史收盤價統一採 Nasdaq 資料。
-      <ul class="valuation-data-links">
-        <li><a href="https://openai.com/index/accelerating-the-next-phase-ai/" target="_blank" rel="noopener noreferrer">OpenAI 2026 募資公告</a></li>
-        <li><a href="https://apnews.com/article/anthropic-ai-claude-openai-valuation-86c432fa375548fd4f111f8164d6ffc1" target="_blank" rel="noopener noreferrer">Anthropic 2026 新融資報導</a></li>
-        <li><a href="https://www.prnewswire.com/news-releases/databricks-grows-65-yoy-surpasses-5-4-billion-revenue-run-rate-doubles-down-on-lakebase-and-genie-302682674.html" target="_blank" rel="noopener noreferrer">Databricks 2026 融資公告</a></li>
-        <li><a href="https://www.figure.ai/news/series-c" target="_blank" rel="noopener noreferrer">Figure AI Series C 公告</a></li>
-        <li><a href="https://www.nasdaq.com/market-activity/stocks" target="_blank" rel="noopener noreferrer">Nasdaq Market Activity</a></li>
-      </ul>
-      <p class="valuation-data-status">閱讀時請留意：私人公司估值更新頻率不一，外幣輪次以公告當期約值換算；上市榜顯示公司整體市值，不等同其 AI 業務價值。本版已更新 Anthropic 私人估值，上市榜仍為 2026-06-30 同口徑基準。</p>
-    </div>
-  </div>
-</div>
-</section>
-
-<section class="analysis-section" id="industry-adoption" aria-labelledby="industry-adoption-title">
-<figure class="section-visual" aria-label="各產業 AI 滲透率主視覺">
-  <img class="section-visual-image-light" src="assets/industry-adoption-hero.svg" alt="以水平長條與排序控制呈現各產業 AI 滲透率差異的主視覺">
-  <img class="section-visual-image-dark" src="assets/industry-adoption-hero-dark.svg" alt="" aria-hidden="true">
-</figure>
-<div class="section-heading">
-  <div class="section-heading-text">
-    <h2 class="section-title" id="industry-adoption-title"><span class="section-title-icon" aria-hidden="true">bar_chart</span>各產業 AI 滲透率</h2>
-    <p class="section-description">用來比較不同產業的 AI 導入強度。可透過下拉選單依滲透率或市場規模重新排序；將游標移至長條，可查看各產業的導入原因、估計基礎與市場規模指數。數字為 2025 年分析估計，OECD 與 Microsoft 資料只用於理解擴散背景，不直接混用。</p>
-  </div>
-  <div class="adoption-sort" aria-label="各產業 AI 滲透率排序">
-    <select class="sort-select" data-sort-select aria-label="排序方式">
-      <option value="adoption-desc">滲透率高到低</option>
-      <option value="adoption-asc">滲透率低到高</option>
-      <option value="market-desc">市場規模大到小</option>
-      <option value="market-asc">市場規模小到大</option>
-      <option value="default">預設</option>
-    </select>
-  </div>
-</div>
-<div class="bars-wrap" id="bars"></div>
-</section>
-
-<section class="analysis-section" id="investment-productivity" aria-labelledby="investment-productivity-title">
-<hr class="divider">
-<figure class="section-visual" aria-label="AI 投資規模與生產力提升預估主視覺">
-  <img class="section-visual-image-light" src="assets/investment-productivity-hero.svg" alt="以泡泡散點圖呈現 AI 投資強度、生產力提升潛力與市場規模關係的主視覺">
-  <img class="section-visual-image-dark" src="assets/investment-productivity-hero-dark.svg" alt="" aria-hidden="true">
-</figure>
-<div class="section-heading">
-  <div class="section-heading-text section-heading-text-wide">
-    <h2 class="section-title" id="investment-productivity-title"><span class="section-title-icon" aria-hidden="true">bubble_chart</span>AI 投資規模 vs. 生產力提升預估</h2>
-    <p class="section-description">用 X 軸比較 AI 投資強度、Y 軸比較生產力提升潛力，泡泡大小則代表市場規模。可先觀察右上角與大泡泡，找出同時具備投入、改善空間與市場放大效果的產業。</p>
-    <div class="section-inline-note" aria-label="泡泡圖讀圖重點">
-      <ul class="section-inline-note-list">
-        <li><strong>右上角與大泡泡</strong>：右上角代表「投入高、改善潛力也高」；大泡泡則代表「市場基數大，任何流程改善都容易被放大」。<span class="chart-note-source">讀圖重點</span></li>
-        <li><strong>投資高不一定等於效益高</strong>：真正關鍵是 AI 是否接進核心工作流、資料是否可用、治理是否成熟，以及改善是否能轉成營收、成本、風險或交付速度上的實際指標。<span class="chart-note-source">判讀口徑：可搭配 BCG AI Radar、EY AI Pulse、Deloitte State of AI in the Enterprise</span></li>
-      </ul>
-    </div>
-  </div>
-</div>
-<div class="legend">
-  <span><span class="leg-sq" style="background:#378ADD"></span>科技 / 金融</span>
-  <span><span class="leg-sq" style="background:#1D9E75"></span>醫療 / 製造</span>
-  <span><span class="leg-sq" style="background:#D85A30"></span>零售 / 物流</span>
-  <span><span class="leg-sq" style="background:#D4537E"></span>教育 / 法律</span>
-</div>
-<div class="chart-wrap">
-  <canvas id="bubbleChart" role="img" aria-label="AI 投資與生產力提升泡泡圖，顯示各產業相關性">各產業 AI 投資規模與生產力提升相關性。</canvas>
-</div>
-<details class="bubble-explanation">
-  <summary class="bubble-explanation-title">如何解讀這張圖</summary>
-  <div class="bubble-explanation-grid">
-    <div class="bubble-explanation-item"><strong>X 軸代表 AI 投資規模</strong>，位置越往右，表示該產業投入 AI 基礎建設、模型、資料平台與導入專案的資源越高。</div>
-    <div class="bubble-explanation-item"><strong>Y 軸代表生產力提升預估</strong>，位置越往上，表示 AI 對該產業流程效率、決策速度或產出品質的潛在改善越明顯。</div>
-    <div class="bubble-explanation-item"><strong>泡泡大小代表市場規模</strong>，泡泡越大，表示即使單位改善幅度不高，累積到整個產業仍可能形成可觀的經濟影響。</div>
-  </div>
-</details>
-</section>
-
-<section class="analysis-section" id="industry-impact" aria-labelledby="industry-impact-title">
-<hr class="divider">
-<figure class="section-visual" aria-label="各產業 AI 應用實際影響主視覺">
-  <img class="section-visual-image-light" src="assets/industry-impact-hero.svg" alt="以產業卡片、工作流節點與成效指標呈現各產業 AI 應用實際影響的主視覺">
-  <img class="section-visual-image-dark" src="assets/industry-impact-hero-dark.svg" alt="" aria-hidden="true">
-</figure>
-<div class="section-heading">
-  <div class="section-heading-text section-heading-text-wide">
-    <h2 class="section-title" id="industry-impact-title"><span class="section-title-icon" aria-hidden="true">workspaces</span>各產業 AI 應用實際影響</h2>
-    <p class="section-description">比較各產業常見的效益方向與導入限制。點擊卡片可查看典型應用、影響如何發生、衡量指標、落地風險與後續評估；卡片數字用於辨識改善方向，不代表所有企業都能取得相同成果。</p>
-    <div class="section-inline-note" aria-label="產業影響解讀">
-      <div class="section-inline-note-title">從單點效率到流程重組</div>
-      <ul class="section-inline-note-list">
-        <li><strong>數字代表的是「可觀察的效益方向」</strong>：例如速度、準確率、轉換率或成本節省；它們適合用來比較產業潛力，但仍需搭配資料口徑與導入成熟度解讀。</li>
-        <li><strong>真正影響通常發生在工作流被重排時</strong>：AI 先改善單一任務，接著影響審核、交接、決策與治理流程，最後才可能轉成營收、成本、風險或交付速度上的實際成果。</li>
-        <li><strong>高效益不代表低風險</strong>：金融、醫療、法律等產業即使效率提升明顯，也更需要可解釋性、責任歸屬、資料治理與人工覆核機制。</li>
-      </ul>
-    </div>
-  </div>
-</div>
-<div class="impact-grid" id="impacts"></div>
-</section>
-
-<section class="analysis-section" id="adoption-stages" aria-labelledby="adoption-stages-title">
-<hr class="divider">
-<figure class="section-visual" aria-label="AI 採用的三大階段分佈主視覺">
-  <img class="section-visual-image-light" src="assets/adoption-stages-hero.svg" alt="以三段堆疊長條呈現 AI 採用從探索評估、局部試行到深度整合的主視覺">
-  <img class="section-visual-image-dark" src="assets/adoption-stages-hero-dark.svg" alt="" aria-hidden="true">
-</figure>
-<div class="section-heading">
-  <div class="section-heading-text section-heading-text-wide">
-    <h2 class="section-title" id="adoption-stages-title"><span class="section-title-icon" aria-hidden="true">stacked_bar_chart</span>AI 採用的三大階段分佈</h2>
-    <p class="section-description">比較各產業「用得多」與「用得深」的差異。深度整合表示 AI 已進入核心工作流，局部試行表示仍集中在特定團隊，探索評估則代表價值、風險與責任邊界仍在驗證。</p>
-    <div class="section-inline-note" aria-label="採用階段讀圖重點">
-      <ul class="section-inline-note-list">
-        <li><strong>用得多 vs. 用得深</strong>：讀圖時不只看「哪個產業用得多」，也要看「用到多深」。科技軟體與金融科技的深度整合比例較高，代表 AI 已成為工作流的一部分。<span class="chart-note-source">讀圖重點</span></li>
-        <li><strong>低滲透不等於低價值</strong>：醫療、製造與物流雖然仍有較多局部試行，但一旦資料串接與治理成熟，單位流程改善可能帶來更大的營運價值；低滲透往往只是代表導入阻力、責任風險與系統整合成本更高。<span class="chart-note-source">判讀口徑</span></li>
-      </ul>
-    </div>
-  </div>
-</div>
-<div class="legend">
-  <span><span class="leg-sq" style="background:#3B6D11"></span>深度整合</span>
-  <span><span class="leg-sq" style="background:#BA7517"></span>局部試行</span>
-  <span><span class="leg-sq" style="background:#185FA5"></span>探索評估</span>
-</div>
-<div class="chart-wrap2">
-  <canvas id="stageChart" role="img" aria-label="各產業 AI 採用階段分佈橫條圖">各產業在深度整合、局部試行、探索評估三階段的分佈比例。</canvas>
-</div>
-<details class="stage-explanation">
-  <summary class="stage-explanation-title">如何解讀這張圖</summary>
-  <div class="stage-explanation-grid">
-    <div class="stage-explanation-item"><strong>深度整合代表</strong> AI 已進入核心流程，例如開發、風控、排程、客服或決策輔助，並開始影響 KPI、組織分工與治理制度。</div>
-    <div class="stage-explanation-item"><strong>局部試行代表</strong> AI 已在特定團隊或任務中帶來效率，但尚未全面接入資料、權限、稽核與跨部門流程。</div>
-    <div class="stage-explanation-item"><strong>探索評估代表</strong> 產業仍在驗證資料品質、責任歸屬、投資報酬與法規邊界，使用情境多半停留在原型或輔助工具。</div>
-  </div>
-</details>
-</section>
-
-<section class="analysis-section" id="industry-clusters" aria-labelledby="industry-clusters-title">
-<hr class="divider">
-<figure class="section-visual" aria-label="產業分群解讀主視覺">
-  <img class="section-visual-image-light" src="assets/industry-clusters-hero.svg" alt="以四象限、節點與連線呈現產業 AI 分群的主視覺">
-  <img class="section-visual-image-dark" src="assets/industry-clusters-hero-dark.svg" alt="" aria-hidden="true">
-</figure>
-<div class="section-heading">
-  <div class="section-heading-text">
-    <h2 class="section-title" id="industry-clusters-title"><span class="section-title-icon" aria-hidden="true">hub</span>產業分群解讀</h2>
-    <p class="section-description">用滲透速度、影響潛力與導入阻力辨識四類產業。點擊卡片可查看代表性應用、衡量指標、主要限制與後續評估，協助判斷不同產業應優先追求效率、治理或基礎能力建設。</p>
-  </div>
-</div>
-<div class="cluster-grid">
-  <button class="cluster-card" type="button" data-cluster-index="0" aria-label="查看高滲透高影響分群詳情">
-    <span class="card-click-icon" aria-hidden="true">arrow_outward</span>
-    <div class="cluster-badges" aria-label="高滲透，高影響">
-      <span class="badge badge-high">高滲透</span>
-      <span class="badge badge-high">高影響</span>
-    </div>
-    <div class="cluster-title">科技軟體、金融服務、行銷內容、客服銷售</div>
-    <div class="cluster-body">落地速度快，因為資料密度高、流程已數位化，AI 容易接進開發、風控、內容生成與客戶互動。實際影響會先出現在速度與成本，再改變審核、交接與品質治理。主要阻力是安全、法遵、品牌一致性與模型輸出責任。</div>
-  </button>
-  <button class="cluster-card" type="button" data-cluster-index="1" aria-label="查看高滲透低確定性分群詳情">
-    <span class="card-click-icon" aria-hidden="true">arrow_outward</span>
-    <div class="cluster-badges" aria-label="高滲透，低確定性">
-      <span class="badge badge-high">高滲透</span>
-      <span class="badge badge-low">低確定性</span>
-    </div>
-    <div class="cluster-title">內容、設計、媒體、教育</div>
-    <div class="cluster-body">落地速度快但成效不穩，因為 AI 產出門檻降低，工具滲透快；但工作流影響取決於題目判斷、品質標準與脈絡維持。主要阻力是版權、原創性、評量制度、專業身份與低品質內容過量。</div>
-  </button>
-  <button class="cluster-card" type="button" data-cluster-index="2" aria-label="查看中滲透高潛力分群詳情">
-    <span class="card-click-icon" aria-hidden="true">arrow_outward</span>
-    <div class="cluster-badges" aria-label="中滲透，高潛力">
-      <span class="badge badge-mid">中滲透</span>
-      <span class="badge badge-high">高潛力</span>
-    </div>
-    <div class="cluster-title">醫療、製造、物流、能源、農業</div>
-    <div class="cluster-body">落地速度較慢但改善空間巨大，因為需要資料串接、現場流程改造與清楚責任邊界。AI 的實際影響常落在預測維護、排程、分診、品管與資源配置。主要阻力是系統整合成本、資料品質、法規與現場採納。</div>
-  </button>
-  <button class="cluster-card" type="button" data-cluster-index="3" aria-label="查看低滲透高阻力分群詳情">
-    <span class="card-click-icon" aria-hidden="true">arrow_outward</span>
-    <div class="cluster-badges" aria-label="低滲透，高阻力">
-      <span class="badge badge-low">低滲透</span>
-      <span class="badge badge-mid">高阻力</span>
-    </div>
-    <div class="cluster-title">公共部門、傳統中小企業、低數位化產業</div>
-    <div class="cluster-body">落地速度慢，阻力通常不是「沒有工具」，而是資料分散、流程未標準化、採購與責任制度較慢。AI 可以先從文件整理、客服、知識庫與內部流程輔助切入，再逐步累積治理與整合能力。</div>
-  </button>
-</div>
-</section>
-
-<section class="analysis-section" id="hybrid-talent" aria-labelledby="hybrid-talent-title">
-<hr class="divider">
-<figure class="section-visual" aria-label="重構人才定義主視覺">
-  <img class="section-visual-image-light" src="assets/hybrid-talent-hero.svg" alt="以中心節點連接多個職能模組，呈現混合型人才重新編排工作流程的主視覺">
-  <img class="section-visual-image-dark" src="assets/hybrid-talent-hero-dark.svg" alt="" aria-hidden="true">
-</figure>
-<div class="section-heading">
-  <div class="section-heading-text">
-    <h2 class="section-title" id="hybrid-talent-title"><span class="section-title-icon" aria-hidden="true">psychology</span>重構人才定義</h2>
-    <p class="section-description">從設計、產品、工程與行銷四種能力，理解工作價值如何從單一產出轉向問題定義、系統整合、商業判斷與品質治理。每張卡片呈現角色在 AI 工作流中的能力轉移。</p>
-  </div>
-</div>
-<div class="quote-block">能用 AI 連接多個職能，並把問題、資料、內容、介面、流程與商業目標重新組裝成可執行方案的人。</div>
-<div class="talent-grid">
-  <article class="talent-card">
-    <div class="talent-kicker"><span class="talent-icon" aria-hidden="true">design_services</span>設計能力</div>
-    <div class="talent-title"><span class="talent-title-arrow" aria-hidden="true">arrow_forward</span><span>從做畫面，轉向定義系統與判斷品質</span></div>
-    <div class="talent-body">AI 讓草圖、版型與內容變快，設計價值更集中在問題定義、體驗流程、設計系統一致性與品質治理。</div>
-  </article>
-  <article class="talent-card">
-    <div class="talent-kicker"><span class="talent-icon" aria-hidden="true">inventory_2</span>產品能力</div>
-    <div class="talent-title"><span class="talent-title-arrow" aria-hidden="true">arrow_forward</span><span>從寫需求，轉向把 AI 產出轉成產品決策</span></div>
-    <div class="talent-body">產品角色需要把市場訊號、使用者回饋、原型與資料解讀串成優先級，並判斷哪些 AI 產出值得進入正式產品。</div>
-  </article>
-  <article class="talent-card">
-    <div class="talent-kicker"><span class="talent-icon" aria-hidden="true">code</span>工程能力</div>
-    <div class="talent-title"><span class="talent-title-arrow" aria-hidden="true">arrow_forward</span><span>從只實作功能，轉向理解可行性並生成原型</span></div>
-    <div class="talent-body">工程能力不只在寫 code，而是能辨識架構限制、安全風險、資料介面與技術成本，讓 AI 原型可被驗證與治理。</div>
-  </article>
-  <article class="talent-card">
-    <div class="talent-kicker"><span class="talent-icon" aria-hidden="true">campaign</span>行銷能力</div>
-    <div class="talent-title"><span class="talent-title-arrow" aria-hidden="true">arrow_forward</span><span>從包裝賣點，轉向內容、轉換與成長策略</span></div>
-    <div class="talent-body">行銷角色需要把產品價值轉成受眾語言、內容系統、實驗節奏與轉換指標，而不是只產出更多素材。</div>
-  </article>
-</div>
-<div class="section-inline-note" aria-label="混合型人才來源脈絡">
-  <ul class="section-inline-note-list">
-    <li>Anthropic Economic Index 從任務層級觀察 AI 使用，說明 AI 更常重組職能系統，而非直接替代職位。</li>
-    <li>WEF 與 Wharton 報告則顯示，技能轉型同時牽動培訓、流程與管理制度。</li>
-  </ul>
-</div>
-</section>
-
-<section class="analysis-section" id="hybrid-influence" aria-labelledby="hybrid-influence-title">
-<hr class="divider">
-<figure class="section-visual" aria-label="混合型職能發展能力主視覺">
-  <img class="section-visual-image-light" src="assets/hybrid-influence-hero.svg" alt="以雷達圖、層級節點與能力連線呈現混合型職能發展能力的主視覺">
-  <img class="section-visual-image-dark" src="assets/hybrid-influence-hero-dark.svg" alt="" aria-hidden="true">
-</figure>
-<div class="section-heading">
-  <div class="section-heading-text">
-    <h2 class="section-title" id="hybrid-influence-title"><span class="section-title-icon" aria-hidden="true">account_tree</span>混合型職能發展能力</h2>
-    <p class="section-description">星級代表影響深度，雷達圖代表五項能力的相對需求。可比較不同層級在問題定義、系統整合、內容營運、技術原型與品質治理上的能力組合；圖形用於理解職能方向，不是個人能力評分。</p>
-  </div>
-</div>
-<div class="influence-map">
-  <article class="influence-card">
-    <div class="influence-kicker"><span class="influence-depth-icons" aria-label="三星深度"><span class="material-symbol" aria-hidden="true">star</span><span class="material-symbol" aria-hidden="true">star</span><span class="material-symbol" aria-hidden="true">star</span></span>核心影響層</div>
-    <div class="influence-title">交付、研究、內容、原型與設計系統</div>
-    <div class="influence-body">AI 最先改變高頻、可拆解、可快速回饋的工作。混合型人才的價值在於把產出接回使用者研究、設計交付、內容營運、原型製作與設計系統應用。</div>
-    <div class="tag-list-label">影響關鍵字</div>
-    <div class="tag-list"><span class="tag">設計交付</span><span class="tag">研究摘要</span><span class="tag">內容營運</span><span class="tag">原型製作</span><span class="tag">設計系統</span></div>
-    <div class="influence-radar">
-      <div class="influence-radar-title">技能對應雷達圖</div>
-      <div class="influence-radar-canvas">
-        <svg class="radar-static" viewBox="0 0 180 180" role="img" aria-label="核心影響區技能對應雷達圖">
-          <polygon class="radar-static-grid" points="90,34 143,80.6 123.1,136 56.9,136 37,80.6"></polygon>
-          <polygon class="radar-static-grid" points="90,20 156.6,68.4 131.1,146.6 48.9,146.6 23.4,68.4"></polygon>
-          <line class="radar-static-axis" x1="90" y1="90" x2="90" y2="20"></line><line class="radar-static-axis" x1="90" y1="90" x2="156.6" y2="68.4"></line><line class="radar-static-axis" x1="90" y1="90" x2="131.1" y2="146.6"></line><line class="radar-static-axis" x1="90" y1="90" x2="48.9" y2="146.6"></line><line class="radar-static-axis" x1="90" y1="90" x2="23.4" y2="68.4"></line>
-          <polygon class="radar-static-area" fill="#378ADD" stroke="#378ADD" points="90,20 143.3,77.1 131.1,146.6 48.9,146.6 36.7,77.1"></polygon>
-          <circle class="radar-static-point" fill="#378ADD" cx="90" cy="20" r="2.5"></circle><circle class="radar-static-point" fill="#378ADD" cx="143.3" cy="77.1" r="2.5"></circle><circle class="radar-static-point" fill="#378ADD" cx="131.1" cy="146.6" r="2.5"></circle><circle class="radar-static-point" fill="#378ADD" cx="48.9" cy="146.6" r="2.5"></circle><circle class="radar-static-point" fill="#378ADD" cx="36.7" cy="77.1" r="2.5"></circle>
-          <text class="radar-static-label" x="90" y="12">問題定義</text><text class="radar-static-label" x="164" y="66">系統整合</text><text class="radar-static-label" x="136" y="162">內容營運</text><text class="radar-static-label" x="44" y="162">技術原型</text><text class="radar-static-label" x="16" y="66">品質治理</text>
-        </svg>
-      </div>
-    </div>
-  </article>
-  <article class="influence-card">
-    <div class="influence-kicker"><span class="influence-depth-icons" aria-label="二星深度"><span class="material-symbol" aria-hidden="true">star</span><span class="material-symbol" aria-hidden="true">star</span></span>延伸影響層</div>
-    <div class="influence-title">PM、前端、成長、品牌與管理流程</div>
-    <div class="influence-body">當 AI 進入跨部門流程，影響會擴展到需求拆解、前端原型、行銷成長、品牌管理、客戶提案、設計管理與新人培訓。</div>
-    <div class="tag-list-label">影響關鍵字</div>
-    <div class="tag-list"><span class="tag">PM 工作</span><span class="tag">前端工程</span><span class="tag">行銷成長</span><span class="tag">品牌管理</span><span class="tag">新人培訓</span></div>
-    <div class="influence-radar">
-      <div class="influence-radar-title">技能對應雷達圖</div>
-      <div class="influence-radar-canvas">
-        <svg class="radar-static" viewBox="0 0 180 180" role="img" aria-label="次核心影響區技能對應雷達圖">
-          <polygon class="radar-static-grid" points="90,34 143,80.6 123.1,136 56.9,136 37,80.6"></polygon>
-          <polygon class="radar-static-grid" points="90,20 156.6,68.4 131.1,146.6 48.9,146.6 23.4,68.4"></polygon>
-          <line class="radar-static-axis" x1="90" y1="90" x2="90" y2="20"></line><line class="radar-static-axis" x1="90" y1="90" x2="156.6" y2="68.4"></line><line class="radar-static-axis" x1="90" y1="90" x2="131.1" y2="146.6"></line><line class="radar-static-axis" x1="90" y1="90" x2="48.9" y2="146.6"></line><line class="radar-static-axis" x1="90" y1="90" x2="23.4" y2="68.4"></line>
-          <polygon class="radar-static-area" fill="#1D9E75" stroke="#1D9E75" points="90,20 156.6,68.4 114.9,127.3 57.1,127.3 36.7,77.1"></polygon>
-          <circle class="radar-static-point" fill="#1D9E75" cx="90" cy="20" r="2.5"></circle><circle class="radar-static-point" fill="#1D9E75" cx="156.6" cy="68.4" r="2.5"></circle><circle class="radar-static-point" fill="#1D9E75" cx="114.9" cy="127.3" r="2.5"></circle><circle class="radar-static-point" fill="#1D9E75" cx="57.1" cy="127.3" r="2.5"></circle><circle class="radar-static-point" fill="#1D9E75" cx="36.7" cy="77.1" r="2.5"></circle>
-          <text class="radar-static-label" x="90" y="12">問題定義</text><text class="radar-static-label" x="164" y="66">系統整合</text><text class="radar-static-label" x="136" y="162">內容營運</text><text class="radar-static-label" x="44" y="162">技術原型</text><text class="radar-static-label" x="16" y="66">品質治理</text>
-        </svg>
-      </div>
-    </div>
-  </article>
-  <article class="influence-card">
-    <div class="influence-kicker"><span class="influence-depth-icons" aria-label="一星深度"><span class="material-symbol" aria-hidden="true">star</span></span>外圍影響層</div>
-    <div class="influence-title">市場、教育、招募、工具與競爭結構</div>
-    <div class="influence-body">長期影響會進入接案市場、設計教育、組織招募、設計工具市場、創業門檻、產業競爭與專業認同，重新定義人才與服務的價值。</div>
-    <div class="tag-list-label">影響關鍵字</div>
-    <div class="tag-list"><span class="tag">接案市場</span><span class="tag">設計教育</span><span class="tag">組織招募</span><span class="tag">創業門檻</span><span class="tag">專業認同</span></div>
-    <div class="influence-radar">
-      <div class="influence-radar-title">技能對應雷達圖</div>
-      <div class="influence-radar-canvas">
-        <svg class="radar-static" viewBox="0 0 180 180" role="img" aria-label="外圍影響區技能對應雷達圖">
-          <polygon class="radar-static-grid" points="90,34 143,80.6 123.1,136 56.9,136 37,80.6"></polygon>
-          <polygon class="radar-static-grid" points="90,20 156.6,68.4 131.1,146.6 48.9,146.6 23.4,68.4"></polygon>
-          <line class="radar-static-axis" x1="90" y1="90" x2="90" y2="20"></line><line class="radar-static-axis" x1="90" y1="90" x2="156.6" y2="68.4"></line><line class="radar-static-axis" x1="90" y1="90" x2="131.1" y2="146.6"></line><line class="radar-static-axis" x1="90" y1="90" x2="48.9" y2="146.6"></line><line class="radar-static-axis" x1="90" y1="90" x2="23.4" y2="68.4"></line>
-          <polygon class="radar-static-area" fill="#D85A30" stroke="#D85A30" points="90,34 129.9,80.6 114.9,127.3 73.6,118.6 23.4,68.4"></polygon>
-          <circle class="radar-static-point" fill="#D85A30" cx="90" cy="34" r="2.5"></circle><circle class="radar-static-point" fill="#D85A30" cx="129.9" cy="80.6" r="2.5"></circle><circle class="radar-static-point" fill="#D85A30" cx="114.9" cy="127.3" r="2.5"></circle><circle class="radar-static-point" fill="#D85A30" cx="73.6" cy="118.6" r="2.5"></circle><circle class="radar-static-point" fill="#D85A30" cx="23.4" cy="68.4" r="2.5"></circle>
-          <text class="radar-static-label" x="90" y="12">問題定義</text><text class="radar-static-label" x="164" y="66">系統整合</text><text class="radar-static-label" x="136" y="162">內容營運</text><text class="radar-static-label" x="44" y="162">技術原型</text><text class="radar-static-label" x="16" y="66">品質治理</text>
-        </svg>
-      </div>
-    </div>
-  </article>
-  <article class="influence-card">
-    <div class="influence-kicker"><span class="influence-depth-icons" aria-label="統整判讀"><span class="material-symbol" aria-hidden="true">stars</span></span>統整判讀層</div>
-    <div class="influence-title">跨職能系統的重新編排者</div>
-    <div class="influence-body"><strong>AI 時代的混合型人才，不是跨領域工作者，而是跨職能系統的重新編排者。</strong>真正的門檻是能否把 AI 產出轉成可驗證、可交付、可治理的流程結果。</div>
-    <div class="tag-list-label">影響關鍵字</div>
-    <div class="tag-list"><span class="tag">系統編排</span><span class="tag">品質治理</span><span class="tag">可驗證交付</span><span class="tag">流程重構</span><span class="tag">責任邊界</span></div>
-    <div class="influence-radar">
-      <div class="influence-radar-title">技能對應雷達圖</div>
-      <div class="influence-radar-canvas">
-        <svg class="radar-static" viewBox="0 0 180 180" role="img" aria-label="跨職能系統重新編排者技能對應雷達圖">
-          <polygon class="radar-static-grid" points="90,34 143,80.6 123.1,136 56.9,136 37,80.6"></polygon>
-          <polygon class="radar-static-grid" points="90,20 156.6,68.4 131.1,146.6 48.9,146.6 23.4,68.4"></polygon>
-          <line class="radar-static-axis" x1="90" y1="90" x2="90" y2="20"></line><line class="radar-static-axis" x1="90" y1="90" x2="156.6" y2="68.4"></line><line class="radar-static-axis" x1="90" y1="90" x2="131.1" y2="146.6"></line><line class="radar-static-axis" x1="90" y1="90" x2="48.9" y2="146.6"></line><line class="radar-static-axis" x1="90" y1="90" x2="23.4" y2="68.4"></line>
-          <polygon class="radar-static-area" fill="#D4537E" stroke="#D4537E" points="90,20 156.6,68.4 114.9,127.3 57.1,127.3 23.4,68.4"></polygon>
-          <circle class="radar-static-point" fill="#D4537E" cx="90" cy="20" r="2.5"></circle><circle class="radar-static-point" fill="#D4537E" cx="156.6" cy="68.4" r="2.5"></circle><circle class="radar-static-point" fill="#D4537E" cx="114.9" cy="127.3" r="2.5"></circle><circle class="radar-static-point" fill="#D4537E" cx="57.1" cy="127.3" r="2.5"></circle><circle class="radar-static-point" fill="#D4537E" cx="23.4" cy="68.4" r="2.5"></circle>
-          <text class="radar-static-label" x="90" y="12">問題定義</text><text class="radar-static-label" x="164" y="66">系統整合</text><text class="radar-static-label" x="136" y="162">內容營運</text><text class="radar-static-label" x="44" y="162">技術原型</text><text class="radar-static-label" x="16" y="66">品質治理</text>
-        </svg>
-      </div>
-    </div>
-  </article>
-</div>
-</section>
-
-<section class="analysis-section" id="source-pool" aria-labelledby="source-pool-title">
-<hr class="divider">
-<div class="section-heading">
-  <div class="section-heading-text">
-    <h2 class="section-title" id="source-pool-title"><span class="section-title-icon" aria-hidden="true">library_books</span>公開報告來源池</h2>
-    <p class="section-description">依分析用途整理公開報告，協助判斷哪些來源適合回答企業採用、全球擴散、投資回報、人才變化或治理問題。展開各分類可查看建議用途與原始報告；不同年份、樣本與定義的數字不直接混用。</p>
-  </div>
-</div>
-<div class="source-pool-grid">
-  <details class="source-pool-card">
-    <summary>
-      <span>
-        <span class="source-pool-kicker">關鍵指標 / 宏觀影響</span>
-        <span class="source-pool-title">採用率、經濟貢獻與成熟度</span>
-      </span>
-    </summary>
-    <div class="source-pool-content">
-      <div class="source-pool-body">用 McKinsey 與 Stanford 確認企業採用趨勢，用 PwC 理解長期經濟影響，再以 Deloitte 比較企業準備度與實際效益落差。</div>
-      <ul class="source-pool-links">
-        <li><a href="https://www.deloitte.com/us/en/what-we-do/capabilities/applied-artificial-intelligence/content/state-of-generative-ai-in-enterprise.html" target="_blank" rel="noopener noreferrer">Deloitte State of AI in the Enterprise 2026</a></li>
-        <li><a href="https://www.pwc.com/us/en/tech-effect/ai-analytics/scaling-ai-capabilities-with-generative-investment.html" target="_blank" rel="noopener noreferrer">PwC AI economic impact estimate</a></li>
-      </ul>
-    </div>
-  </details>
-  <details class="source-pool-card" data-valuation-source-card>
-    <summary>
-      <span>
-        <span class="source-pool-kicker">公司估值 / 市場市值</span>
-        <span class="source-pool-title">募資估值與公開市場比較</span>
-      </span>
-    </summary>
-    <div class="source-pool-content">
-      <div class="source-pool-body">私人公司以最近一輪已完成的公開募資資料確認估值，排除仍在洽談的目標價、二級市場報價與收購選擇權；上市公司以 Nasdaq 同一交易日的整體市值與歷史收盤價比較。本版已更新 Anthropic 私人估值，上市公司仍沿用 2026-06-30 同口徑基準，待可機器讀取市場資料後整批重算。</div>
-      <ul class="source-pool-links">
-        <li><a href="https://openai.com/index/accelerating-the-next-phase-ai/" target="_blank" rel="noopener noreferrer">OpenAI 2026 募資公告</a></li>
-        <li><a href="https://apnews.com/article/anthropic-ai-claude-openai-valuation-86c432fa375548fd4f111f8164d6ffc1" target="_blank" rel="noopener noreferrer">Anthropic 2026 新融資報導</a></li>
-        <li><a href="https://www.prnewswire.com/news-releases/databricks-grows-65-yoy-surpasses-5-4-billion-revenue-run-rate-doubles-down-on-lakebase-and-genie-302682674.html" target="_blank" rel="noopener noreferrer">Databricks 2026 融資公告</a></li>
-        <li><a href="https://www.figure.ai/news/series-c" target="_blank" rel="noopener noreferrer">Figure AI Series C 公告</a></li>
-        <li><a href="https://www.nasdaq.com/market-activity/stocks" target="_blank" rel="noopener noreferrer">Nasdaq Market Activity</a></li>
-      </ul>
-    </div>
-  </details>
-  <details class="source-pool-card">
-    <summary>
-      <span>
-        <span class="source-pool-kicker">產業滲透 / 擴散</span>
-        <span class="source-pool-title">企業採用與全球 AI 擴散</span>
-      </span>
-    </summary>
-    <div class="source-pool-content">
-      <div class="source-pool-body">OECD 適合理解企業採用條件與生產力關係，Microsoft 適合觀察全球使用擴散與數位落差；兩者不直接替代本頁產業估計。</div>
-      <ul class="source-pool-links">
-        <li><a href="https://www.oecd.org/en/publications/the-adoption-of-artificial-intelligence-in-firms_f9ef33c3-en/full-report.html" target="_blank" rel="noopener noreferrer">OECD The Adoption of Artificial Intelligence in Firms 2025</a></li>
-        <li><a href="https://www.microsoft.com/en-us/corporate-responsibility/topics/ai-economy-institute/reports/global-ai-adoption-2025/" target="_blank" rel="noopener noreferrer">Microsoft Global AI Adoption in 2025</a></li>
-      </ul>
-    </div>
-  </details>
-  <details class="source-pool-card">
-    <summary>
-      <span>
-        <span class="source-pool-kicker">企業成熟度 / 投資回報</span>
-        <span class="source-pool-title">投資、落地落差與自主型 AI</span>
-      </span>
-    </summary>
-    <div class="source-pool-content">
-      <div class="source-pool-body">BCG、EY 與 Wharton 適合評估投資回報、資料條件、決策權與流程制度化，幫助辨識為何高投入不一定帶來高效益。</div>
-      <ul class="source-pool-links">
-        <li><a href="https://web-assets.bcg.com/73/8e/cc44cbc14a3b81695f8a3de28ff1/ai-radar-2026-web-jan-2026-edit.pdf" target="_blank" rel="noopener noreferrer">BCG AI Radar 2026</a></li>
-        <li><a href="https://knowledge.wharton.upenn.edu/special-report/2025-ai-adoption-report/" target="_blank" rel="noopener noreferrer">Wharton 2025 AI Adoption Report</a></li>
-      </ul>
-    </div>
-  </details>
-  <details class="source-pool-card">
-    <summary>
-      <span>
-        <span class="source-pool-kicker">人才職能 / 任務重組</span>
-        <span class="source-pool-title">從職位衝擊到任務與能力重組</span>
-      </span>
-    </summary>
-    <div class="source-pool-content">
-      <div class="source-pool-body">WEF 與 Anthropic 適合觀察 AI 如何改變任務、流程、技能組合與品質治理，避免只以職稱是否被替代來理解人才影響。</div>
-      <ul class="source-pool-links">
-        <li><a href="https://www.weforum.org/reports/the-future-of-jobs-report-2025/" target="_blank" rel="noopener noreferrer">WEF Future of Jobs Report 2025</a></li>
-        <li><a href="https://www.anthropic.com/research/the-anthropic-economic-index" target="_blank" rel="noopener noreferrer">Anthropic Economic Index</a></li>
-      </ul>
-    </div>
-  </details>
-  <details class="source-pool-card">
-    <summary>
-      <span>
-        <span class="source-pool-kicker">治理 / 信任</span>
-        <span class="source-pool-title">責任式採用、公共部門與信任落差</span>
-      </span>
-    </summary>
-    <div class="source-pool-content">
-      <div class="source-pool-body">WEF、OECD 與 KPMG 適合比較公共部門、低數位化產業與高風險產業的治理條件，補足只談效率時容易忽略的責任與信任問題。</div>
-      <ul class="source-pool-links">
-        <li><a href="https://reports.weforum.org/docs/WEF_AI_in_Action_Beyond_Experimentation_to_Transform_Industry_2025.pdf" target="_blank" rel="noopener noreferrer">WEF AI in Action 2025</a></li>
-        <li><a href="https://www.oecd.org/en/publications/governing-with-artificial-intelligence_795de142-en.html" target="_blank" rel="noopener noreferrer">OECD Governing with Artificial Intelligence 2025</a></li>
-      </ul>
-    </div>
-  </details>
-  <details class="source-pool-card">
-    <summary>
-      <span>
-        <span class="source-pool-kicker">引用提醒</span>
-        <span class="source-pool-title">引用與比較提醒</span>
-      </span>
-    </summary>
-    <div class="source-pool-content">
-      <div class="source-pool-body">引用數字前，請確認年份、樣本、調查對象、定義與統計口徑。無法確認的資料只適合作為趨勢背景，不應與本頁關鍵指標、產業估計或其他調查直接混算。</div>
-    </div>
-  </details>
-</div>
-</section>
-
-<footer class="page-footer" aria-label="版權宣告與錯誤回報">
-  <div class="footer-grid">
-    <section class="footer-panel" aria-labelledby="copyright-title">
-      <div class="footer-title" id="copyright-title">版權宣告</div>
-      <div class="footer-copy">
-        本頁內容由 Dino 整理與改寫，僅供產業研究、簡報討論與內部決策參考。外部資料、商標與報告內容之著作權歸原權利人所有；本頁新增的中文分析文字、資料編排與視覺化設計，未經授權請勿整頁轉載、商業散布或移除來源標註。引用本頁觀點時，請保留頁名「AI 對產業的數據觀察」、發布日期 <span data-footer-version-date>2026-07-14</span>、版號 <span data-footer-version-number>v2026.07.14-1</span>。
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <p class="kicker">Independent research &amp; digital products</p>
+      <h1 id="hero-title">把複雜資訊，整理成<span>可以理解與行動的介面。</span></h1>
+      <div class="hero-footer">
+        <p>我是 Dino Peng。這裡收錄我對城市資料、AI 產業與運動科技的研究、實驗與數位產品。</p>
+        <a class="jump-link" href="#projects">瀏覽專案 <span aria-hidden="true">↓</span></a>
       </div>
     </section>
-    <section class="footer-panel" aria-labelledby="error-report-title">
-      <div class="footer-title" id="error-report-title">錯誤回報</div>
-      <div class="footer-report-copy">
-        若發現數據來源、圖表顯示、文字內容或操作體驗有誤，可透過 Google Form 提供問題位置與修正建議，協助後續核對與改善。若表單無法開啟，也可寄信至 <a href="mailto:doublemore.art@gmail.com">doublemore.art@gmail.com</a>。
+
+    <section class="projects" id="projects" aria-labelledby="projects-title">
+      <div class="section-heading">
+        <p>Selected work</p>
+        <h2 id="projects-title">Projects</h2>
+        <span>2026</span>
       </div>
-      <button class="footer-report-btn" type="button" data-report-open>開啟錯誤回報表單</button>
+      <div class="project-grid">
+        <a class="project-card trees" href="/tptrees/">
+          <div class="card-topline"><span>01</span><span>Civic data · Active</span></div>
+          <div class="card-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="card-copy">
+            <h3>TP Trees</h3>
+            <p>從臺北市行道樹公開資料出發，整理市民能查到什麼，以及城市樹木生命履歷仍缺少哪些資訊。</p>
+          </div>
+          <ul aria-label="TP Trees 專案分類"><li>公開資料</li><li>城市治理</li><li>資訊設計</li></ul>
+          <div class="card-action"><span>查看專案</span><span aria-hidden="true">↗</span></div>
+        </a>
+
+        <a class="project-card ai" href="/aidata/">
+          <div class="card-topline"><span>02</span><span>Industry research · Active</span></div>
+          <div class="card-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="card-copy">
+            <h3>AI Data</h3>
+            <p>用互動圖表與產業分群，觀察 AI 採用、公司估值、生產力與人才職能的結構性變化。</p>
+          </div>
+          <ul aria-label="AI Data 專案分類"><li>產業研究</li><li>資料視覺化</li><li>AI 趨勢</li></ul>
+          <div class="card-action"><span>查看專案</span><span aria-hidden="true">↗</span></div>
+        </a>
+
+        <a class="project-card sport" href="/sporttech/">
+          <div class="card-topline"><span>03</span><span>Sports systems · Active</span></div>
+          <div class="card-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="card-copy">
+            <h3>SportTech</h3>
+            <p>查詢 2022–2026 臺灣運動科技預算，辨識政策來源、執行程度、地方場域與資源流向。</p>
+          </div>
+          <ul aria-label="SportTech 專案分類"><li>運動科技</li><li>生態系</li><li>資源分析</li></ul>
+          <div class="card-action"><span>查看專案</span><span aria-hidden="true">↗</span></div>
+        </a>
+      </div>
     </section>
-  </div>
-</footer>
 
-</div>
-
-<div class="report-modal" id="report-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="report-modal-title">
-  <div class="report-dialog">
-    <div class="report-dialog-header">
-      <div>
-        <div class="report-dialog-title" id="report-modal-title">錯誤回報</div>
-        <div class="report-dialog-desc">Google Form 暫時無法使用，請簡短描述問題並改用 Email 回報。</div>
+    <section class="about" aria-labelledby="about-title">
+      <p class="kicker">Working approach</p>
+      <h2 id="about-title">研究問題，也設計理解問題的方式。</h2>
+      <div class="about-copy">
+        <p>每個專案保留自己的內容結構與視覺語言；這個入口只負責讓它們被找到、被辨識，並清楚呈現目前進度。</p>
+        <a href="mailto:doublemore.art@gmail.com">開始一段對話 ↗</a>
       </div>
-      <button class="report-close" type="button" data-report-close aria-label="關閉錯誤回報">close</button>
-    </div>
-    <form class="report-form" id="report-form">
-      <div class="report-field">
-        <label for="report-section">問題位置</label>
-        <input id="report-section" name="section" type="text" placeholder="例如：各產業 AI 滲透率、公開報告來源池">
-      </div>
-      <div class="report-field">
-        <label for="report-type">問題類型</label>
-        <select id="report-type" name="type">
-          <option value="資料或引用錯誤">資料或引用錯誤</option>
-          <option value="圖表或互動異常">圖表或互動異常</option>
-          <option value="文字敘事需修正">文字敘事需修正</option>
-          <option value="版面或閱讀性問題">版面或閱讀性問題</option>
-          <option value="其他">其他</option>
-        </select>
-      </div>
-      <div class="report-field">
-        <label for="report-detail">問題描述</label>
-        <textarea id="report-detail" name="detail" required placeholder="請描述錯誤內容、預期修正方向，或你看到的畫面狀態。"></textarea>
-      </div>
-      <div class="report-field">
-        <label for="report-contact">回覆聯絡方式（選填）</label>
-        <input id="report-contact" name="contact" type="text" placeholder="Email 或其他可聯絡方式">
-      </div>
-      <div class="report-recipient-note" data-report-recipient-note>若未自動開啟郵件程式，目前無法建立 Email 草稿，請直接寄信至 doublemore.art@gmail.com。</div>
-      <div class="report-actions">
-        <button type="button" data-report-close>取消</button>
-        <button type="submit">使用 Email 回報</button>
-      </div>
-    </form>
-  </div>
-</div>
+    </section>
 
-<div class="drawer-backdrop" data-drawer-close aria-hidden="true"></div>
-<aside class="impact-detail-drawer valuation-company-detail-drawer" id="valuation-company-detail-drawer" aria-hidden="true" aria-labelledby="valuation-company-drawer-title">
-  <button class="drawer-close" type="button" data-drawer-close>關閉</button>
-  <div class="valuation-company-drawer-heading">
-    <div id="valuation-company-drawer-logo"></div>
-    <div>
-      <div class="drawer-kicker" id="valuation-company-drawer-kicker">AI 公司估值</div>
-      <div class="drawer-title" id="valuation-company-drawer-title">公司名稱</div>
-    </div>
-  </div>
-  <div class="drawer-stat" id="valuation-company-drawer-value"></div>
-  <div id="valuation-company-drawer-change"></div>
-  <div class="drawer-summary" id="valuation-company-drawer-summary"></div>
-  <div class="drawer-section">
-    <div class="drawer-section-title">數據口徑</div>
-    <ul class="drawer-list" id="valuation-company-drawer-data"></ul>
-  </div>
-</aside>
-<aside class="impact-detail-drawer" id="impact-detail-drawer" aria-hidden="true" aria-labelledby="drawer-title">
-  <button class="drawer-close" type="button" data-drawer-close>關閉</button>
-  <div class="drawer-kicker" id="drawer-kicker"></div>
-  <div class="drawer-title" id="drawer-title">產業詳情</div>
-  <div class="drawer-stat" id="drawer-stat"></div>
-  <div class="drawer-summary" id="drawer-summary"></div>
-  <div class="drawer-section">
-    <div class="drawer-section-title">典型應用</div>
-    <ul class="drawer-list" id="drawer-use-cases"></ul>
-  </div>
-  <div class="drawer-section">
-    <div class="drawer-section-title">影響如何發生</div>
-    <ul class="drawer-list" id="drawer-mechanism"></ul>
-  </div>
-  <div class="drawer-section">
-    <div class="drawer-section-title">衡量指標</div>
-    <ul class="drawer-list" id="drawer-metrics"></ul>
-  </div>
-  <div class="drawer-section">
-    <div class="drawer-section-title">落地限制</div>
-    <ul class="drawer-list" id="drawer-risks"></ul>
-  </div>
-  <div class="drawer-section">
-    <div class="drawer-section-title">後續評估</div>
-    <ul class="drawer-list" id="drawer-watch"></ul>
-  </div>
-</aside>
-<aside class="impact-detail-drawer" id="article-detail-drawer" aria-hidden="true" aria-labelledby="article-drawer-title">
-  <button class="drawer-close" type="button" data-drawer-close>關閉</button>
-  <div class="drawer-kicker" id="article-drawer-kicker">相關文章</div>
-  <div class="drawer-title" id="article-drawer-title">KPI 相關文章</div>
-  <div class="drawer-stat" id="article-drawer-stat"></div>
-  <div class="drawer-summary" id="article-drawer-summary"></div>
-  <div class="drawer-section">
-    <div class="drawer-section-title">建議閱讀</div>
-    <ul class="drawer-list article-link-list" id="article-links"></ul>
-  </div>
-  <div class="drawer-section">
-    <div class="drawer-section-title">閱讀提示</div>
-    <ul class="drawer-list note-list" id="article-notes"></ul>
-  </div>
-</aside>
-<aside class="impact-detail-drawer" id="cluster-detail-drawer" aria-hidden="true" aria-labelledby="cluster-drawer-title">
-  <button class="drawer-close" type="button" data-drawer-close>關閉</button>
-  <div class="drawer-kicker" id="cluster-drawer-kicker">產業分群</div>
-  <div class="drawer-title" id="cluster-drawer-title">分群詳情</div>
-  <div class="drawer-summary" id="cluster-drawer-summary"></div>
-  <div class="drawer-section">
-    <div class="drawer-section-title">典型落點</div>
-    <ul class="drawer-list" id="cluster-landing-list"></ul>
-  </div>
-  <div class="drawer-section">
-    <div class="drawer-section-title">衡量指標</div>
-    <ul class="drawer-list" id="cluster-metric-list"></ul>
-  </div>
-  <div class="drawer-section">
-    <div class="drawer-section-title">後續評估</div>
-    <ul class="drawer-list" id="cluster-watch-list"></ul>
-  </div>
-  <div class="drawer-section">
-    <div class="drawer-section-title">詞彙解釋</div>
-    <ul class="drawer-list note-list" id="cluster-term-list"></ul>
-  </div>
-</aside>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" onerror="window.aiIndustryChartLoadFailed = true"></script>
-<script>
-const rootEl = document.documentElement;
-const storage = {
-  get(key) { try { return localStorage.getItem(key); } catch (e) { return null; } },
-  set(key, value) { try { localStorage.setItem(key, value); } catch (e) {} }
-};
-const applyTheme = theme => {
-  rootEl.dataset.theme = theme;
-  document.querySelectorAll('[data-theme-choice]').forEach(btn => {
-    btn.setAttribute('aria-pressed', String(btn.dataset.themeChoice === theme));
-  });
-  storage.set('aiIndustryTheme', theme);
-};
-const applyFontSize = size => {
-  rootEl.dataset.fontSize = size;
-  document.querySelectorAll('[data-font-size-choice]').forEach(btn => {
-    btn.setAttribute('aria-pressed', String(btn.dataset.fontSizeChoice === size));
-  });
-  storage.set('aiIndustryFontSize', size);
-};
-const preferredTheme = storage.get('aiIndustryTheme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-const preferredFontSize = storage.get('aiIndustryFontSize') || 'medium';
-applyTheme(preferredTheme);
-applyFontSize(preferredFontSize);
-const syncVersionDate = () => {
-  const dateSource = document.querySelector('meta[name="page-version-date"]');
-  const numberSource = document.querySelector('meta[name="page-version-number"]');
-  const versionDate = dateSource ? dateSource.getAttribute('content') : '';
-  const versionNumber = numberSource ? numberSource.getAttribute('content') : '';
-  if (!versionDate) return;
-  document.querySelectorAll('[data-footer-version-date]').forEach(el => {
-    el.textContent = versionDate;
-  });
-  document.querySelectorAll('[data-footer-version-number]').forEach(el => {
-    el.textContent = versionNumber;
-  });
-};
-syncVersionDate();
-document.querySelectorAll('[data-theme-choice]').forEach(btn => {
-  btn.addEventListener('click', () => applyTheme(btn.dataset.themeChoice));
-});
-document.querySelectorAll('[data-font-size-choice]').forEach(btn => {
-  btn.addEventListener('click', () => applyFontSize(btn.dataset.fontSizeChoice));
-});
-
-const mainCompanyLogoFiles = {
-  'OpenAI': 'assets/company-logos/openai.ico',
-  'Anthropic': 'assets/company-logos/anthropic.ico',
-  'Databricks': 'assets/company-logos/databricks.ico',
-  'Figure AI': 'assets/company-logos/figure-ai.ico',
-  'Safe Superintelligence': 'assets/company-logos/ssi.ico',
-  'Anysphere': 'assets/company-logos/anysphere.ico',
-  'Perplexity': 'assets/company-logos/perplexity.ico',
-  'Helsing': 'assets/company-logos/helsing.ico',
-  'Mistral AI': 'assets/company-logos/mistral-ai.ico',
-  'Thinking Machines Lab': 'assets/company-logos/thinking-machines.ico',
-  'NVIDIA': 'assets/company-logos/nvidia.ico',
-  'Alphabet': 'assets/company-logos/alphabet.ico',
-  'Apple': 'assets/company-logos/apple.ico',
-  'Microsoft': 'assets/company-logos/microsoft.ico',
-  'Amazon': 'assets/company-logos/amazon.ico',
-  'TSMC': 'assets/company-logos/tsmc.ico',
-  'Broadcom': 'assets/company-logos/broadcom.ico',
-  'Tesla': 'assets/company-logos/tesla.ico',
-  'Meta': 'assets/company-logos/meta.ico',
-  'Oracle': 'assets/company-logos/oracle.ico',
-};
-
-const mainCompanyValuationData = [
-  { companyName: 'Anthropic', companyType: 'private', valueUsd: 965e9, valueType: 'post_money_valuation', previousValueUsd: 380e9, valueAsOf: '2026-05-28', previousValueAsOf: '2026-02-12', changePeriodLabel: 'vs. 前輪估值', priceChange30dPct: null, businessTags: ['基礎模型', '企業 AI'], inclusionRationale: 'Claude 模型、Claude Code、API 與企業工作流是主要價值來源；本版採最新可追溯融資估值，排除二級市場報價。', sourceName: 'Anthropic / AP News', sourceUrl: 'https://apnews.com/article/anthropic-ai-claude-openai-valuation-86c432fa375548fd4f111f8164d6ffc1', sourcePublishedAt: '2026-05-28', sourceTier: 'tier_one_media', methodologyNote: '採 Anthropic 對外宣布且 AP 報導的新融資後估值；二級市場 US$1.2T 報價未納入。' },
-  { companyName: 'OpenAI', companyType: 'private', valueUsd: 852e9, valueType: 'post_money_valuation', previousValueUsd: 300e9, valueAsOf: '2026-03-31', previousValueAsOf: '2025-03-31', changePeriodLabel: 'vs. 前輪估值', priceChange30dPct: null, businessTags: ['基礎模型', 'AI 平台'], inclusionRationale: '通用模型、ChatGPT、API 與 agentic 工作流構成主要產品與商業模式。', sourceName: 'OpenAI', sourceUrl: 'https://openai.com/index/accelerating-the-next-phase-ai/', sourcePublishedAt: '2026-03-31', sourceTier: 'official', methodologyNote: '採最近一輪已完成且由公司揭露的投後估值。' },
-  { companyName: 'Databricks', companyType: 'private', valueUsd: 134e9, valueType: 'financing_valuation', previousValueUsd: 100e9, valueAsOf: '2026-02-09', previousValueAsOf: '2025-09-08', changePeriodLabel: 'vs. 前輪估值', priceChange30dPct: null, businessTags: ['資料平台', '企業 AI'], inclusionRationale: '資料湖倉、AI 開發平台與 agent 資料基礎設施是核心業務。', sourceName: 'Databricks / PR Newswire', sourceUrl: 'https://www.prnewswire.com/news-releases/databricks-grows-65-yoy-surpasses-5-4-billion-revenue-run-rate-doubles-down-on-lakebase-and-genie-302682674.html', sourcePublishedAt: '2026-02-09', sourceTier: 'official', methodologyNote: '採已完成融資估值；尚在洽談的更高估值未納入。' },
-  { companyName: 'Figure AI', companyType: 'private', valueUsd: 39e9, valueType: 'post_money_valuation', previousValueUsd: 2.6e9, valueAsOf: '2025-09-16', previousValueAsOf: '2024-02-29', changePeriodLabel: 'vs. 前輪估值', priceChange30dPct: null, businessTags: ['具身 AI', '人形機器人'], inclusionRationale: '以 Helix 具身智慧系統與通用型人形機器人為主要產品。', sourceName: 'Figure AI', sourceUrl: 'https://www.figure.ai/news/series-c', sourcePublishedAt: '2025-09-16', sourceTier: 'official', methodologyNote: '採公司 Series C 公告的投後估值。' },
-  { companyName: 'Safe Superintelligence', companyType: 'private', valueUsd: 32e9, valueType: 'financing_valuation', previousValueUsd: 5e9, valueAsOf: '2025-04-12', previousValueAsOf: '2024-09-04', changePeriodLabel: 'vs. 前輪估值', priceChange30dPct: null, businessTags: ['AI 安全', '前沿研究'], inclusionRationale: '公司專注於安全超級智慧研究，尚未以商業產品收入作為主要估值依據。', sourceName: 'TechCrunch / Financial Times', sourceUrl: 'https://techcrunch.com/2025/04/12/openai-co-founder-ilya-sutskevers-safe-superintelligence-reportedly-valued-at-32b/', sourcePublishedAt: '2025-04-12', sourceTier: 'tier_one_media', methodologyNote: '採媒體報導的已完成融資估值，公司未發布完整輪次公告。' },
-  { companyName: 'Anysphere', companyType: 'private', valueUsd: 29.3e9, valueType: 'financing_valuation', previousValueUsd: 9.9e9, valueAsOf: '2025-11-13', previousValueAsOf: '2025-06-05', changePeriodLabel: 'vs. 前輪估值', priceChange30dPct: null, businessTags: ['AI Coding', '開發工具'], inclusionRationale: 'Cursor 與相關 coding agent 產品將生成式 AI 直接整合進軟體開發流程。', sourceName: 'TechCrunch / Wall Street Journal', sourceUrl: 'https://techcrunch.com/2025/11/13/coding-assistant-cursor-raises-2-3b-5-months-after-its-previous-round/', sourcePublishedAt: '2025-11-13', sourceTier: 'tier_one_media', methodologyNote: '採最近已完成的定價輪次，排除後續洽談與收購選擇權價格。' },
-  { companyName: 'Perplexity', companyType: 'private', valueUsd: 20e9, valueType: 'financing_valuation', previousValueUsd: 18e9, valueAsOf: '2025-09-10', previousValueAsOf: '2025-07-10', changePeriodLabel: 'vs. 前輪估值', priceChange30dPct: null, businessTags: ['AI 搜尋', '消費應用'], inclusionRationale: '以生成式搜尋、研究與瀏覽器產品作為主要使用入口。', sourceName: 'Reuters / The Information', sourceUrl: 'https://www.investing.com/news/stock-market-news/perplexity-finalizes-20-billion-valuation-round-the-information-reports-4234608', sourcePublishedAt: '2025-09-10', sourceTier: 'tier_one_media', methodologyNote: '採投資承諾報導值；Reuters 註明未能獨立核實原始消息。' },
-  { companyName: 'Helsing', companyType: 'private', valueUsd: 13.7e9, valueType: 'financing_valuation', previousValueUsd: 5.4e9, valueAsOf: '2025-06-17', previousValueAsOf: '2024-07-11', changePeriodLabel: 'vs. 前輪估值', priceChange30dPct: null, businessTags: ['國防 AI', '自主系統'], inclusionRationale: '聚焦國防軟體、感知決策與自主系統，反映 AI 在高責任場景的資本需求。', sourceName: 'Tech.eu', sourceUrl: 'https://tech.eu/2025/06/17/helsing-raises-600-million-elevating-valuation-to-eur12bn/', sourcePublishedAt: '2025-06-17', sourceTier: 'tier_one_media', methodologyNote: 'EUR12B 輪次估值以約值換算為 US$13.7B。' },
-  { companyName: 'Mistral AI', companyType: 'private', valueUsd: 13.7e9, valueType: 'financing_valuation', previousValueUsd: 6.2e9, valueAsOf: '2025-09-09', previousValueAsOf: '2024-06-11', changePeriodLabel: 'vs. 前輪估值', priceChange30dPct: null, businessTags: ['基礎模型', '主權 AI'], inclusionRationale: '提供開放權重模型、企業部署與歐洲主權 AI 基礎設施。', sourceName: 'ASML', sourceUrl: 'https://www.asml.com/en/news/press-releases/2025/asml-mistral-ai-enter-strategic-partnership', sourcePublishedAt: '2025-09-09', sourceTier: 'official', methodologyNote: 'EUR11.7B 揭露估值以約值換算；未納入後續募資洽談。' },
-  { companyName: 'Thinking Machines Lab', companyType: 'private', valueUsd: 12e9, valueType: 'financing_valuation', previousValueUsd: null, valueAsOf: '2025-07-15', previousValueAsOf: null, changePeriodLabel: 'vs. 前輪估值', priceChange30dPct: null, businessTags: ['前沿模型', '研究工具'], inclusionRationale: '以前沿模型研究與可協作 AI 系統為定位，估值主要反映團隊與研發預期。', sourceName: 'Reuters', sourceUrl: 'https://finance.yahoo.com/news/mira-muratis-ai-startup-thinking-170344492.html', sourcePublishedAt: '2025-07-15', sourceTier: 'tier_one_media', methodologyNote: '採首輪已完成融資估值，無可比前輪。' },
-  { companyName: 'NVIDIA', companyType: 'public', valueUsd: 4802974000000, valueType: 'market_cap', previousValueUsd: null, valueAsOf: '2026-06-30', previousValueAsOf: '2026-06-01', changePeriodLabel: '2026-06-01 至 2026-06-30', priceChange30dPct: -10.82, businessTags: ['AI 晶片', '計算平台'], inclusionRationale: 'GPU、網路與 CUDA 軟體生態構成 AI 計算基礎設施。', sourceName: 'Nasdaq', sourceUrl: 'https://www.nasdaq.com/market-activity/stocks/nvda', sourcePublishedAt: '2026-06-30', sourceTier: 'exchange', methodologyNote: '顯示公司整體市值；股價變動依兩個指定交易日收盤價計算。' },
-  { companyName: 'Alphabet', companyType: 'public', valueUsd: 4306489231200, valueType: 'market_cap', previousValueUsd: null, valueAsOf: '2026-06-30', previousValueAsOf: '2026-06-01', changePeriodLabel: '2026-06-01 至 2026-06-30', priceChange30dPct: -5.05, businessTags: ['基礎模型', '雲端搜尋'], inclusionRationale: 'Gemini、Google Cloud、搜尋與自研 TPU 形成跨產品 AI 版圖。', sourceName: 'Nasdaq', sourceUrl: 'https://www.nasdaq.com/market-activity/stocks/googl', sourcePublishedAt: '2026-06-30', sourceTier: 'exchange', methodologyNote: '顯示 Alphabet 公司整體市值，不是 AI 部門估值。' },
-  { companyName: 'Apple', companyType: 'public', valueUsd: 4250503201573, valueType: 'market_cap', previousValueUsd: null, valueAsOf: '2026-06-30', previousValueAsOf: '2026-06-01', changePeriodLabel: '2026-06-01 至 2026-06-30', priceChange30dPct: -5.53, businessTags: ['裝置 AI', '消費平台'], inclusionRationale: 'AI 能力透過裝置、作業系統與服務生態進入大規模消費場景。', sourceName: 'Nasdaq', sourceUrl: 'https://www.nasdaq.com/market-activity/stocks/aapl', sourcePublishedAt: '2026-06-30', sourceTier: 'exchange', methodologyNote: '顯示 Apple 公司整體市值，不是 AI 部門估值。' },
-  { companyName: 'Microsoft', companyType: 'public', valueUsd: 2816491018022, valueType: 'market_cap', previousValueUsd: null, valueAsOf: '2026-06-30', previousValueAsOf: '2026-06-01', changePeriodLabel: '2026-06-01 至 2026-06-30', priceChange30dPct: -19, businessTags: ['AI 雲端', '企業軟體'], inclusionRationale: 'Azure AI、Copilot 與企業軟體分發能力將 AI 接入知識工作流程。', sourceName: 'Nasdaq', sourceUrl: 'https://www.nasdaq.com/market-activity/stocks/msft', sourcePublishedAt: '2026-06-30', sourceTier: 'exchange', methodologyNote: '顯示 Microsoft 公司整體市值，不是 AI 部門估值。' },
-  { companyName: 'Amazon', companyType: 'public', valueUsd: 2567614451279, valueType: 'market_cap', previousValueUsd: null, valueAsOf: '2026-06-30', previousValueAsOf: '2026-06-01', changePeriodLabel: '2026-06-01 至 2026-06-30', priceChange30dPct: -8.77, businessTags: ['AI 雲端', '電商物流'], inclusionRationale: 'AWS AI 服務、自研晶片與電商物流場景共同支撐 AI 應用。', sourceName: 'Nasdaq', sourceUrl: 'https://www.nasdaq.com/market-activity/stocks/amzn', sourcePublishedAt: '2026-06-30', sourceTier: 'exchange', methodologyNote: '顯示 Amazon 公司整體市值，不是 AI 部門估值。' },
-  { companyName: 'TSMC', companyType: 'public', valueUsd: 2459400170739, valueType: 'market_cap', previousValueUsd: null, valueAsOf: '2026-06-30', previousValueAsOf: '2026-06-01', changePeriodLabel: '2026-06-01 至 2026-06-30', priceChange30dPct: 9.63, businessTags: ['晶圓代工', 'AI 供應鏈'], inclusionRationale: '先進製程與封裝能力是 AI 加速器供應鏈的關鍵產能基礎。', sourceName: 'Nasdaq', sourceUrl: 'https://www.nasdaq.com/market-activity/stocks/tsm', sourcePublishedAt: '2026-06-30', sourceTier: 'exchange', methodologyNote: '採 Nasdaq ADR 口徑的整體市值與收盤價變動。' },
-  { companyName: 'Broadcom', companyType: 'public', valueUsd: 1785519848309, valueType: 'market_cap', previousValueUsd: null, valueAsOf: '2026-06-30', previousValueAsOf: '2026-06-01', changePeriodLabel: '2026-06-01 至 2026-06-30', priceChange30dPct: -17.88, businessTags: ['定制晶片', 'AI 網路'], inclusionRationale: '定制加速器與資料中心網路產品支援大型 AI 叢集。', sourceName: 'Nasdaq', sourceUrl: 'https://www.nasdaq.com/market-activity/stocks/avgo', sourcePublishedAt: '2026-06-30', sourceTier: 'exchange', methodologyNote: '顯示 Broadcom 公司整體市值，不是 AI 部門估值。' },
-  { companyName: 'Tesla', companyType: 'public', valueUsd: 1566625098310, valueType: 'market_cap', previousValueUsd: null, valueAsOf: '2026-06-30', previousValueAsOf: '2026-06-01', changePeriodLabel: '2026-06-01 至 2026-06-30', priceChange30dPct: 1.13, businessTags: ['自動駕駛', '機器人'], inclusionRationale: '自動駕駛、訓練基礎設施與人形機器人構成主要 AI 關聯。', sourceName: 'Nasdaq', sourceUrl: 'https://www.nasdaq.com/market-activity/stocks/tsla', sourcePublishedAt: '2026-06-30', sourceTier: 'exchange', methodologyNote: '顯示 Tesla 公司整體市值；AI 僅是多項業務與市場敘事之一。' },
-  { companyName: 'Meta', companyType: 'public', valueUsd: 1430046152541, valueType: 'market_cap', previousValueUsd: null, valueAsOf: '2026-06-30', previousValueAsOf: '2026-06-01', changePeriodLabel: '2026-06-01 至 2026-06-30', priceChange30dPct: -6.19, businessTags: ['開放模型', '推薦系統'], inclusionRationale: 'Llama、推薦系統、廣告模型與消費產品形成大規模 AI 應用。', sourceName: 'Nasdaq', sourceUrl: 'https://www.nasdaq.com/market-activity/stocks/meta', sourcePublishedAt: '2026-06-30', sourceTier: 'exchange', methodologyNote: '顯示 Meta 公司整體市值，不是 AI 部門估值。' },
-  { companyName: 'Oracle', companyType: 'public', valueUsd: 427749943500, valueType: 'market_cap', previousValueUsd: null, valueAsOf: '2026-06-30', previousValueAsOf: '2026-06-01', changePeriodLabel: '2026-06-01 至 2026-06-30', priceChange30dPct: -40.94, businessTags: ['AI 雲端', '企業資料庫'], inclusionRationale: '雲端算力、資料庫與企業資料整合是部署 AI 工作負載的重要基礎。', sourceName: 'Nasdaq', sourceUrl: 'https://www.nasdaq.com/market-activity/stocks/orcl', sourcePublishedAt: '2026-06-30', sourceTier: 'exchange', methodologyNote: '顯示 Oracle 公司整體市值，不是 AI 部門估值。' },
-];
-
-const formatMainUsd = value => {
-  if (value >= 1e12) return `US$${(value / 1e12).toFixed(2).replace(/\.00$/, '')}T`;
-  if (value >= 1e9) return `US$${(value / 1e9).toFixed(value % 1e9 === 0 ? 0 : 1).replace(/\.0$/, '')}B`;
-  return `US$${Math.round(value / 1e6)}M`;
-};
-const getMainCompanyInitials = companyName => {
-  const words = companyName.replace(/\.ai/gi, '').trim().split(/\s+/).filter(Boolean);
-  if (words.length > 1) return words.slice(0, 2).map(word => word[0]).join('').toUpperCase();
-  return words[0].slice(0, 2).toUpperCase();
-};
-const createMainCompanyLogoMarkup = (company, variant) => {
-  const wrap = inner => `<span class="valuation-logo valuation-logo-${variant}" aria-hidden="true">${inner}</span>`;
-  const fallbackMarkup = `<span class="valuation-logo-fallback">${getMainCompanyInitials(company.companyName)}</span>`;
-  const fallback = wrap(fallbackMarkup);
-  const logoFile = mainCompanyLogoFiles[company.companyName];
-  if (!logoFile) return fallback;
-  return wrap(`${fallbackMarkup}<img src="${logoFile}" alt="" loading="lazy" onerror="this.hidden=true">`);
-};
-const getMainChangePct = company => {
-  if (company.companyType === 'public') return Number.isFinite(company.priceChange30dPct) ? company.priceChange30dPct : null;
-  return Number.isFinite(company.previousValueUsd) && company.previousValueUsd > 0
-    ? ((company.valueUsd - company.previousValueUsd) / company.previousValueUsd) * 100
-    : null;
-};
-const createMainChangeMarkup = company => {
-  const pct = getMainChangePct(company);
-  if (pct === null) return '<span class="valuation-change neutral">無可比資料</span>';
-  const sign = pct > 0 ? '+' : '';
-  const direction = pct > 0 ? '上升' : pct < 0 ? '下降' : '持平';
-  const className = pct > 0 ? 'positive' : pct < 0 ? 'negative' : 'neutral';
-  return `<span class="valuation-change ${className}">${sign}${pct.toFixed(1)}% ${direction}</span>`;
-};
-const getMainRankedCompanies = type => mainCompanyValuationData
-  .filter(company => company.companyType === type)
-  .sort((a, b) => b.valueUsd - a.valueUsd)
-  .slice(0, 10)
-  .map((company, index) => ({ ...company, rank: index + 1 }));
-const createMainDetailButtonAttributes = company => `type="button" data-valuation-company-type="${company.companyType}" data-valuation-company-rank="${company.rank}" aria-controls="valuation-company-detail-drawer"`;
-const renderValuationRanking = type => {
-  const ranked = getMainRankedCompanies(type);
-  const topThree = document.querySelector(`[data-valuation-top-three="${type}"]`);
-  const list = document.querySelector(`[data-valuation-list="${type}"]`);
-  if (!topThree || !list) return;
-  topThree.innerHTML = ranked.slice(0, 3).map(company => `
-    <button class="valuation-company-card" ${createMainDetailButtonAttributes(company)}>
-      <span class="valuation-card-top"><span class="valuation-rank">#${company.rank}</span><span class="material-symbols-outlined" aria-hidden="true">north_east</span></span>
-      ${createMainCompanyLogoMarkup(company, 'card')}
-      <span class="valuation-company-name">${company.companyName}</span>
-      <span class="valuation-company-value">${formatMainUsd(company.valueUsd)}</span>
-      ${createMainChangeMarkup(company)}
-      <span class="valuation-tag-list">${company.businessTags.slice(0, 2).map(tag => `<span class="valuation-tag">${tag}</span>`).join('')}</span>
-    </button>
-  `).join('');
-  list.innerHTML = ranked.slice(3).map(company => `
-    <tr>
-      <td>${company.rank}</td>
-      <td><button class="valuation-row-button" ${createMainDetailButtonAttributes(company)}>${createMainCompanyLogoMarkup(company, 'row')}<span>${company.companyName}</span></button></td>
-      <td>${formatMainUsd(company.valueUsd)}</td>
-      <td>${createMainChangeMarkup(company)}</td>
-      <td>${company.businessTags.join(' · ')}</td>
-    </tr>
-  `).join('');
-  document.querySelectorAll(`[data-valuation-company-type="${type}"]`).forEach(button => {
-    button.addEventListener('click', () => openMainValuationCompanyDetail(type, Number(button.dataset.valuationCompanyRank)));
-  });
-};
-const openMainValuationCompanyDetail = (type, rank) => {
-  const company = getMainRankedCompanies(type).find(item => item.rank === rank);
-  if (!company) return;
-  closeDrawers();
-  document.getElementById('valuation-company-drawer-logo').innerHTML = createMainCompanyLogoMarkup(company, 'drawer');
-  document.getElementById('valuation-company-drawer-kicker').textContent = `${type === 'private' ? '私人公司估值' : '上市公司市值'} · #${company.rank}`;
-  document.getElementById('valuation-company-drawer-title').textContent = company.companyName;
-  document.getElementById('valuation-company-drawer-value').textContent = formatMainUsd(company.valueUsd);
-  document.getElementById('valuation-company-drawer-change').innerHTML = createMainChangeMarkup(company);
-  document.getElementById('valuation-company-drawer-summary').textContent = company.inclusionRationale;
-  const previousLabel = company.companyType === 'public'
-    ? `股價比較起日：${company.previousValueAsOf}`
-    : Number.isFinite(company.previousValueUsd) ? `${formatMainUsd(company.previousValueUsd)}（${company.previousValueAsOf}）` : '無可比資料';
-  document.getElementById('valuation-company-drawer-data').innerHTML = [
-    `數值基準日：${company.valueAsOf}`,
-    `${company.companyType === 'public' ? '' : '前期數值：'}${previousLabel}`,
-    `比較期間：${company.changePeriodLabel}`,
-    `核心業務：${company.businessTags.join('、')}`,
-    `資料口徑：${company.methodologyNote}`,
-    `來源：<a href="${company.sourceUrl}" target="_blank" rel="noopener noreferrer">${company.sourceName}（${company.sourcePublishedAt}）</a>`,
-  ].map(item => `<li>${item}</li>`).join('');
-  document.body.classList.add('drawer-open');
-  const drawerEl = document.getElementById('valuation-company-detail-drawer');
-  drawerEl.setAttribute('aria-hidden', 'false');
-  drawerEl.querySelector('[data-drawer-close]').focus();
-};
-const applyValuationTab = (type, moveFocus = false) => {
-  document.querySelectorAll('[data-valuation-tab]').forEach(button => {
-    const selected = button.dataset.valuationTab === type;
-    button.setAttribute('aria-selected', String(selected));
-    button.tabIndex = selected ? 0 : -1;
-    if (selected && moveFocus) button.focus();
-  });
-  document.querySelectorAll('[data-valuation-panel]').forEach(panel => {
-    panel.hidden = panel.dataset.valuationPanel !== type;
-  });
-};
-const handleValuationTabKeydown = event => {
-  const tabs = [...document.querySelectorAll('[data-valuation-tab]')];
-  const currentIndex = tabs.indexOf(event.currentTarget);
-  let nextIndex = currentIndex;
-  if (event.key === 'ArrowRight') nextIndex = (currentIndex + 1) % tabs.length;
-  else if (event.key === 'ArrowLeft') nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
-  else if (event.key === 'Home') nextIndex = 0;
-  else if (event.key === 'End') nextIndex = tabs.length - 1;
-  else return;
-  event.preventDefault();
-  applyValuationTab(tabs[nextIndex].dataset.valuationTab, true);
-};
-renderValuationRanking('private');
-renderValuationRanking('public');
-document.querySelectorAll('[data-valuation-tab]').forEach(button => {
-  button.addEventListener('click', () => applyValuationTab(button.dataset.valuationTab));
-  button.addEventListener('keydown', handleValuationTabKeydown);
-});
-
-const metricArticleData = [
-  {
-    title: '組織定期使用 AI',
-    stat: '88%',
-    summary: '這個指標用來說明 AI 已從少數團隊試用，進入多數組織至少一個業務功能的日常使用。它代表 AI 已經成為企業工作流的普遍工具，但不代表每個組織都已經把 AI 接進核心系統。判讀時需進一步確認，使用範圍是否從個人效率推進到跨部門流程、治理、資料品質與財務成果。換句話說，88% 是普及度訊號，不是成熟度保證。',
-    links: [
-      { title: 'The State of AI: Global Survey 2025', source: 'McKinsey', url: 'https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai' },
-      { title: '2026 AI Index Report: Economy', source: 'Stanford HAI', url: 'https://hai.stanford.edu/ai-index/2026-ai-index-report/economy' },
-      { title: 'AI at work but not at scale', source: 'McKinsey Week in Charts', url: 'https://www.mckinsey.com/featured-insights/week-in-charts/ai-at-work-but-not-at-scale' },
-      { title: 'State of AI in the Enterprise 2026', source: 'Deloitte', url: 'https://www.deloitte.com/us/en/what-we-do/capabilities/applied-artificial-intelligence/content/state-of-generative-ai-in-enterprise.html' },
-    ],
-    notes: [
-      { title: '口徑提示', source: '使用率 vs. 規模化', text: '「定期使用 AI」通常指組織至少在一個業務功能中使用 AI，不等於全公司部署，也不等於已有明確財務回報。' },
-      { title: '閱讀方式', source: '採用成熟度', text: '這個數字適合放在總覽，說明 AI 已進入主流；若要判斷成熟度，需搭配 agentic AI 規模化、治理制度與工作流重組程度一起看。' },
-      { title: '決策含義', source: '組織能力', text: '企業接下來的差異不在是否使用 AI，而在是否能建立資料、權限、審核、回饋與責任分工，讓 AI 產出進入正式流程。' },
-      { title: '來源判讀', source: 'Deloitte / OECD / Microsoft', text: 'Deloitte 可用來理解企業準備度；OECD 與 Microsoft 則提供企業採用條件與全球擴散脈絡，但不直接替代本頁產業估計。' },
-    ]
-  },
-  {
-    title: 'AI 對全球 GDP 貢獻預測',
-    stat: 'US$15.7 兆',
-    summary: '這是 PwC 對 2030 年 AI 潛在經濟貢獻的估計，主要來自兩個方向：一是企業透過自動化、預測、輔助決策與流程重組提升生產力；二是 AI 強化產品與服務，帶動新的需求與消費。它適合用來描述長期經濟機會，但不應被解讀為短期已實現收益，也不應直接套用到單一企業或單一產業。',
-    links: [
-      { title: 'PwC Global Artificial Intelligence Study', source: 'PwC', url: 'https://www.pwc.co.nz/insights-and-publications/2023-publications/artificial-intelligence-study.html' },
-      { title: 'Scaling AI capabilities with generative investment', source: 'PwC', url: 'https://www.pwc.com/us/en/tech-effect/ai-analytics/scaling-ai-capabilities-with-generative-investment.html' },
-      { title: 'Sizing the prize: What is the real value of AI?', source: 'PwC report PDF', url: 'https://www.pwc.com/gx/en/issues/analytics/assets/pwc-ai-analysis-sizing-the-prize-report.pdf' },
-    ],
-    notes: [
-      { title: '口徑提示', source: '2030 年估計', text: 'US$15.7 兆是長期潛在經濟貢獻估計，不是已發生收入，也不是每年固定新增 GDP。引用時需標示「估計」與年份。' },
-      { title: '閱讀方式', source: '宏觀機會', text: '這個數字適合回答「AI 的長期經濟重要性」，但若要做產業或公司判斷，仍需回到投資強度、資料可用性、採用成熟度與商業模式。' },
-      { title: '決策含義', source: '投資評估', text: '企業不應只因宏觀估計而增加投入，還要拆解 AI 能改善哪些流程、改善幅度如何衡量，以及是否能轉成毛利、成本、風險或成長指標。' },
-    ]
-  },
-  {
-    title: 'Agentic AI 規模化',
-    stat: '23%',
-    summary: '這個指標說明只有一部分組織把 agentic AI 從試驗推進到企業某處的擴大部署。它反映的不是工具熱度，而是企業是否能讓 AI agent 在明確邊界內執行任務、呼叫工具、交接人工、記錄決策並接受稽核。23% 的重點在於落差：AI 使用率已高，但能把 agentic AI 制度化的人仍少，這正是資料、權限、流程與治理能力的門檻。',
-    links: [
-      { title: 'The State of AI: Global Survey 2025', source: 'McKinsey', url: 'https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai' },
-      { title: '2026 AI Index Report: Economy', source: 'Stanford HAI', url: 'https://hai.stanford.edu/ai-index/2026-ai-index-report/economy' },
-      { title: 'The state of AI 2025 PDF', source: 'McKinsey report PDF', url: 'https://www.mckinsey.com/~/media/mckinsey/business%20functions/quantumblack/our%20insights/the%20state%20of%20ai/2025/the-state-of-ai-how-organizations-are-rewiring-to-capture-value_final.pdf' },
-      { title: 'AI Radar 2026', source: 'BCG', url: 'https://web-assets.bcg.com/73/8e/cc44cbc14a3b81695f8a3de28ff1/ai-radar-2026-web-jan-2026-edit.pdf' },
-    ],
-    notes: [
-      { title: '成熟度判讀', source: '實驗 vs. 部署', text: '規模化通常代表 agentic AI 不只存在於 demo，而是已進入某些業務流程，並具備權限、監控、例外處理與責任歸屬。' },
-      { title: '閱讀方式', source: '流程重組', text: '這個數字可用來解釋「AI 普及」與「AI 真的重組流程」之間仍有落差，尤其在高風險或跨系統流程中更明顯。' },
-      { title: '決策含義', source: '治理門檻', text: '若要推進 agentic AI，企業需要先定義任務邊界、資料來源、人工覆核點、錯誤回報與稽核紀錄，而不是只採購更多工具。' },
-      { title: '來源判讀', source: 'BCG / EY / Wharton', text: '這些來源可用來觀察自主型 AI、投資回報、決策權與治理成熟度；跨報告比較數字前，仍需確認樣本與調查定義。' },
-    ]
-  },
-  {
-    title: 'Agentic AI 實驗中',
-    stat: '39%',
-    summary: '這個指標代表許多組織已開始測試 AI agents，但仍停留在探索、原型或局部任務驗證。這個階段很重要，因為它會暴露哪些工作適合交給 agent、哪些任務仍需要人工判斷、哪些資料無法支撐自動化，以及哪些流程缺少清楚的責任邊界。39% 表示市場正在快速試探，但真正轉成規模化仍需要組織能力跟上。',
-    links: [
-      { title: 'The State of AI: Global Survey 2025', source: 'McKinsey', url: 'https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai' },
-      { title: 'AI at work but not at scale', source: 'McKinsey Week in Charts', url: 'https://www.mckinsey.com/featured-insights/week-in-charts/ai-at-work-but-not-at-scale' },
-      { title: '2026 AI Index Report', source: 'Stanford HAI', url: 'https://hai.stanford.edu/ai-index/2026-ai-index-report' },
-      { title: '2025 AI Adoption Report', source: 'Wharton', url: 'https://knowledge.wharton.upenn.edu/special-report/2025-ai-adoption-report/' },
-    ],
-    notes: [
-      { title: '成熟度判讀', source: '探索階段', text: '實驗中不代表沒有價值，而是組織仍在找合適任務、衡量方式、資料條件與治理邊界。這通常是規模化之前的必要學習。' },
-      { title: '閱讀方式', source: '與 23% 對照', text: '39% 實驗中需要和 23% 規模化一起看：兩者差距越大，越表示市場熱度高，但正式部署仍被流程、風險與資料條件卡住。' },
-      { title: '決策含義', source: '試點設計', text: '好的實驗不只是做 demo，而是要設計成功指標、失敗條件、人工交接、資料品質檢查與是否值得擴大部署的判斷標準。' },
-    ]
-  },
-];
-const articleDrawer = document.getElementById('article-detail-drawer');
-const articleDrawerTitle = document.getElementById('article-drawer-title');
-const articleDrawerStat = document.getElementById('article-drawer-stat');
-const articleDrawerSummary = document.getElementById('article-drawer-summary');
-const articleLinks = document.getElementById('article-links');
-const articleNotes = document.getElementById('article-notes');
-const renderArticleLinks = links => {
-  articleLinks.innerHTML = links.map(link => `<li><a href="${link.url}" target="_blank" rel="noopener noreferrer">${link.title}</a><span class="article-link-source">${link.source}</span></li>`).join('');
-};
-const openMetricArticles = item => {
-  document.querySelectorAll('.impact-detail-drawer').forEach(drawerEl => {
-    drawerEl.setAttribute('aria-hidden', 'true');
-  });
-  articleDrawerTitle.textContent = item.title;
-  articleDrawerStat.textContent = item.stat;
-  articleDrawerSummary.textContent = item.summary;
-  renderArticleLinks(item.links);
-  articleNotes.innerHTML = item.notes.map(note => `<li><strong>${note.title}</strong>：${note.text}<span class="note-source">${note.source}</span></li>`).join('');
-  document.body.classList.add('drawer-open');
-  articleDrawer.setAttribute('aria-hidden', 'false');
-  articleDrawer.querySelector('[data-drawer-close]').focus();
-};
-document.querySelectorAll('[data-metric-index]').forEach(btn => {
-  btn.addEventListener('click', () => openMetricArticles(metricArticleData[Number(btn.dataset.metricIndex)]));
-});
-
-const industries = [
-  { name: '金融科技', pct: 88, marketSize: 72, color: '#378ADD', note: '資料密度高、交易流程數位化完整，AI 最容易先進入風控、反詐欺與授信模型。', basis: '2025 年分析估計；可搭配 OECD 企業採用與 Microsoft diffusion 脈絡閱讀，不與外部調查口徑混算。市場規模屬大型。' },
-  { name: '科技軟體', pct: 85, marketSize: 90, color: '#378ADD', note: '軟體團隊能快速把 AI 接進開發、測試、客服與資料分析流程，導入阻力相對低。', basis: '2025 年分析估計；可搭配 OECD 企業採用與 Microsoft diffusion 脈絡閱讀，不與外部調查口徑混算。市場規模屬大型。' },
-  { name: '醫療健康', pct: 74, marketSize: 68, color: '#1D9E75', note: 'AI 在影像判讀、病歷摘要與分診輔助中成長快，但受法規、責任與資料品質限制。', basis: '2025 年分析估計；治理阻力可搭配 WEF AI in Action 與 OECD AI governance 脈絡閱讀。市場規模偏大。' },
-  { name: '製造業', pct: 68, marketSize: 75, color: '#1D9E75', note: '主要落在預測維護、機器視覺與排程最佳化，價值大但需要設備資料串接。', basis: '2025 年分析估計；可搭配 WEF 產業轉型與 BCG impact gap 脈絡閱讀。市場規模大型。' },
-  { name: '零售電商', pct: 65, marketSize: 54, color: '#D85A30', note: '推薦、搜尋、客服與促銷生成最容易落地，成效通常直接反映在轉換與留存。', basis: '2025 年分析估計；可搭配 Deloitte / Wharton 企業採用與 ROI 脈絡閱讀。市場規模中大型。' },
-  { name: '物流運輸', pct: 61, marketSize: 48, color: '#D85A30', note: 'AI 能改善路線、倉儲與需求預測，但實際效益取決於即時資料與跨系統整合。', basis: '2025 年分析估計；可搭配 WEF 產業轉型與 OECD 採用條件脈絡閱讀。市場規模中等。' },
-  { name: '教育', pct: 52, marketSize: 35, color: '#D4537E', note: 'AI 可用於個人化練習、內容生成與學習輔助，但制度、評量與教師角色仍在調整。', basis: '2025 年分析估計；人才與技能轉型可搭配 WEF Future of Jobs 脈絡閱讀。市場規模較小。' },
-  { name: '法律服務', pct: 41, marketSize: 28, color: '#D4537E', note: '文件審查與案例檢索能明顯提速，但專業責任、引用可信度與風險判斷限制導入。', basis: '2025 年分析估計；治理與信任可搭配 OECD / KPMG 脈絡閱讀。市場規模較小。' },
-];
-
-const barsEl = document.getElementById('bars');
-const sortSelect = document.querySelector('[data-sort-select]');
-const getSortedIndustries = mode => {
-  const data = industries.map((item, index) => ({ ...item, index }));
-  if (mode === 'adoption-asc') return data.sort((a, b) => a.pct - b.pct);
-  if (mode === 'market-desc') return data.sort((a, b) => b.marketSize - a.marketSize);
-  if (mode === 'market-asc') return data.sort((a, b) => a.marketSize - b.marketSize);
-  if (mode === 'default') return data.sort((a, b) => a.index - b.index);
-  return data.sort((a, b) => b.pct - a.pct);
-};
-const renderIndustries = (mode = 'adoption-desc') => {
-  barsEl.innerHTML = '';
-  getSortedIndustries(mode).forEach(ind => {
-    barsEl.innerHTML += `
-    <div class="industry-row" tabindex="0" aria-label="${ind.name} AI 滲透率 ${ind.pct}%">
-      <div class="industry-name">${ind.name}</div>
-      <div class="bar-bg"><div class="bar-fill" style="width:${ind.pct}%;background:${ind.color}"></div></div>
-      <div class="pct">${ind.pct}%</div>
-      <div class="adoption-tooltip" role="tooltip">
-        <div class="tooltip-title">${ind.name}：${ind.pct}%</div>
-        <div>${ind.note}</div>
-        <div class="tooltip-meta">${ind.basis} 市場規模指數：${ind.marketSize}。</div>
-      </div>
-    </div>`;
-  });
-};
-sortSelect.addEventListener('change', () => {
-  renderIndustries(sortSelect.value);
-});
-renderIndustries('adoption-desc');
-
-const clusterData = [
-  {
-    kicker: '高滲透、高影響',
-    title: '科技軟體、金融服務、行銷內容、客服銷售',
-    summary: '這一群的共同特徵是資料密度高、流程已數位化，AI 很容易接進既有工具鏈與客戶互動節點。影響通常先出現在速度、成本與準確率，接著才改變審核、交接與品質治理。',
-    landing: ['coding 輔助、測試生成與文件摘要', '風險偵測、授信評分與合規摘要', '內容生成、活動變體與受眾分群', '客服摘要、知識庫回覆與銷售線索排序'],
-    metrics: ['交付週期與開發 lead time', '人工覆核成本與模型誤判率', '客服解決時間與銷售轉換率', '品牌一致性與內容品質通過率'],
-    watch: ['workflow 先行，重點從工具導入轉向治理、審核與責任分工。', '若缺少審核規則，速度提升會放大安全、法遵與品牌風險。'],
-    terms: [
-      { title: '科技軟體', text: '包含 SaaS、平台、開發工具與資料產品；AI 主要影響開發、測試、文件、客服與內部工具建置。' },
-      { title: '金融服務', text: '包含銀行、保險、支付、投資與金融科技；AI 常用於風控、反詐欺、授信、客服與合規摘要。' },
-      { title: '行銷內容', text: '包含廣告、社群、CRM、內容營運與成長行銷；AI 能快速產生受眾版本、文案變體與轉換分析。' },
-      { title: '客服銷售', text: '包含客服中心、售前諮詢、售後支援與業務開發；AI 主要改善回覆速度、線索排序、摘要與知識庫查找。' },
-    ]
-  },
-  {
-    kicker: '高滲透、低確定性',
-    title: '內容、設計、媒體、教育',
-    summary: '這一群的工具滲透快，因為 AI 大幅降低產出門檻；但成效是否穩定，取決於題目判斷、品質標準、脈絡維持與評量制度。',
-    landing: ['草稿生成、素材變體與版型探索', '研究摘要、教材改寫與題庫生成', '新聞摘要、腳本草稿與多格式內容轉換', '學習輔助、個人化練習與即時回饋'],
-    metrics: ['產出速度與修改回合數', '品質通過率與品牌一致性', '學習完成率與弱點改善速度', '引用正確率與原創性風險'],
-    watch: ['品質與治理會比產量更重要。', '需要建立評量標準、引用規則、人類判斷流程與低品質內容過濾機制。'],
-    terms: [
-      { title: '內容', text: '包含文案、報告、社群、腳本與知識文件；AI 能加速草稿與變體，但需要人工定義觀點與品質。' },
-      { title: '設計', text: '包含介面、視覺、體驗流程與設計系統；AI 可加速產出，但核心價值會轉向問題定義與品質判斷。' },
-      { title: '媒體', text: '包含新聞、影音、出版與社群平台；AI 可協助摘要、剪輯與生成，但版權、可信度與編輯責任更重要。' },
-      { title: '教育', text: '包含學校、補教、企業學習與教育科技；AI 可提供個人化練習與回饋，但評量制度與教師角色需要重整。' },
-    ]
-  },
-  {
-    kicker: '中滲透、高潛力',
-    title: '醫療、製造、物流、能源、農業',
-    summary: '這一群落地速度較慢，但一旦資料、設備與現場流程接起來，改善空間巨大。AI 的價值通常不是單點模型，而是預測、排程、品管與資源配置連成營運閉環。',
-    landing: ['影像判讀、分診輔助與病歷摘要', '預測維護、機器視覺與產線排程', '路線最佳化、倉儲調度與需求預測', '能源用量預測、灌溉決策與產量預估'],
-    metrics: ['停機時間、良率與報廢率', '診斷周轉時間與行政工時', '準時率、空車率與單位配送成本', '能源耗用、產量波動與資源使用效率'],
-    watch: ['資料串接與現場採納是放大效益的前提。', '若只做單點模型，價值容易停在試點，難以進入正式作業流程。'],
-    terms: [
-      { title: '醫療', text: '包含醫院、診所、影像、照護與藥物流程；AI 可輔助判讀與摘要，但責任歸屬與臨床驗證要求高。' },
-      { title: '製造', text: '包含產線、品管、設備維護與供應鏈；AI 常用於瑕疵檢測、預測維護與排程最佳化。' },
-      { title: '物流', text: '包含運輸、倉儲、配送與供應鏈協調；AI 可改善路線、需求預測與資源調度。' },
-      { title: '能源', text: '包含電力、用能管理、設備監控與需求預測；AI 主要改善調度、維護與耗能效率。' },
-      { title: '農業', text: '包含作物監測、灌溉、病蟲害、產量預測與供應鏈；AI 價值取決於感測資料與現場採納。' },
-    ]
-  },
-  {
-    kicker: '低滲透、高阻力',
-    title: '公共部門、傳統中小企業、低數位化產業',
-    summary: '這一群的阻力通常不是沒有 AI 工具，而是資料分散、流程未標準化、採購週期長、責任制度慢。適合先從低風險輔助場景切入，逐步建立資料秩序與治理能力。',
-    landing: ['文件整理、表單摘要與內部知識庫', '客服回覆、流程提醒與行政輔助', '採購、審核、申請流程的資料整理', '低風險內部流程的自動化輔助'],
-    metrics: ['文件處理時間與人工重工率', '回覆一致性與知識庫命中率', '資料完整度與跨部門交接時間', '流程標準化程度與治理成熟度'],
-    watch: ['先建立低風險場景與資料秩序，再逐步擴大到治理、採購、責任制度與系統整合。', '低滲透不代表低價值，往往代表前置整理成本較高。'],
-    terms: [
-      { title: '公共部門', text: '包含政府機關、公營機構與公共服務；AI 可先改善文件、客服與知識管理，但採購、法規與責任制度較慢。' },
-      { title: '傳統中小企業', text: '包含數位化程度不一的地方服務、製造、貿易與營運型企業；AI 價值常從行政、客服與資料整理開始。' },
-      { title: '低數位化產業', text: '指資料分散、流程仰賴人工經驗、系統整合不足的產業；AI 導入前通常要先補資料與流程標準化。' },
-    ]
-  },
-];
-
-const impactData = [
-  { icon: 'ti-chart-line', industry: '金融科技', title: '風險偵測準確率', stat: '+43%', badge: 'badge-high', level: '高滲透', desc: 'AI 能在交易、授信與詐欺偵測中提前標記異常，降低誤判與人工覆核成本。', detailUseCases: ['交易異常偵測與反詐欺警示', '授信風險評分與客戶分群', '客服與合規文件摘要'], detailMechanism: ['把原本由人工事後檢查的交易與信用訊號，前移到即時偵測與預警。', '讓風控、客服與合規團隊共用同一套風險線索，縮短判斷與覆核時間。'], detailMetrics: ['誤報率與漏報率', '授信審核時間', '詐欺損失率', '人工覆核成本'], detailRisks: ['模型誤判可能造成客戶體驗與合規風險', '資料偏差會影響授信公平性'], detailWatch: ['是否能把模型輸出接進人工覆核流程', '模型治理、稽核與可解釋性是否同步成熟'] },
-  { icon: 'ti-heart-rate-monitor', industry: '醫療健康', title: '診斷輔助效率', stat: '+38%', badge: 'badge-high', level: '高滲透', desc: '把診斷輔助接進分診、影像判讀與病歷摘要，可縮短醫師前置整理時間。', detailUseCases: ['醫學影像輔助判讀', '病歷摘要與照護紀錄整理', '分診與檢查優先順序建議'], detailMechanism: ['把病歷、影像與檢查資料整理成醫師可快速判讀的輔助訊號。', '降低行政整理時間，讓臨床人員把注意力放在診斷判斷與病患溝通。'], detailMetrics: ['影像判讀周轉時間', '病歷摘要節省時間', '醫師行政工時', '臨床覆核一致性'], detailRisks: ['責任歸屬與醫療法規限制高', '資料品質與院內系統整合成本高'], detailWatch: ['AI 是否能降低行政負擔而非增加醫師確認成本', '是否建立臨床驗證與錯誤回報機制'] },
-  { icon: 'ti-robot', industry: '製造業', title: '生產良率提升', stat: '+22%', badge: 'badge-mid', level: '中滲透', desc: '把停機預警與品管檢測接到產線資料，可提前發現缺陷並穩定良率。', detailUseCases: ['機器視覺瑕疵檢測', '設備預測維護', '產線排程與耗材預測'], detailMechanism: ['把設備、影像與產線資料轉成即時異常訊號，讓問題在停機或大量報廢前被發現。', '把維修、品管與排程接成同一個改善循環，降低單點優化的落差。'], detailMetrics: ['良率與報廢率', '非預期停機時間', '維修反應時間', '單位生產成本'], detailRisks: ['老舊設備資料難以串接', '現場流程變更需要訓練與 SOP 調整'], detailWatch: ['資料是否能從單點設備擴展到整條產線', 'AI 建議是否能進入排程與維修決策'] },
-  { icon: 'ti-shopping-cart', industry: '零售電商', title: '個人化推薦轉換', stat: '+31%', badge: 'badge-mid', level: '中滲透', desc: 'AI 讓商品推薦、搜尋排序與促銷訊息更貼近個別需求，提升轉換率。', detailUseCases: ['商品推薦與搜尋排序', '客服機器人與售後摘要', '促銷文案與受眾分群'], detailMechanism: ['把瀏覽、購買、客服與促銷資料串起來，讓推薦與溝通更貼近個別需求。', '將內容生成、受眾分群與轉換追蹤形成快速迭代，縮短行銷實驗週期。'], detailMetrics: ['轉換率與客單價', '搜尋成功率', '客服解決時間', '回購率與留存率'], detailRisks: ['過度個人化可能造成隱私疑慮', '推薦品質不佳會放大庫存與品牌問題'], detailWatch: ['推薦提升是否反映在毛利與留存，而不只是點擊率', '生成內容是否維持品牌一致性'] },
-  { icon: 'ti-truck', industry: '物流運輸', title: '路線最佳化節省', stat: '15%', badge: 'badge-mid', level: '中滲透', desc: '即時路況、倉儲與需求預測能一起進入排程模型，減少空車與等待時間。', detailUseCases: ['路線最佳化與配送排序', '需求預測與倉儲調度', '車隊維修與燃料效率分析'], detailMechanism: ['把路況、訂單、倉儲與車隊狀態即時納入排程，減少等待與空車。', '讓需求預測連動補貨、派車與倉儲配置，使局部節省轉成整體運輸效率。'], detailMetrics: ['準時配送率', '空車率與載運率', '單位配送成本', '燃料使用量'], detailRisks: ['跨系統資料延遲會降低模型效益', '突發事件仍需要人工調度判斷'], detailWatch: ['是否能把路線建議接進派車與倉儲系統', '節省是否體現在準時率與單位配送成本'] },
-  { icon: 'ti-school', industry: '教育', title: '學習完成率提升', stat: '+19%', badge: 'badge-low', level: '成長中', desc: 'AI 可依學習狀態調整練習與回饋，但成效仍取決於課程設計與教師介入。', detailUseCases: ['個人化練習與即時回饋', '教材生成與題庫改寫', '學習弱點摘要與輔導建議'], detailMechanism: ['依照學習狀態調整練習難度與回饋節奏，讓教師更快掌握學生弱點。', '把教材改寫、題庫生成與學習摘要自動化，釋放教師備課與追蹤時間。'], detailMetrics: ['完成率與持續學習率', '弱點改善速度', '教師備課時間', '學習成效評量差異'], detailRisks: ['學習成效難以只用完成率衡量', '學生過度依賴 AI 可能削弱思考訓練'], detailWatch: ['AI 是否補強教師回饋，而非取代教學設計', '評量制度是否能區分輔助與代寫'] },
-  { icon: 'ti-building', industry: '法律服務', title: '文件審查速度', stat: '10×', badge: 'badge-low', level: '成長中', desc: '合約摘要、案例檢索與條款比對速度提高，但最終風險判斷仍需專業把關。', detailUseCases: ['合約條款比對與風險提示', '案例檢索與法規摘要', '盡職調查文件整理'], detailMechanism: ['把大量文件初步分類、摘要與比對，讓法律專業人員把時間集中在風險判斷。', '將引用來源與條款差異整理成可覆核線索，而不是直接取代法律意見。'], detailMetrics: ['文件審查時間', '條款比對覆蓋率', '引用來源可追溯性', '律師覆核修正率'], detailRisks: ['幻覺與錯誤引用會造成重大風險', '不同法域與案件情境需要專業判斷'], detailWatch: ['是否建立引用來源追蹤與律師覆核機制', '效率提升是否轉化為更高品質的策略判斷'] },
-  { icon: 'ti-brain', industry: '科技軟體', title: '開發者生產力', stat: '+55%', badge: 'badge-high', level: '高滲透', desc: 'AI coding 能加速樣板、測試與文件產出，工程師的價值轉向架構判斷與品質治理。', detailUseCases: ['程式樣板與測試草稿生成', '錯誤排查與文件摘要', '原型與內部工具快速建立'], detailMechanism: ['把重複程式、測試草稿與文件整理交給 AI，讓工程師更快進入架構與問題判斷。', '縮短原型到可驗證版本的時間，但也要求更嚴格的 code review 與安全檢查。'], detailMetrics: ['開發週期時間', '測試覆蓋率', '缺陷回歸率', 'code review 修正量'], detailRisks: ['產出速度提高也可能放大技術債', '安全、授權與程式品質仍需審查'], detailWatch: ['團隊是否建立 AI 產出 code review 規範', '生產力提升是否反映在交付品質而非只看速度'] },
-];
-
-const impactsEl = document.getElementById('impacts');
-impactData.forEach((d, index) => {
-  impactsEl.innerHTML += `
-    <button class="impact-card" type="button" data-impact-index="${index}" aria-label="查看${d.industry}詳情">
-      <span class="card-click-icon" aria-hidden="true">arrow_outward</span>
-      <div class="impact-icon" aria-hidden="true"><i class="ti ${d.icon}"></i></div>
-      <div class="impact-industry">${d.industry}</div>
-      <div class="impact-title">${d.title}</div>
-      <div class="impact-stat">${d.stat}</div>
-      <span class="badge ${d.badge}">${d.level}</span>
-      <div class="impact-desc">${d.desc}</div>
-    </button>`;
-});
-
-const drawer = document.getElementById('impact-detail-drawer');
-const drawerKicker = document.getElementById('drawer-kicker');
-const drawerTitle = document.getElementById('drawer-title');
-const drawerStat = document.getElementById('drawer-stat');
-const drawerSummary = document.getElementById('drawer-summary');
-const drawerUseCases = document.getElementById('drawer-use-cases');
-const drawerMechanism = document.getElementById('drawer-mechanism');
-const drawerMetrics = document.getElementById('drawer-metrics');
-const drawerRisks = document.getElementById('drawer-risks');
-const drawerWatch = document.getElementById('drawer-watch');
-const renderDrawerList = (el, items) => {
-  el.innerHTML = items.map(item => `<li>${item}</li>`).join('');
-};
-const openImpactDetail = item => {
-  closeDrawers();
-  drawerKicker.textContent = `${item.industry} / ${item.level}`;
-  drawerTitle.textContent = item.title;
-  drawerStat.textContent = item.stat;
-  drawerSummary.textContent = item.desc;
-  renderDrawerList(drawerUseCases, item.detailUseCases);
-  renderDrawerList(drawerMechanism, item.detailMechanism);
-  renderDrawerList(drawerMetrics, item.detailMetrics);
-  renderDrawerList(drawerRisks, item.detailRisks);
-  renderDrawerList(drawerWatch, item.detailWatch);
-  document.body.classList.add('drawer-open');
-  drawer.setAttribute('aria-hidden', 'false');
-  drawer.querySelector('[data-drawer-close]').focus();
-};
-const closeDrawers = () => {
-  document.body.classList.remove('drawer-open');
-  document.querySelectorAll('.impact-detail-drawer').forEach(drawerEl => {
-    drawerEl.setAttribute('aria-hidden', 'true');
-  });
-};
-const clusterDrawer = document.getElementById('cluster-detail-drawer');
-const clusterDrawerKicker = document.getElementById('cluster-drawer-kicker');
-const clusterDrawerTitle = document.getElementById('cluster-drawer-title');
-const clusterDrawerSummary = document.getElementById('cluster-drawer-summary');
-const clusterLandingList = document.getElementById('cluster-landing-list');
-const clusterMetricList = document.getElementById('cluster-metric-list');
-const clusterWatchList = document.getElementById('cluster-watch-list');
-const clusterTermList = document.getElementById('cluster-term-list');
-const renderClusterTerms = terms => {
-  clusterTermList.innerHTML = terms.map(term => `<li><strong>${term.title}</strong>：${term.text}</li>`).join('');
-};
-const openClusterDetail = item => {
-  closeDrawers();
-  clusterDrawerKicker.textContent = item.kicker;
-  clusterDrawerTitle.textContent = item.title;
-  clusterDrawerSummary.textContent = item.summary;
-  renderDrawerList(clusterLandingList, item.landing);
-  renderDrawerList(clusterMetricList, item.metrics);
-  renderDrawerList(clusterWatchList, item.watch);
-  renderClusterTerms(item.terms);
-  document.body.classList.add('drawer-open');
-  clusterDrawer.setAttribute('aria-hidden', 'false');
-  clusterDrawer.querySelector('[data-drawer-close]').focus();
-};
-document.querySelectorAll('[data-impact-index]').forEach(btn => {
-  btn.addEventListener('click', () => openImpactDetail(impactData[Number(btn.dataset.impactIndex)]));
-});
-document.querySelectorAll('[data-cluster-index]').forEach(btn => {
-  btn.addEventListener('click', () => openClusterDetail(clusterData[Number(btn.dataset.clusterIndex)]));
-});
-document.querySelectorAll('[data-drawer-close]').forEach(el => {
-  el.addEventListener('click', closeDrawers);
-});
-const googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLScYr_-_MGfh0lV8Mps7tuvWMi7wX_qfDs1CVm7b51aRTRUY1w/viewform?usp=header';
-const reportEmail = 'doublemore.art@gmail.com';
-const reportModal = document.getElementById('report-modal');
-const reportForm = document.getElementById('report-form');
-const reportRecipientNote = document.querySelector('[data-report-recipient-note]');
-const isReportEmailConfigured = Boolean(reportEmail);
-if (reportRecipientNote) {
-  reportRecipientNote.hidden = isReportEmailConfigured;
-}
-const openReportModal = () => {
-  if (googleFormUrl) {
-    const formWindow = window.open(googleFormUrl, '_blank');
-    if (formWindow) {
-      formWindow.opener = null;
-    } else {
-      window.location.href = googleFormUrl;
-    }
-    return;
-  }
-  reportModal.setAttribute('aria-hidden', 'false');
-  document.body.classList.add('report-modal-open');
-  document.getElementById('report-section').focus();
-};
-const closeReportModal = () => {
-  reportModal.setAttribute('aria-hidden', 'true');
-  document.body.classList.remove('report-modal-open');
-};
-document.querySelectorAll('[data-report-open]').forEach(btn => {
-  btn.addEventListener('click', openReportModal);
-});
-document.querySelectorAll('[data-report-close]').forEach(btn => {
-  btn.addEventListener('click', closeReportModal);
-});
-reportModal.addEventListener('click', event => {
-  if (event.target === reportModal) closeReportModal();
-});
-reportForm.addEventListener('submit', event => {
-  event.preventDefault();
-  const formData = new FormData(reportForm);
-  const versionDate = document.querySelector('meta[name="page-version-date"]')?.getAttribute('content') || '';
-  const versionNumber = document.querySelector('meta[name="page-version-number"]')?.getAttribute('content') || '';
-  const subject = `AI 對產業的數據觀察錯誤回報：${formData.get('type')}`;
-  const body = [
-    `問題位置：${formData.get('section') || '未填寫'}`,
-    `問題類型：${formData.get('type')}`,
-    '',
-    '問題描述：',
-    formData.get('detail') || '未填寫',
-    '',
-    `回覆聯絡方式：${formData.get('contact') || '未提供'}`,
-    '',
-    `頁面：${window.location.href}`,
-    `版本日期：${versionDate}`,
-    `版號：${versionNumber}`,
-  ].join('\n');
-  window.location.href = `mailto:${reportEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  closeReportModal();
-});
-document.addEventListener('keydown', event => {
-  if (event.key === 'Escape') {
-    closeDrawers();
-    closeReportModal();
-  }
-});
-
-const showChartFallback = () => {
-  document.querySelectorAll('[data-chart-fallback]').forEach(el => {
-    el.style.display = 'block';
-  });
-};
-window.addEventListener('load', () => {
-  if (!window.Chart) showChartFallback();
-});
-
-if (!window.Chart) {
-  showChartFallback();
-} else {
-new Chart(document.getElementById('bubbleChart'), {
-  type: 'bubble',
-  data: {
-    datasets: [
-      { label: '金融科技', data: [{ x: 12.4, y: 43, r: 18 }], backgroundColor: 'rgba(55,138,221,0.7)' },
-      { label: '科技軟體', data: [{ x: 18.2, y: 55, r: 22 }], backgroundColor: 'rgba(55,138,221,0.5)' },
-      { label: '醫療健康', data: [{ x: 9.6, y: 38, r: 20 }], backgroundColor: 'rgba(29,158,117,0.7)' },
-      { label: '製造業', data: [{ x: 7.8, y: 22, r: 24 }], backgroundColor: 'rgba(29,158,117,0.5)' },
-      { label: '零售電商', data: [{ x: 6.2, y: 31, r: 17 }], backgroundColor: 'rgba(216,90,48,0.7)' },
-      { label: '物流運輸', data: [{ x: 4.8, y: 15, r: 14 }], backgroundColor: 'rgba(216,90,48,0.5)' },
-      { label: '教育', data: [{ x: 3.1, y: 19, r: 11 }], backgroundColor: 'rgba(212,83,126,0.7)' },
-      { label: '法律服務', data: [{ x: 2.4, y: 12, r: 9 }], backgroundColor: 'rgba(212,83,126,0.5)' },
-    ]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false }, tooltip: {
-      callbacks: {
-        label: ctx => `${ctx.dataset.label}：投資 $${ctx.raw.x}B，生產力 +${ctx.raw.y}%`
-      }
-    }},
-    scales: {
-      x: { title: { display: true, text: 'AI 投資規模（十億美元）', color: '#888780', font: { size: 11 } }, min: 0, max: 24, ticks: { color: '#888780' }, grid: { color: 'rgba(136,135,128,0.12)' } },
-      y: { title: { display: true, text: '生產力提升預估（%）', color: '#888780', font: { size: 11 } }, min: 0, max: 70, ticks: { color: '#888780' }, grid: { color: 'rgba(136,135,128,0.12)' } }
-    }
-  }
-});
-
-new Chart(document.getElementById('stageChart'), {
-  type: 'bar',
-  data: {
-    labels: ['科技軟體', '金融科技', '醫療健康', '製造業', '零售電商', '物流運輸', '教育', '法律服務'],
-    datasets: [
-      { label: '深度整合', data: [70, 62, 45, 38, 35, 30, 18, 12], backgroundColor: '#639922' },
-      { label: '局部試行', data: [20, 22, 30, 32, 30, 31, 34, 29], backgroundColor: '#BA7517' },
-      { label: '探索評估', data: [10, 16, 25, 30, 35, 39, 48, 59], backgroundColor: '#378ADD' },
-    ]
-  },
-  options: {
-    indexAxis: 'y',
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false }, tooltip: { mode: 'index' } },
-    scales: {
-      x: { stacked: true, max: 100, ticks: { color: '#888780', callback: v => v + '%' }, grid: { color: 'rgba(136,135,128,0.12)' } },
-      y: { stacked: true, ticks: { color: '#888780', font: { size: 12 } }, grid: { display: false } }
-    }
-  }
-});
-
-}
-</script>
+    <footer>
+      <span>Dino Peng</span>
+      <span>Taipei · 2026</span>
+      <a href="#top">Back to top ↑</a>
+    </footer>
+  </main>
 </body>
 </html>
