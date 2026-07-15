@@ -11,6 +11,50 @@
 - AI 投資強度與生產力提升資料
 - 混合型人才、職能重組與治理風險敘事
 
+## 更新分流
+
+每次開始前先判斷更新深度，避免把小調整做成完整資料重整，也避免資料改動缺少來源查核。
+
+### A. 快速更新
+
+適用於：
+
+- UI、排版、RWD、Light / Dark、字級、主視覺、icon、卡片互動。
+- 不改 KPI、圖表數字、排行榜數字、來源口徑。
+
+必做：
+
+- 檢查 `AI 公司估值排行榜` 是否有明顯新的公司公告、一線媒體報導或上市公司市值基準日。
+- 若無可信新資料，只記錄「本次不更新排行榜數據」即可。
+- 執行 `npm run release:prepare` 與 `npm run update:check`。
+
+### B. 資料更新
+
+適用於：
+
+- 修改 KPI、產業滲透率、泡泡圖、採用階段、AI 公司估值排行榜或 tooltip 數字。
+- 新增或替換來源引用。
+
+必做：
+
+- 完成低強度來源確認；若新資料會改圖表或 KPI，升級為中強度更新。
+- 每個新增數字都保留年份、來源、樣本或口徑。
+- 同步更新頁面文案、資料註記、公開報告來源池與必要的 CSV。
+- 執行 `npm run release:prepare`、`npm run update:check`。
+
+### C. 正式推版
+
+適用於：
+
+- 要發佈到 `https://dinopeng.com/aidata/`。
+- 要建立 Git commit / push。
+
+必做：
+
+- 完成 A 或 B。
+- 確認 `git status --short` 只包含本次預期檔案。
+- push 後執行 `npm run release:verify -- <commit>`。
+
 ## 檔名規則
 
 每次更新都建立新日期檔，不覆蓋舊版本。
@@ -114,18 +158,19 @@ ai_industry_penetration_2026-06-09.html
 - 外幣融資估值換算美元時標記為約值，並保留原幣口徑說明。
 - 每次完整更新建立 `data/ai_company_valuation_YYYY-MM-DD.csv`，同步更新頁面卡片、詳情抽屜、資料備註與公開報告來源池。
 
-## 更新步驟
+## 標準更新步驟
 
-1. 找出最近一期日期版本；若尚無日期版本，使用 `ai_industry_penetration.html`。
-2. 更新 `aidata/index.html` 後，執行 `npm run release:prepare`，同步建立當期日期檔並將相對資源同步至 `aidata/assets/`；根目錄 `index.html` 是跨專案入口，不得由 AI Data 發布流程覆蓋。
-3. 確認新的日期檔格式為 `ai_industry_penetration_YYYY-MM-DD.html`，日期需對應 `aidata/index.html` 的 `page-version-date`。
-4. 執行推版前低強度來源確認，並必查 `AI 公司估值排行榜` 是否仍為最新數據；若發現重大新資料，再升級為中強度更新。
-5. 查核固定來源池與當週重要 AI 產業資料。
-6. 更新新日期檔中的 KPI、圖表資料、文字敘事與來源註記。
-7. 若沿用上一期數據，在頁面上方的週更說明中清楚標註。
-8. 依照 `WEB_SPEC.md` 檢查閱讀性、留白、Light / Dark Mode、三種字級與 RWD。
-9. 用瀏覽器開啟新日期檔，確認長條圖、泡泡圖與階段分佈圖正常渲染。
-10. 推版前執行 `npm run release:check`；GitHub Pages 部署成功後執行 `npm run release:verify -- <commit>`。
+1. 判斷更新屬於快速更新、資料更新或正式推版。
+2. 執行推版前低強度來源確認，並必查 `AI 公司估值排行榜` 是否仍為最新數據；若發現重大新資料，再升級為中強度更新。
+3. 若是資料更新，查核固定來源池與當週重要 AI 產業資料。
+4. 編輯 `aidata/index.html`。根目錄 `index.html` 是 `dinopeng.com` 跨專案入口，不得由 AI Data 更新流程覆蓋。
+5. 若修改資料，同步更新 KPI、圖表資料、tooltip、文字敘事、來源註記與必要 CSV。
+6. 若沿用上一期數據，在頁面摘要或更新紀錄中清楚標註。
+7. 執行 `npm run release:prepare`，依 `aidata/index.html` 的 `page-version-date` 建立當期 `ai_industry_penetration_YYYY-MM-DD.html`，並同步 `assets/` 至 `aidata/assets/`。
+8. 確認新的日期檔格式為 `ai_industry_penetration_YYYY-MM-DD.html`，日期需對應 `aidata/index.html` 的 `page-version-date`。
+9. 依照 `WEB_SPEC.md` 檢查閱讀性、留白、Light / Dark Mode、三種字級與 RWD。
+10. 用瀏覽器開啟 `aidata/index.html` 或新日期檔，確認長條圖、泡泡圖、階段分佈圖與新增互動正常渲染。
+11. 推版前執行 `npm run update:check`；GitHub Pages 部署成功後執行 `npm run release:verify -- <commit>`。
 
 ## 驗收標準
 

@@ -110,8 +110,10 @@ ai_industry_penetration_YYYY-MM-DD.html
 
 ```bash
 npm run release:prepare
-npm run release:check
+npm run update:check
 ```
+
+`npm run update:check` 與 `npm run release:check` 目前等效；前者作為日常更新守門，後者保留給正式 release 語境。
 
 GitHub Pages 部署成功後，可用最新 commit 做線上雜湊驗收：
 
@@ -120,6 +122,12 @@ npm run release:verify -- <commit>
 ```
 
 完整步驟請見 `RELEASE.md`。
+
+### 建議更新節奏
+
+- 快速更新：只改 UI、文案、主視覺或互動。先確認 AI 公司估值排行榜沒有明顯新資料，再執行 `release:prepare` 與 `update:check`。
+- 資料更新：會改 KPI、圖表、排行或來源。先依 `DATA_UPDATE.md` 查核來源口徑，再同步頁面、CSV、註記與日期版本。
+- 正式推版：完成本機檢查後 commit / push，部署成功後執行 `release:verify`。
 
 ## 內容重點
 
