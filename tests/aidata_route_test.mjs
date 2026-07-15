@@ -8,6 +8,13 @@ const aidataPagePath = new URL('../aidata/index.html', import.meta.url);
 const aidataRootPath = new URL('../aidata/', import.meta.url);
 const sporttechPagePath = new URL('../sporttech/index.html', import.meta.url);
 const sporttechRootPath = new URL('../sporttech/', import.meta.url);
+const tpTreesPagePath = new URL('../tptrees/index.html', import.meta.url);
+const tpTreesLifecyclePath = new URL('../tptrees/lifecycle/index.html', import.meta.url);
+const tpTreesSpeciesPath = new URL('../tptrees/species/index.html', import.meta.url);
+const tpTreesDailyPath = new URL('../tptrees/daily/index.html', import.meta.url);
+const tpTreesRecordsPath = new URL('../tptrees/data/tree-records.js', import.meta.url);
+const tpTreesManifestPath = new URL('../tptrees/data/tree-data-manifest.json', import.meta.url);
+const tpTreesFaviconPath = new URL('../tptrees/favicon.svg', import.meta.url);
 const readmePath = new URL('../README.md', import.meta.url);
 const updateGuidePath = new URL('../DATA_UPDATE.md', import.meta.url);
 
@@ -34,6 +41,23 @@ test('sporttech route publishes its static page and local assets', async () => {
   for (const path of paths) {
     assert.equal(existsSync(new URL(path, sporttechRootPath)), true, `${path} should load below /sporttech/`);
   }
+});
+
+test('tptrees route publishes every public page and data dependency', async () => {
+  const [home, lifecycle, species, daily] = await Promise.all([
+    readFile(tpTreesPagePath, 'utf8'),
+    readFile(tpTreesLifecyclePath, 'utf8'),
+    readFile(tpTreesSpeciesPath, 'utf8'),
+    readFile(tpTreesDailyPath, 'utf8'),
+  ]);
+
+  assert.match(home, /臺北市行道樹小幫手/);
+  assert.match(lifecycle, /樹木的生命履歷/);
+  assert.match(species, /樹種科普/);
+  assert.match(daily, /今天給我一棵樹/);
+  assert.equal(existsSync(tpTreesRecordsPath), true, 'tree-records.js should load below /tptrees/');
+  assert.equal(existsSync(tpTreesManifestPath), true, 'tree-data-manifest.json should load below /tptrees/');
+  assert.equal(existsSync(tpTreesFaviconPath), true, 'favicon.svg should load below /tptrees/');
 });
 
 test('aidata route includes every relative company logo asset used by the page', async () => {
