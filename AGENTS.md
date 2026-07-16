@@ -13,6 +13,7 @@
 - `tptrees/index.html`（由獨立 TP Trees repo 同步的正式入口）
 - `sporttech/index.html`（由獨立 SportTech repo 的 gh-pages 分支同步）
 - `48DIRECTORY/index.html`（由獨立 48DIRECTORY repo 的 gh-pages 分支同步）
+- `small-parties/index.html`（由獨立 Small Parties repo 的 main 分支同步）
 - `scripts/sync-projects.sh`（來源 repo 到入口網站的允許清單同步）
 - `DATA_UPDATE.md`
 - `WEB_SPEC.md`

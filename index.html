@@ -122,7 +122,8 @@
       border-right: 1px solid var(--ink);
       transition: transform 180ms ease, background-color 180ms ease;
     }
-    .project-card:last-child { border-right: 0; }
+    .project-card:nth-child(4n) { border-right: 0; }
+    .project-card:nth-child(n + 5) { border-top: 1px solid var(--ink); }
     a.project-card:hover { transform: translateY(-8px); }
     .card-topline,
     .card-action {
@@ -174,6 +175,16 @@
     .directory-card .card-mark span:first-child { height: 72%; left: 0; background: #d83f67; }
     .directory-card .card-mark span:nth-child(2) { height: 48%; left: 33%; background: #e8b735; }
     .directory-card .card-mark span:nth-child(3) { height: 86%; right: 0; background: #2d8fca; }
+    .small-parties-card .card-mark { background: #efe5d0; }
+    .small-parties-card .card-mark span:first-child {
+      width: 58%; height: 58%; left: 10%; top: 12%; border-radius: 50%; background: #6d5dfc;
+    }
+    .small-parties-card .card-mark span:nth-child(2) {
+      width: 48%; height: 48%; right: 8%; bottom: 10%; border-radius: 50%; background: #e4522d;
+    }
+    .small-parties-card .card-mark span:nth-child(3) {
+      width: 70%; height: 2px; left: 15%; top: 50%; background: var(--ink); transform: rotate(-18deg);
+    }
     .card-copy h3 { margin: 0 0 18px; font-size: clamp(38px, 4vw, 58px); font-weight: 620; letter-spacing: -0.06em; }
     .card-copy p { margin: 0; color: #494841; line-height: 1.7; }
     .project-card ul { display: flex; flex-wrap: wrap; gap: 8px; margin: auto 0 32px; padding: 32px 0 0; list-style: none; }
@@ -208,11 +219,12 @@
     @media (max-width: 1200px) and (min-width: 901px) {
       .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .project-card:nth-child(2n) { border-right: 0; }
-      .project-card:nth-child(-n + 2) { border-bottom: 1px solid var(--ink); }
+      .project-card:nth-child(3n) { border-right: 1px solid var(--ink); }
+      .project-card:nth-child(n + 3) { border-top: 1px solid var(--ink); }
     }
     @media (max-width: 900px) {
       .project-grid { grid-template-columns: 1fr; }
-      .project-card { min-height: 560px; border-right: 0; border-bottom: 1px solid var(--ink); }
+      .project-card { min-height: 560px; border-top: 0; border-right: 0; border-bottom: 1px solid var(--ink); }
       .project-card:last-child { border-bottom: 0; }
     }
     @media (max-width: 640px) {
@@ -304,6 +316,17 @@
             <p>整合 48 Group 成員照片、基本資料、官方連結、社群資訊、人氣排行與最新消息的互動名鑑。</p>
           </div>
           <ul aria-label="48 DIRECTORY 專案分類"><li>成員名鑑</li><li>文化資料</li><li>互動查詢</li></ul>
+          <div class="card-action"><span>查看專案</span><span aria-hidden="true">↗</span></div>
+        </a>
+
+        <a class="project-card small-parties-card" href="/small-parties/">
+          <div class="card-topline"><span>05</span><span>Political media · Active</span></div>
+          <div class="card-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="card-copy">
+            <h3>Small Parties</h3>
+            <p>分析小黨如何透過核心支持者、跨平台擴散與演算法機制放大社群聲量，並提供成本試算與辨識清單。</p>
+          </div>
+          <ul aria-label="Small Parties 專案分類"><li>政治傳播</li><li>社群分析</li><li>互動試算</li></ul>
           <div class="card-action"><span>查看專案</span><span aria-hidden="true">↗</span></div>
         </a>
       </div>

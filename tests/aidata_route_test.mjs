@@ -10,6 +10,8 @@ const sporttechPagePath = new URL('../sporttech/index.html', import.meta.url);
 const sporttechRootPath = new URL('../sporttech/', import.meta.url);
 const directoryPagePath = new URL('../48DIRECTORY/index.html', import.meta.url);
 const directoryRootPath = new URL('../48DIRECTORY/', import.meta.url);
+const smallPartiesPagePath = new URL('../small-parties/index.html', import.meta.url);
+const smallPartiesRootPath = new URL('../small-parties/', import.meta.url);
 const tpTreesPagePath = new URL('../tptrees/index.html', import.meta.url);
 const tpTreesLifecyclePath = new URL('../tptrees/lifecycle/index.html', import.meta.url);
 const tpTreesSpeciesPath = new URL('../tptrees/species/index.html', import.meta.url);
@@ -31,8 +33,21 @@ test('root publishes a project portal while /aidata/ keeps the AI report', async
   assert.match(portalPage, /href="\/aidata\/"/);
   assert.match(portalPage, /href="\/sporttech\/"/);
   assert.match(portalPage, /href="\/48DIRECTORY\/"/);
+  assert.match(portalPage, /href="\/small-parties\/"/);
   assert.match(aidataPage, /AI 對產業的數據觀察/);
   assert.notEqual(aidataPage, portalPage);
+});
+
+test('small-parties route publishes its static page and local assets', async () => {
+  const html = await readFile(smallPartiesPagePath, 'utf8');
+  assert.match(html, /<title>為什麼小黨可以攪動社群言論？<\/title>/);
+  assert.match(html, /id="process"/);
+  assert.match(html, /id="algorithm"/);
+  assert.match(html, /id="check"/);
+
+  for (const path of ['favicon.ico', 'favicon.svg', 'assets/hero-social-discourse.png']) {
+    assert.equal(existsSync(new URL(path, smallPartiesRootPath)), true, `${path} should load below /small-parties/`);
+  }
 });
 
 test('sporttech route publishes its static page and local assets', async () => {
