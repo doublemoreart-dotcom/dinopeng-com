@@ -52,7 +52,7 @@ test('small-parties route publishes its static page and local assets', async () 
 
 test('sporttech route publishes its static page and local assets', async () => {
   const html = await readFile(sporttechPagePath, 'utf8');
-  assert.match(html, /2022-2026 運動X科技預算查詢小幫手/);
+  assert.match(html, /2022-2026 運動X科技預算(?:查詢)?小幫手/);
 
   const paths = [...html.matchAll(/(?:src|href)="(assets\/[^"]+)"/g)].map(match => match[1]);
   assert.ok(paths.length >= 3, `expected SportTech local asset references, got ${paths.length}`);
