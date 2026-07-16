@@ -40,6 +40,7 @@
         var(--bg);
       color:var(--text);
       line-height:1.68;
+      overflow-x:hidden;
     }
     .page-preloader{
       position:fixed;
@@ -672,6 +673,60 @@
       font-size:15px;
       font-weight:600;
     }
+    .mobile-flow-list{
+      display:none;
+      gap:10px;
+    }
+    .mobile-flow-item{
+      position:relative;
+      display:grid;
+      grid-template-columns:44px minmax(0,1fr);
+      gap:12px;
+      align-items:center;
+      padding:14px;
+      border:1px solid rgba(102,227,196,.18);
+      border-radius:14px;
+      background:rgba(19,23,28,.78);
+    }
+    .mobile-flow-item:not(:last-child)::after{
+      content:"";
+      position:absolute;
+      left:35px;
+      bottom:-11px;
+      width:2px;
+      height:11px;
+      background:linear-gradient(180deg, rgba(255,209,102,.85), rgba(255,209,102,.12));
+    }
+    .mobile-flow-icon{
+      display:grid;
+      place-items:center;
+      width:44px;
+      height:44px;
+      border:1px solid rgba(102,227,196,.38);
+      border-radius:50%;
+      background:#071112;
+      color:var(--text);
+      box-shadow:0 0 18px rgba(102,227,196,.16);
+    }
+    .mobile-flow-icon .icon{
+      width:23px;
+      height:23px;
+      color:var(--text);
+    }
+    .mobile-flow-item strong{
+      display:block;
+      color:var(--text);
+      font-size:16px;
+      line-height:1.3;
+    }
+    .mobile-flow-item span{
+      display:block;
+      margin-top:3px;
+      color:var(--accent);
+      font-size:13px;
+      font-weight:800;
+      line-height:1.35;
+    }
     .process-detail-cards{
       grid-template-columns:repeat(4, minmax(0, 1fr));
       gap:14px;
@@ -1062,10 +1117,14 @@
       color:var(--accent);
     }
     .quote-table-wrap{
-      overflow:auto;
+      width:100%;
+      max-width:100%;
+      overflow-x:auto;
+      overflow-y:hidden;
       border:0;
       border-radius:0;
       background:var(--panel);
+      -webkit-overflow-scrolling:touch;
     }
     .cost-quote{
       min-width:820px;
@@ -1279,11 +1338,12 @@
         padding:0 16px 16px;
       }
       .algorithm-duel{
-        padding:18px;
+        padding:16px;
+        overflow:visible;
       }
       .algorithm-duel-cards{
         grid-template-columns:1fr;
-        gap:18px;
+        gap:14px;
       }
       .algorithm-duel-cards::before{
         display:none;
@@ -1293,10 +1353,17 @@
       }
       .algorithm-card{
         min-height:auto;
+        padding:22px 18px;
+      }
+      .algorithm-card h3{font-size:21px}
+      .algorithm-card p{
+        font-size:15px;
+        line-height:1.7;
       }
       .duel-node{
         min-height:92px;
         border-radius:18px;
+        order:2;
       }
       .duel-node::before,
       .duel-node::after{
@@ -1305,26 +1372,67 @@
       .algorithm-conclusion{
         align-items:flex-start;
         font-size:17px;
+        padding:18px;
+      }
+      .process-integrated{
+        margin-inline:-4px;
+        padding:14px;
+        gap:16px;
+      }
+      .process-line-graphic{
+        display:none;
+      }
+      .mobile-flow-list{
+        display:grid;
+      }
+      .tpp-impact-panel .mobile-flow-list{
+        margin-top:14px;
+      }
+      .process-detail-cards .card{
+        min-height:auto;
+        padding:20px;
+      }
+      .process-supply-note{
+        align-items:flex-start;
+        padding:16px;
+        font-size:15px;
       }
       .benefit-map{
         grid-template-columns:1fr;
         grid-template-rows:auto;
-        padding:18px;
+        margin-inline:-4px;
+        padding:16px;
+        gap:16px;
       }
       .benefit-center{
         grid-column:auto;
         grid-row:auto;
-        min-height:160px;
+        min-height:150px;
+        order:2;
       }
       .benefit-card{
         min-height:auto;
+        padding:20px;
       }
       .benefit-card::after{
         display:none;
       }
+      .benefit-conclusion{
+        align-items:flex-start;
+        justify-content:flex-start;
+        text-align:left;
+        font-size:18px;
+      }
       .tpp-section{
         margin:34px -12px 0;
         padding:40px 12px;
+      }
+      .tpp-impact-formula{
+        padding:18px;
+        font-size:20px;
+      }
+      .tpp-line-graphic{
+        display:none;
       }
       .result strong{font-size:30px}
       .site-nav .wrap{
@@ -1337,7 +1445,9 @@
         padding:4px 0 10px;
       }
       .menu{
-        padding:0 12px 4px;
+        width:100%;
+        padding:0 12px 6px;
+        scroll-padding-inline:12px;
       }
       .menu a{
         min-height:38px;
@@ -1346,6 +1456,27 @@
       .wrap{width:min(var(--max), calc(100% - 24px))}
       th,td{padding:13px}
       table{font-size:14px}
+      .collapsible-panel{
+        overflow:hidden;
+      }
+      .cost-quote{
+        min-width:640px;
+      }
+      .cost-quote th,
+      .cost-quote td{
+        padding:13px 12px;
+      }
+      .cost-quote th:first-child,
+      .cost-quote td:first-child{
+        width:38%;
+      }
+      .quote-plan strong{
+        font-size:16px;
+      }
+      .check{
+        width:26px;
+        height:26px;
+      }
     }
   </style>
 </head>
@@ -1566,6 +1697,28 @@
               <text class="body-text" y="114" text-anchor="middle">進入公共議程</text>
             </g>
           </svg>
+        </div>
+        <div class="mobile-flow-list" aria-label="議題放大的手機版流程摘要">
+          <div class="mobile-flow-item">
+            <div class="mobile-flow-icon"><svg class="icon"><use href="#icon-risk"></use></svg></div>
+            <div><strong>01 抓衝突點</strong><span>找到不滿入口</span></div>
+          </div>
+          <div class="mobile-flow-item">
+            <div class="mobile-flow-icon"><svg class="icon"><use href="#icon-flow"></use></svg></div>
+            <div><strong>02 套入母框架</strong><span>形成共同語言</span></div>
+          </div>
+          <div class="mobile-flow-item">
+            <div class="mobile-flow-icon"><svg class="icon"><use href="#icon-document"></use></svg></div>
+            <div><strong>03 內容模組化</strong><span>拆成可轉貼素材</span></div>
+          </div>
+          <div class="mobile-flow-item">
+            <div class="mobile-flow-icon"><svg class="icon"><use href="#icon-volume"></use></svg></div>
+            <div><strong>04 社群再製</strong><span>成功版本勝出</span></div>
+          </div>
+          <div class="mobile-flow-item">
+            <div class="mobile-flow-icon"><svg class="icon"><use href="#icon-chart"></use></svg></div>
+            <div><strong>聲量放大</strong><span>進入公共議程</span></div>
+          </div>
         </div>
 
         <div class="cards process-detail-cards">
@@ -1862,6 +2015,32 @@
           </g>
 
           </svg>
+        </div>
+        <div class="mobile-flow-list" aria-label="民眾黨政治影響力的手機版流程摘要">
+          <div class="mobile-flow-item">
+            <div class="mobile-flow-icon"><svg class="icon"><use href="#icon-case"></use></svg></div>
+            <div><strong>個人品牌</strong><span>高辨識度</span></div>
+          </div>
+          <div class="mobile-flow-item">
+            <div class="mobile-flow-icon"><svg class="icon"><use href="#icon-supporters"></use></svg></div>
+            <div><strong>集中支持者</strong><span>同步擴散</span></div>
+          </div>
+          <div class="mobile-flow-item">
+            <div class="mobile-flow-icon"><svg class="icon"><use href="#icon-document"></use></svg></div>
+            <div><strong>衝突敘事</strong><span>高反應率</span></div>
+          </div>
+          <div class="mobile-flow-item">
+            <div class="mobile-flow-icon"><svg class="icon"><use href="#icon-scale"></use></svg></div>
+            <div><strong>國會席次</strong><span>關鍵少數</span></div>
+          </div>
+          <div class="mobile-flow-item">
+            <div class="mobile-flow-icon"><svg class="icon"><use href="#icon-volume"></use></svg></div>
+            <div><strong>媒體反應</strong><span>放大迴路</span></div>
+          </div>
+          <div class="mobile-flow-item">
+            <div class="mobile-flow-icon"><svg class="icon"><use href="#icon-chart"></use></svg></div>
+            <div><strong>高於政黨規模</strong><span>政治影響力</span></div>
+          </div>
         </div>
       </div>
     </section>
