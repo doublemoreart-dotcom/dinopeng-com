@@ -153,6 +153,12 @@
       border-radius:18px;
       backdrop-filter:blur(8px);
     }
+    .stat .icon{
+      width:30px;
+      height:30px;
+      margin-bottom:14px;
+      color:var(--accent);
+    }
     .stat strong{display:block;font-size:24px;color:var(--accent)}
     .stat span{color:var(--muted)}
     .site-nav{
@@ -482,12 +488,16 @@
     .algorithm-card{
       position:relative;
       z-index:1;
+      display:grid;
+      align-content:center;
+      justify-items:center;
       min-height:210px;
       padding:24px;
       border:1px solid rgba(102,227,196,.18);
       border-radius:18px;
       background:rgba(19,23,28,.9);
       box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+      text-align:center;
     }
     .algorithm-card h3{
       margin:16px 0 10px;
@@ -496,6 +506,7 @@
     .algorithm-card p{
       color:var(--muted);
       line-height:1.75;
+      max-width:36em;
     }
     .algorithm-icon{
       display:grid;
@@ -513,9 +524,9 @@
       height:34px;
     }
     .algorithm-card.opponent .algorithm-icon{
-      border-color:rgba(255,209,102,.34);
-      background:rgba(255,209,102,.1);
-      color:var(--accent-2);
+      border-color:rgba(102,227,196,.34);
+      background:rgba(102,227,196,.1);
+      color:var(--accent);
     }
     .duel-node{
       position:relative;
@@ -700,6 +711,26 @@
     .process-detail-cards .card > *{
       position:relative;
       z-index:1;
+    }
+    .process-supply-note{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:18px 20px;
+      border:1px solid rgba(102,227,196,.22);
+      border-radius:16px;
+      background:linear-gradient(135deg, rgba(102,227,196,.12), rgba(255,209,102,.06));
+      color:var(--text);
+      font-size:17px;
+      line-height:1.65;
+    }
+    .process-supply-note .icon{
+      width:24px;
+      height:24px;
+      color:var(--accent-2);
+    }
+    .process-supply-note strong{
+      color:var(--accent);
     }
     .benefit-map{
       position:relative;
@@ -1099,6 +1130,36 @@
     .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
     label{display:block;margin-bottom:18px;color:var(--muted)}
     input[type="range"]{width:100%}
+    .calc-control{
+      display:grid;
+      grid-template-columns:40px minmax(0,1fr) 40px;
+      gap:12px;
+      align-items:center;
+      margin-top:10px;
+    }
+    .stepper{
+      display:grid;
+      place-items:center;
+      width:40px;
+      height:40px;
+      border:1px solid rgba(102,227,196,.24);
+      border-radius:10px;
+      background:rgba(102,227,196,.08);
+      color:var(--accent);
+      font-size:22px;
+      font-weight:900;
+      line-height:1;
+      cursor:pointer;
+      transition:background-color .18s ease, border-color .18s ease, transform .18s ease;
+    }
+    .stepper:hover{
+      border-color:rgba(102,227,196,.42);
+      background:rgba(102,227,196,.14);
+      transform:translateY(-1px);
+    }
+    .stepper:active{
+      transform:translateY(0);
+    }
     .calculator h3{
       display:flex;
       align-items:center;
@@ -1117,8 +1178,10 @@
       justify-content:center;
       min-height:180px;
       border-radius:18px;
-      background:var(--panel-2);
-      border:1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(8,13,16,.96), rgba(19,23,28,.9));
+      border:1px solid rgba(102,227,196,.22);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 18px 42px rgba(0,0,0,.18);
       text-align:center;
     }
     .result .icon{
@@ -1127,7 +1190,34 @@
       margin-bottom:10px;
       color:var(--accent);
     }
-    .result strong{display:block;font-size:34px;color:var(--accent)}
+    .result-label{
+      display:block;
+      color:var(--muted);
+      font-size:15px;
+      font-weight:800;
+      letter-spacing:.04em;
+    }
+    .calculator-display{
+      display:block;
+      margin:14px 0 10px;
+      padding:12px 18px;
+      border:1px solid rgba(102,227,196,.18);
+      border-radius:12px;
+      background:rgba(4,8,10,.74);
+      color:var(--accent);
+      font-family:"SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size:clamp(30px,4vw,44px);
+      font-weight:900;
+      line-height:1.15;
+      letter-spacing:.02em;
+      text-shadow:0 0 18px rgba(102,227,196,.18);
+    }
+    .result-note{
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+    }
     footer{padding:42px 0 70px;color:var(--muted)}
     .sources{
       font-size:14px;
@@ -1378,9 +1468,9 @@
         </p>
       </div>
       <div class="summary-grid">
-        <div class="stat"><strong>高集中</strong><span>核心人物、議題與支持者注意力更容易同步。</span></div>
-        <div class="stat"><strong>低邊際</strong><span>內容完成後，多一次轉貼與二創幾乎不增加技術成本。</span></div>
-        <div class="stat"><strong>高槓桿</strong><span>社群聲量可換取媒體曝光、募款、動員與國會談判籌碼。</span></div>
+        <div class="stat"><svg class="icon"><use href="#icon-supporters"></use></svg><strong>高集中</strong><span>核心人物、議題與支持者注意力更容易同步。</span></div>
+        <div class="stat"><svg class="icon"><use href="#icon-cost"></use></svg><strong>低邊際</strong><span>內容完成後，多一次轉貼與二創幾乎不增加技術成本。</span></div>
+        <div class="stat"><svg class="icon"><use href="#icon-volume"></use></svg><strong>高槓桿</strong><span>社群聲量可換取媒體曝光、募款、動員與國會談判籌碼。</span></div>
       </div>
     </div>
   </header>
@@ -1484,10 +1574,10 @@
           <div class="card"><div class="num">3</div><h3>KOL完成情緒翻譯</h3><p>把制度語言轉成「他們怕了」「又雙標」「媒體失明」等高傳播句型。</p></div>
           <div class="card"><div class="num">4</div><h3>黨中央反向收編成功版本</h3><p>社群先測試話術，政治人物再把最有效的說法帶回正式場合。</p></div>
         </div>
-      </div>
-
-      <div class="callout">
-        這比「中央廚房下令」更像一條<strong>敘事供應鏈</strong>：核心定調 → 社群變形 → 演算法測試 → 成功版本勝出 → 政黨再收編。
+        <div class="process-supply-note">
+          <svg class="icon"><use href="#icon-flow"></use></svg>
+          <span>這比「中央廚房下令」更像一條<strong>敘事供應鏈</strong>：核心定調 → 社群變形 → 演算法測試 → 成功版本勝出 → 政黨再收編。</span>
+        </div>
       </div>
     </section>
 
@@ -1658,17 +1748,33 @@
             <div class="calc-grid">
               <div>
                 <label><svg class="icon"><use href="#icon-work-hours"></use></svg>人力總工時：<b id="hoursOut">110</b> 小時
-                  <input id="hours" type="range" min="20" max="400" value="110">
+                  <span class="calc-control">
+                    <button class="stepper" type="button" data-target="hours" data-dir="-1" aria-label="減少人力總工時">−</button>
+                    <input id="hours" type="range" min="20" max="400" value="110">
+                    <button class="stepper" type="button" data-target="hours" data-dir="1" aria-label="增加人力總工時">+</button>
+                  </span>
                 </label>
                 <label><svg class="icon"><use href="#icon-cost"></use></svg>平均完整人力成本：<b id="rateOut">700</b> 元／小時
-                  <input id="rate" type="range" min="300" max="1500" step="50" value="700">
+                  <span class="calc-control">
+                    <button class="stepper" type="button" data-target="rate" data-dir="-1" aria-label="減少平均完整人力成本">−</button>
+                    <input id="rate" type="range" min="300" max="1500" step="50" value="700">
+                    <button class="stepper" type="button" data-target="rate" data-dir="1" aria-label="增加平均完整人力成本">+</button>
+                  </span>
                 </label>
                 <label><svg class="icon"><use href="#icon-ad-spend"></use></svg>廣告與外包：<b id="extraOut">120000</b> 元
-                  <input id="extra" type="range" min="0" max="1000000" step="10000" value="120000">
+                  <span class="calc-control">
+                    <button class="stepper" type="button" data-target="extra" data-dir="-1" aria-label="減少廣告與外包">−</button>
+                    <input id="extra" type="range" min="0" max="1000000" step="10000" value="120000">
+                    <button class="stepper" type="button" data-target="extra" data-dir="1" aria-label="增加廣告與外包">+</button>
+                  </span>
                 </label>
               </div>
               <div class="result">
-                <div><span class="muted">估計總成本</span><strong id="total">197,000 元</strong><span class="muted">未含長期品牌與組織建置</span></div>
+                <div>
+                  <span class="result-label">估計總成本</span>
+                  <strong id="total" class="calculator-display">197,000 元</strong>
+                  <span class="result-note">* 未含長期品牌與組織建置</span>
+                </div>
               </div>
             </div>
           </div>
@@ -1858,6 +1964,19 @@
       total.textContent = sum.toLocaleString() + ' 元';
     }
     [hours, rate, extra].forEach(el => el.addEventListener('input', update));
+    document.querySelectorAll('.stepper').forEach(button => {
+      button.addEventListener('click', () => {
+        const target = document.getElementById(button.dataset.target);
+        if (!target) return;
+        const direction = Number(button.dataset.dir) || 1;
+        const step = Number(target.step) || 1;
+        const min = Number(target.min);
+        const max = Number(target.max);
+        const next = Math.min(max, Math.max(min, Number(target.value) + direction * step));
+        target.value = String(next);
+        target.dispatchEvent(new Event('input', {bubbles:true}));
+      });
+    });
     update();
 
     const revealSections = Array.from(document.querySelectorAll('main section'));
