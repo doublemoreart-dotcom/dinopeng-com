@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glowA" cx="22%" cy="18%" r="52%">
+      <stop offset="0" stop-color="#1ed7bd" stop-opacity=".32"/>
+      <stop offset=".52" stop-color="#1ed7bd" stop-opacity=".08"/>
+      <stop offset="1" stop-color="#1ed7bd" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="86%" cy="28%" r="44%">
+      <stop offset="0" stop-color="#ffd166" stop-opacity=".22"/>
+      <stop offset=".58" stop-color="#ffd166" stop-opacity=".06"/>
+      <stop offset="1" stop-color="#ffd166" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#182520"/>
+      <stop offset=".48" stop-color="#111820"/>
+      <stop offset="1" stop-color="#090d11"/>
+    </linearGradient>
+    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0b0d10"/>
+  <rect width="1200" height="630" fill="url(#glowA)"/>
+  <rect width="1200" height="630" fill="url(#glowB)"/>
+  <path d="M0 510 C190 470 320 548 500 512 C690 474 825 404 1200 450 L1200 630 L0 630 Z" fill="#0f171d" opacity=".8"/>
+
+  <rect x="72" y="68" width="1056" height="494" rx="38" fill="url(#panel)" stroke="#24443e" stroke-width="2"/>
+  <rect x="73" y="69" width="12" height="492" rx="6" fill="#66e3c4"/>
+
+  <text x="116" y="308" font-family="Inter, Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="48" font-weight="900" fill="#f5f7fa" letter-spacing="0">
+    為什麼小黨可以
+  </text>
+  <text x="116" y="372" font-family="Inter, Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="48" font-weight="900" fill="#66e3c4" letter-spacing="0">
+    攪動社群言論？
+  </text>
+  <text x="118" y="430" font-family="Inter, Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="25" font-weight="700" fill="#b7c1cc" letter-spacing="0">
+    小黨、平台與政治成本的社群賽局分析
+  </text>
+
+  <g transform="translate(118 492)" font-family="Inter, Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="24" font-weight="800">
+    <rect x="0" y="0" width="132" height="46" rx="23" fill="#13231f" stroke="#35655d"/>
+    <text x="24" y="31" fill="#66e3c4">高集中</text>
+    <rect x="154" y="0" width="132" height="46" rx="23" fill="#181b18" stroke="#6d5a2b"/>
+    <text x="178" y="31" fill="#ffd166">低邊際</text>
+    <rect x="308" y="0" width="132" height="46" rx="23" fill="#13231f" stroke="#35655d"/>
+    <text x="332" y="31" fill="#66e3c4">高槓桿</text>
+  </g>
+
+  <g transform="translate(812 210) scale(.78)" filter="url(#softGlow)">
+    <circle cx="92" cy="102" r="72" fill="#071112" stroke="#66e3c4" stroke-width="5"/>
+    <path d="M54 106h76M130 106l-22-18M130 106l-22 18" fill="none" stroke="#ffd166" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="92" cy="102" r="18" fill="#66e3c4"/>
+    <circle cx="28" cy="44" r="18" fill="#0f1a1d" stroke="#66e3c4" stroke-width="4"/>
+    <circle cx="164" cy="52" r="18" fill="#0f1a1d" stroke="#66e3c4" stroke-width="4"/>
+    <circle cx="42" cy="172" r="18" fill="#0f1a1d" stroke="#66e3c4" stroke-width="4"/>
+    <circle cx="168" cy="164" r="18" fill="#0f1a1d" stroke="#66e3c4" stroke-width="4"/>
+    <path d="M41 57l38 34M148 65l-42 30M56 160l30-42M154 152l-44-34" fill="none" stroke="#66e3c4" stroke-width="4" stroke-linecap="round" opacity=".72"/>
+  </g>
+
+</svg>
