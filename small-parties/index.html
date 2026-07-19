@@ -1019,10 +1019,11 @@
       color:#d8f7f2;
     }
     .tpp-section .flow{
-      gap:14px;
+      gap:10px;
     }
     .tpp-section .flow .step{
-      min-height:178px;
+      min-height:154px;
+      padding:20px;
       border-color:rgba(40,216,190,.25);
       background:linear-gradient(180deg, rgba(18,31,35,.9), rgba(13,18,23,.78));
       box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 18px 44px rgba(0,0,0,.16);
@@ -1034,16 +1035,6 @@
       color:#28d8be;
       background:rgba(40,216,190,.12);
       border:1px solid rgba(40,216,190,.22);
-    }
-    .tpp-section .flow .step::before{
-      content:"";
-      display:block;
-      width:34px;
-      height:4px;
-      margin-bottom:18px;
-      border-radius:999px;
-      background:#28d8be;
-      box-shadow:0 0 18px rgba(40,216,190,.45);
     }
     .tpp-section .flow .step:not(:last-child)::after{
       color:#ffd166;
@@ -1130,6 +1121,7 @@
       color:var(--accent);
     }
     .quote-table-wrap{
+      position:relative;
       width:100%;
       max-width:100%;
       overflow-x:auto;
@@ -1146,13 +1138,24 @@
       border-radius:0;
       background:transparent;
     }
+    .cost-breakdown-table{
+      min-width:720px;
+      margin:0;
+      border:0;
+      border-radius:0;
+      background:transparent;
+    }
     .cost-quote th,
-    .cost-quote td{
+    .cost-quote td,
+    .cost-breakdown-table th,
+    .cost-breakdown-table td{
       text-align:center;
       border-color:var(--line);
     }
     .cost-quote th:first-child,
-    .cost-quote td:first-child{
+    .cost-quote td:first-child,
+    .cost-breakdown-table th:first-child,
+    .cost-breakdown-table td:first-child{
       width:30%;
       text-align:left;
     }
@@ -1311,6 +1314,7 @@
       }
     }
     @media (max-width:800px){
+      body{font-size:16px}
       .summary-grid,.cards,.calc-grid{grid-template-columns:1fr}
       .process-detail-cards{grid-template-columns:1fr}
       .flow{grid-template-columns:1fr}
@@ -1322,9 +1326,9 @@
         padding-top:72px;
         background-position:58% center;
       }
-      h1{font-size:34px}
-      h2{font-size:26px}
-      h3{font-size:19px}
+      h1{font-size:32px}
+      h2{font-size:24px}
+      h3{font-size:20px}
       main{padding-top:34px}
       section{
         padding:34px 0;
@@ -1332,23 +1336,32 @@
       }
       .lead{font-size:16px}
       .callout{font-size:16px}
+      .card h3,
+      .flow .step h3,
+      .stat strong{font-size:20px}
+      .card p,
+      .flow .step p{font-size:16px}
+      .stat span{font-size:14px}
       .equation{padding:18px}
       .formula{
         justify-content:flex-start;
         gap:8px;
+        font-size:16px;
       }
       .formula-item{
         min-height:34px;
         padding:7px 10px;
+        font-size:14px;
       }
       .accordion-item summary{
         align-items:flex-start;
         min-height:auto;
         padding:14px 16px;
-        font-size:16px;
+        font-size:20px;
       }
       .accordion-content{
         padding:0 16px 16px;
+        font-size:16px;
       }
       .algorithm-duel{
         padding:16px;
@@ -1368,25 +1381,47 @@
         min-height:auto;
         padding:22px 18px;
       }
-      .algorithm-card h3{font-size:21px}
+      .algorithm-card.supporter{order:1}
+      .algorithm-card.opponent{order:3}
+      .algorithm-card h3{font-size:20px}
       .algorithm-card p{
-        font-size:15px;
+        font-size:16px;
         line-height:1.7;
       }
       .duel-node{
+        position:relative;
         min-height:92px;
         border-radius:18px;
         order:2;
       }
-      .duel-node::before,
+      .duel-node::before{
+        display:block;
+        top:-18px;
+        left:50%;
+        width:16px;
+        height:18px;
+        transform:translateX(-50%);
+        clip-path:polygon(50% 0, 0 58%, 36% 58%, 36% 100%, 64% 100%, 64% 58%, 100% 58%);
+        background:linear-gradient(180deg, rgba(255,209,102,.18), rgba(255,209,102,.72));
+      }
       .duel-node::after{
-        display:none;
+        display:block;
+        top:auto;
+        right:auto;
+        bottom:-18px;
+        left:50%;
+        width:16px;
+        height:18px;
+        transform:translateX(-50%);
+        clip-path:polygon(50% 100%, 0 42%, 36% 42%, 36% 0, 64% 0, 64% 42%, 100% 42%);
+        background:linear-gradient(180deg, rgba(255,209,102,.72), rgba(255,209,102,.18));
       }
       .algorithm-conclusion{
         align-items:flex-start;
-        font-size:17px;
         padding:18px;
       }
+      .algorithm-conclusion strong{font-size:20px}
+      .algorithm-conclusion p{font-size:16px}
       .process-integrated{
         margin-inline:-4px;
         padding:14px;
@@ -1405,45 +1440,82 @@
         min-height:auto;
         padding:20px;
       }
+      .process-detail-cards .card h3{font-size:20px}
+      .process-detail-cards .card p{font-size:16px}
       .process-supply-note{
         align-items:flex-start;
         padding:16px;
-        font-size:15px;
+        font-size:16px;
       }
       .benefit-map{
-        grid-template-columns:1fr;
+        grid-template-columns:repeat(2, minmax(0, 1fr));
         grid-template-rows:auto;
         margin-inline:-4px;
         padding:16px;
-        gap:16px;
+        gap:12px;
       }
       .benefit-center{
-        grid-column:auto;
+        grid-column:1 / -1;
         grid-row:auto;
-        min-height:150px;
-        order:2;
+        min-height:142px;
+        order:-1;
+        margin-bottom:4px;
       }
+      .benefit-center strong{font-size:26px}
+      .benefit-center span{font-size:14px}
       .benefit-card{
         min-height:auto;
-        padding:20px;
+        padding:16px 14px;
+        border-color:rgba(102,227,196,.22);
       }
+      .benefit-card:nth-child(1){order:1}
+      .benefit-card:nth-child(3){order:2}
+      .benefit-card:nth-child(4){order:3}
+      .benefit-card:nth-child(5){order:4}
       .benefit-card::after{
         display:none;
       }
+      .benefit-card h3{
+        align-items:flex-start;
+        font-size:18px;
+        line-height:1.3;
+      }
+      .benefit-card p{
+        font-size:16px;
+        line-height:1.65;
+      }
       .benefit-conclusion{
+        grid-column:1 / -1;
         align-items:flex-start;
         justify-content:flex-start;
         text-align:left;
-        font-size:18px;
+        font-size:20px;
+        order:5;
       }
       .tpp-section{
         margin:34px -12px 0;
         padding:40px 12px;
       }
+      .tpp-section .flow{
+        gap:6px;
+        margin-top:14px;
+      }
+      .tpp-section .flow .step{
+        min-height:auto;
+        padding:14px;
+      }
+      .tpp-section .flow .step h3{
+        margin:12px 0 5px;
+      }
+      .tpp-section .flow .step:not(:last-child)::after{
+        bottom:-14px;
+        font-size:16px;
+      }
       .tpp-impact-formula{
         padding:18px;
         font-size:20px;
       }
+      .tpp-impact-note{font-size:14px}
       .tpp-line-graphic{
         display:none;
       }
@@ -1468,27 +1540,48 @@
       }
       .wrap{width:min(var(--max), calc(100% - 24px))}
       th,td{padding:13px}
-      table{font-size:14px}
+      table{font-size:16px}
+      .panel-heading strong{font-size:20px}
+      .panel-heading span{font-size:14px}
       .collapsible-panel{
         overflow:hidden;
       }
       .cost-quote{
         min-width:640px;
       }
+      .cost-breakdown-table{
+        min-width:640px;
+      }
       .cost-quote th,
-      .cost-quote td{
+      .cost-quote td,
+      .cost-breakdown-table th,
+      .cost-breakdown-table td{
         padding:13px 12px;
       }
       .cost-quote th:first-child,
-      .cost-quote td:first-child{
+      .cost-quote td:first-child,
+      .cost-breakdown-table th:first-child,
+      .cost-breakdown-table td:first-child{
         width:38%;
       }
       .quote-plan strong{
-        font-size:16px;
+        font-size:18px;
       }
       .check{
         width:26px;
         height:26px;
+      }
+    }
+    @media (max-width:700px){
+      .quote-table-wrap::after{
+        content:"";
+        position:absolute;
+        top:0;
+        right:0;
+        bottom:0;
+        width:54px;
+        pointer-events:none;
+        background:linear-gradient(90deg, rgba(19,23,28,0), rgba(19,23,28,.82) 64%, rgba(19,23,28,.98));
       }
     }
   </style>
@@ -1823,15 +1916,17 @@
           </span>
         </summary>
         <div class="panel-body">
-          <table>
-            <thead><tr><th>成本項目</th><th>內容</th><th>常見誤判</th></tr></thead>
-            <tbody>
-              <tr><td><span class="with-icon"><svg class="icon"><use href="#icon-work-hours"></use></svg>人力工時</span></td><td>研究、定調、文案、設計、剪輯、上架、監測</td><td>把既有員工視為零成本</td></tr>
-              <tr><td><span class="with-icon"><svg class="icon"><use href="#icon-ad-spend"></use></svg>投放</span></td><td>Meta、YouTube、Google等廣告</td><td>把自然流量與付費觸及混在一起</td></tr>
-              <tr><td><span class="with-icon"><svg class="icon"><use href="#icon-nodes"></use></svg>外部節點</span></td><td>KOL、外包剪輯、設計、活動配合</td><td>假設所有擴散都是自發且免費</td></tr>
-              <tr><td><span class="with-icon"><svg class="icon"><use href="#icon-risk"></use></svg>風險成本</span></td><td>法務、查核、危機處理、失敗素材</td><td>只計成功內容，不計試錯</td></tr>
-            </tbody>
-          </table>
+          <div class="quote-table-wrap">
+            <table class="cost-breakdown-table" aria-label="成本項目、內容與常見誤判拆解">
+              <thead><tr><th>成本項目</th><th>內容</th><th>常見誤判</th></tr></thead>
+              <tbody>
+                <tr><td><span class="with-icon"><svg class="icon"><use href="#icon-work-hours"></use></svg>人力工時</span></td><td>研究、定調、文案、設計、剪輯、上架、監測</td><td>把既有員工視為零成本</td></tr>
+                <tr><td><span class="with-icon"><svg class="icon"><use href="#icon-ad-spend"></use></svg>投放</span></td><td>Meta、YouTube、Google等廣告</td><td>把自然流量與付費觸及混在一起</td></tr>
+                <tr><td><span class="with-icon"><svg class="icon"><use href="#icon-nodes"></use></svg>外部節點</span></td><td>KOL、外包剪輯、設計、活動配合</td><td>假設所有擴散都是自發且免費</td></tr>
+                <tr><td><span class="with-icon"><svg class="icon"><use href="#icon-risk"></use></svg>風險成本</span></td><td>法務、查核、危機處理、失敗素材</td><td>只計成功內容，不計試錯</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </details>
 
