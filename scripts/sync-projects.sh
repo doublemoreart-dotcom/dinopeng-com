@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-if [[ $# -ne 6 ]]; then
-  echo "Usage: $0 <aidata-source> <tptrees-source> <sporttech-source> <48directory-source> <small-parties-source> <portal-root>" >&2
+if [[ $# -ne 7 ]]; then
+  echo "Usage: $0 <aidata-source> <tptrees-source> <sporttech-source> <48directory-source> <small-parties-source> <taiwan-food-safety-output> <portal-root>" >&2
   exit 64
 fi
 
@@ -12,7 +12,8 @@ tptrees_source="$(cd "$2" && pwd)"
 sporttech_source="$(cd "$3" && pwd)"
 directory_source="$(cd "$4" && pwd)"
 small_parties_source="$(cd "$5" && pwd)"
-portal_root="$(cd "$6" && pwd)"
+taiwan_food_safety_source="$(cd "$6" && pwd)"
+portal_root="$(cd "$7" && pwd)"
 
 require_file() {
   if [[ ! -f "$1" ]]; then
@@ -39,10 +40,14 @@ require_file "$small_parties_source/index.html"
 require_file "$small_parties_source/favicon.ico"
 require_file "$small_parties_source/favicon.svg"
 require_file "$small_parties_source/assets/hero-social-discourse.png"
+require_file "$taiwan_food_safety_source/index.html"
+require_file "$taiwan_food_safety_source/favicon.ico"
+require_file "$taiwan_food_safety_source/opengraph-image.png"
 require_file "$portal_root/index.html"
 require_file "$portal_root/CNAME"
+require_file "$portal_root/.nojekyll"
 
-mkdir -p "$portal_root/aidata/assets" "$portal_root/tptrees" "$portal_root/sporttech/assets" "$portal_root/48DIRECTORY/assets" "$portal_root/small-parties/assets"
+mkdir -p "$portal_root/aidata/assets" "$portal_root/tptrees" "$portal_root/sporttech/assets" "$portal_root/48DIRECTORY/assets" "$portal_root/small-parties/assets" "$portal_root/taiwan-food-safety"
 
 cp "$aidata_source/index.html" "$portal_root/aidata/index.html"
 rsync -a --delete "$aidata_source/assets/" "$portal_root/aidata/assets/"
@@ -69,4 +74,6 @@ cp "$small_parties_source/favicon.ico" "$portal_root/small-parties/favicon.ico"
 cp "$small_parties_source/favicon.svg" "$portal_root/small-parties/favicon.svg"
 rsync -a --delete "$small_parties_source/assets/" "$portal_root/small-parties/assets/"
 
-echo "Synced AI Data, TP Trees, SportTech, 48 DIRECTORY, and Small Parties into the portal repository."
+rsync -a --delete "$taiwan_food_safety_source/" "$portal_root/taiwan-food-safety/"
+
+echo "Synced AI Data, TP Trees, SportTech, 48 DIRECTORY, Small Parties, and Taiwan Food Safety into the portal repository."

@@ -61,11 +61,12 @@ https://dinopeng.com/aidata/
 - SportTech：https://github.com/doublemoreart-dotcom/sporttech
 - 48 DIRECTORY：https://github.com/doublemoreart-dotcom/48DIRECTORY
 - Small Parties：https://github.com/doublemoreart-dotcom/small-parties
+- Taiwan Food Safety：https://github.com/doublemoreart-dotcom/taiwan-food-safety
 
-本 repo 保留 `dinopeng.com` 的唯一 `CNAME` 與 GitHub Pages 發布責任。`.github/workflows/sync-projects.yml` 每小時及手動執行時，會從 AI Data、TP Trees、Small Parties 的 `main`，以及 SportTech、48 DIRECTORY 的 `gh-pages` 同步公開網站檔案至各自子路徑，通過既有路由測試後才提交更新。同步腳本也可在本機執行：
+本 repo 保留 `dinopeng.com` 的唯一 `CNAME` 與 GitHub Pages 發布責任。`.github/workflows/sync-projects.yml` 每小時及手動執行時，會從 AI Data、TP Trees、Small Parties、Taiwan Food Safety 的 `main`，以及 SportTech、48 DIRECTORY 的 `gh-pages` 同步公開網站檔案至各自子路徑；Taiwan Food Safety 會先建置 Next.js 靜態輸出，再通過既有路由測試後提交更新。同步腳本也可在本機執行：
 
 ```bash
-./scripts/sync-projects.sh ../aidata ../tptrees ../sporttech-gh-pages ../48DIRECTORY-pages ../small-parties .
+./scripts/sync-projects.sh ../aidata ../tptrees ../sporttech-gh-pages ../48DIRECTORY-pages ../small-parties ../taiwan-food-safety/out .
 ```
 
 自訂網域由根目錄的 `CNAME` 管理。網域供應商的 DNS 需另外設定：

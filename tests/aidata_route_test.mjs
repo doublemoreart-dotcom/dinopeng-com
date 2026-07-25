@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 const portalPagePath = new URL('../index.html', import.meta.url);
+const noJekyllPath = new URL('../.nojekyll', import.meta.url);
 const aidataPagePath = new URL('../aidata/index.html', import.meta.url);
 const aidataRootPath = new URL('../aidata/', import.meta.url);
 const sporttechPagePath = new URL('../sporttech/index.html', import.meta.url);
@@ -12,6 +13,8 @@ const directoryPagePath = new URL('../48DIRECTORY/index.html', import.meta.url);
 const directoryRootPath = new URL('../48DIRECTORY/', import.meta.url);
 const smallPartiesPagePath = new URL('../small-parties/index.html', import.meta.url);
 const smallPartiesRootPath = new URL('../small-parties/', import.meta.url);
+const taiwanFoodSafetyPagePath = new URL('../taiwan-food-safety/index.html', import.meta.url);
+const taiwanFoodSafetyRootPath = new URL('../taiwan-food-safety/', import.meta.url);
 const tpTreesPagePath = new URL('../tptrees/index.html', import.meta.url);
 const tpTreesLifecyclePath = new URL('../tptrees/lifecycle/index.html', import.meta.url);
 const tpTreesSpeciesPath = new URL('../tptrees/species/index.html', import.meta.url);
@@ -34,8 +37,30 @@ test('root publishes a project portal while /aidata/ keeps the AI report', async
   assert.match(portalPage, /href="\/sporttech\/"/);
   assert.match(portalPage, /href="\/48DIRECTORY\/"/);
   assert.match(portalPage, /href="\/small-parties\/"/);
+  assert.match(portalPage, /href="\/taiwan-food-safety\/"/);
   assert.match(aidataPage, /AI 對產業的數據觀察/);
   assert.notEqual(aidataPage, portalPage);
+});
+
+test('taiwan-food-safety route publishes its static page and local assets', async () => {
+  const html = await readFile(taiwanFoodSafetyPagePath, 'utf8');
+  assert.equal(existsSync(noJekyllPath), true, '.nojekyll should publish the generated _next directory');
+  assert.match(html, /<title>台灣食安管理流程與權責分工<\/title>/);
+  assert.match(html, /id="overview"/);
+  assert.match(html, /id="roles"/);
+  assert.match(html, /id="incident"/);
+  assert.match(html, /id="check"/);
+
+  const paths = [...html.matchAll(/(?:src|href)="\/taiwan-food-safety\/([^"?]+)(?:\?[^"]*)?"/g)]
+    .map(match => match[1]);
+  assert.ok(paths.length >= 5, `expected Taiwan Food Safety local asset references, got ${paths.length}`);
+  for (const path of new Set(paths)) {
+    assert.equal(existsSync(new URL(path, taiwanFoodSafetyRootPath)), true, `${path} should load below /taiwan-food-safety/`);
+  }
+
+  for (const path of ['favicon.ico', 'opengraph-image.png', 'twitter-image.png']) {
+    assert.equal(existsSync(new URL(path, taiwanFoodSafetyRootPath)), true, `${path} should load below /taiwan-food-safety/`);
+  }
 });
 
 test('small-parties route publishes its static page and local assets', async () => {
@@ -52,7 +77,7 @@ test('small-parties route publishes its static page and local assets', async () 
 
 test('sporttech route publishes its static page and local assets', async () => {
   const html = await readFile(sporttechPagePath, 'utf8');
-  assert.match(html, /2022-2026 運動X科技預算(?:查詢)?小幫手/);
+  assert.match(html, /運動X科技預算(?:查詢)?小幫手/);
 
   const paths = [...html.matchAll(/(?:src|href)="(assets\/[^"]+)"/g)].map(match => match[1]);
   assert.ok(paths.length >= 3, `expected SportTech local asset references, got ${paths.length}`);

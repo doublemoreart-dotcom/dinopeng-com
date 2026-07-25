@@ -185,6 +185,16 @@
     .small-parties-card .card-mark span:nth-child(3) {
       width: 70%; height: 2px; left: 15%; top: 50%; background: var(--ink); transform: rotate(-18deg);
     }
+    .food-safety-card .card-mark { background: #f1eadc; }
+    .food-safety-card .card-mark span:first-child {
+      width: 72%; height: 72%; left: 14%; top: 14%; border: 2px solid #a93226; border-radius: 50%;
+    }
+    .food-safety-card .card-mark span:nth-child(2) {
+      width: 2px; height: 76%; left: 50%; top: 12%; background: #a93226; transform: rotate(45deg);
+    }
+    .food-safety-card .card-mark span:nth-child(3) {
+      width: 76%; height: 2px; left: 12%; top: 50%; background: #a93226; transform: rotate(45deg);
+    }
     .card-copy h3 { margin: 0 0 18px; font-size: clamp(38px, 4vw, 58px); font-weight: 620; letter-spacing: -0.06em; }
     .card-copy p { margin: 0; color: #494841; line-height: 1.7; }
     .project-card ul { display: flex; flex-wrap: wrap; gap: 8px; margin: auto 0 32px; padding: 32px 0 0; list-style: none; }
@@ -218,8 +228,8 @@
 
     @media (max-width: 1200px) and (min-width: 901px) {
       .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .project-card:nth-child(2n) { border-right: 0; }
       .project-card:nth-child(3n) { border-right: 1px solid var(--ink); }
+      .project-card:nth-child(2n) { border-right: 0; }
       .project-card:nth-child(n + 3) { border-top: 1px solid var(--ink); }
     }
     @media (max-width: 900px) {
@@ -327,6 +337,17 @@
             <p>分析小黨如何透過核心支持者、跨平台擴散與演算法機制放大社群聲量，並提供成本試算與辨識清單。</p>
           </div>
           <ul aria-label="Small Parties 專案分類"><li>政治傳播</li><li>社群分析</li><li>互動試算</li></ul>
+          <div class="card-action"><span>查看專案</span><span aria-hidden="true">↗</span></div>
+        </a>
+
+        <a class="project-card food-safety-card" href="/taiwan-food-safety/">
+          <div class="card-topline"><span>06</span><span>Public governance · Active</span></div>
+          <div class="card-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="card-copy">
+            <h3>Food Safety</h3>
+            <p>整理台灣食品業者、地方政府、中央食藥署、跨部會與司法體系的治理流程、權責分工與事件應變。</p>
+          </div>
+          <ul aria-label="Food Safety 專案分類"><li>食安治理</li><li>權責分工</li><li>事件應變</li></ul>
           <div class="card-action"><span>查看專案</span><span aria-hidden="true">↗</span></div>
         </a>
       </div>
