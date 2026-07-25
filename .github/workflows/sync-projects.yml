@@ -81,7 +81,7 @@ jobs:
 
       - name: Build Taiwan Food Safety
         working-directory: sources/taiwan-food-safety
-        run: npm ci && npm run build:pages
+        run: npm ci && NEXT_BUILD_ID="$(git rev-parse HEAD)" npm run build:pages
 
       - name: Sync published files
         working-directory: portal
