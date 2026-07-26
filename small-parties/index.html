@@ -309,9 +309,6 @@
       opacity:1;
       transform:translateY(0);
     }
-    .gsap-ready .reveal-section{
-      transition:none;
-    }
     @media (prefers-reduced-motion:reduce){
       html{scroll-behavior:auto}
       .page-preloader{
@@ -2456,14 +2453,7 @@
     <p class="footer-note">政治傳播與社群賽局分析</p>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollToPlugin.min.js"></script>
   <script>
-    const motionAllowed = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const hasGsap = motionAllowed && window.gsap;
-    const hasScrollAnimations = hasGsap && window.ScrollTrigger;
-
     function markPageReady(){
       document.documentElement.classList.add('is-page-ready');
       window.setTimeout(() => {
@@ -2492,7 +2482,6 @@
     const costQuote = document.querySelector('.cost-quote');
     const costQuoteWrap = costQuote?.closest('.quote-table-wrap');
     let activeTierIndex = 1;
-    const totalCounter = {value:Number(hours.value) * Number(rate.value) + Number(extra.value)};
 
     const costTiers = [
       {
@@ -2530,34 +2519,8 @@
       const target = costQuote.querySelector(`th[data-tier="${activeTierIndex}"]`);
       if (!target) return;
       const left = target.offsetLeft - (costQuoteWrap.clientWidth - target.offsetWidth) / 2;
-      const targetLeft = Math.max(0, left);
-
-      if (hasGsap && window.ScrollToPlugin) {
-        gsap.to(costQuoteWrap, {scrollTo:{x:targetLeft}, duration:.52, ease:'power2.out'});
-        gsap.to(window, {scrollTo:{y:costQuoteWrap, offsetY:110}, duration:.58, ease:'power2.out'});
-      } else {
-        costQuoteWrap.scrollTo({left:targetLeft, behavior:'smooth'});
-        costQuoteWrap.scrollIntoView({behavior:'smooth', block:'center'});
-      }
-    }
-
-    function renderTotal(value){
-      total.textContent = Math.round(value).toLocaleString() + ' 元';
-    }
-
-    function updateTotalDisplay(sum){
-      if (hasGsap) {
-        gsap.to(totalCounter, {
-          value:sum,
-          duration:.42,
-          ease:'power2.out',
-          overwrite:true,
-          onUpdate:() => renderTotal(totalCounter.value)
-        });
-      } else {
-        totalCounter.value = sum;
-        renderTotal(sum);
-      }
+      costQuoteWrap.scrollTo({left:Math.max(0, left), behavior:'smooth'});
+      costQuoteWrap.scrollIntoView({behavior:'smooth', block:'center'});
     }
 
     function update(){
@@ -2565,7 +2528,7 @@
       rateOut.textContent = Number(rate.value).toLocaleString();
       extraOut.textContent = Number(extra.value).toLocaleString();
       const sum = Number(hours.value) * Number(rate.value) + Number(extra.value);
-      updateTotalDisplay(sum);
+      total.textContent = sum.toLocaleString() + ' 元';
       const tier = costTiers.find(item => sum <= item.max);
       tierBadge.innerHTML = `<svg class="icon"><use href="#icon-flow"></use></svg>${tier.label}`;
       tierDesc.textContent = tier.desc;
@@ -2597,12 +2560,7 @@
     const revealSections = Array.from(document.querySelectorAll('main section'));
     revealSections.forEach(section => section.classList.add('reveal-section'));
 
-    function initFallbackReveal(){
-      if (!('IntersectionObserver' in window)) {
-        revealSections.forEach(section => section.classList.add('is-visible'));
-        return;
-      }
-
+    if ('IntersectionObserver' in window) {
       const revealObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
           if (!entry.isIntersecting) return;
@@ -2615,111 +2573,8 @@
       });
 
       revealSections.forEach(section => revealObserver.observe(section));
-    }
-
-    function initGsapAnimations(){
-      document.documentElement.classList.add('gsap-ready');
-      if (window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
-      if (window.ScrollToPlugin) gsap.registerPlugin(ScrollToPlugin);
-
-      gsap.from('.site-brand-mark img', {
-        opacity:0,
-        scale:.82,
-        rotate:-4,
-        duration:.72,
-        ease:'back.out(1.7)'
-      });
-
-      gsap.from('.hero .eyebrow, .hero h1, .hero .lead, .summary-grid .stat', {
-        opacity:0,
-        y:24,
-        duration:.72,
-        ease:'power2.out',
-        stagger:.08,
-        delay:.12
-      });
-
-      revealSections.forEach(section => {
-        gsap.fromTo(section,
-          {autoAlpha:0, y:30},
-          {
-            autoAlpha:1,
-            y:0,
-            duration:.74,
-            ease:'power2.out',
-            scrollTrigger:{
-              trigger:section,
-              start:'top 82%',
-              once:true
-            }
-          }
-        );
-      });
-
-      gsap.utils.toArray('.process-integrated, .tpp-impact-panel').forEach(panel => {
-        const items = panel.querySelectorAll('.process-line-graphic svg circle, .process-line-graphic svg rect, .process-line-graphic svg path, .process-line-graphic svg text, .mobile-flow-item, .process-detail-cards .card');
-        gsap.from(items, {
-          opacity:0,
-          y:14,
-          scale:.98,
-          duration:.52,
-          ease:'power2.out',
-          stagger:.045,
-          scrollTrigger:{
-            trigger:panel,
-            start:'top 76%',
-            once:true
-          }
-        });
-      });
-
-      gsap.from('.algorithm-card, .duel-node, .algorithm-conclusion', {
-        opacity:0,
-        y:22,
-        duration:.58,
-        ease:'power2.out',
-        stagger:.08,
-        scrollTrigger:{
-          trigger:'.algorithm-duel',
-          start:'top 74%',
-          once:true
-        }
-      });
-
-      gsap.from('.benefit-center, .benefit-card, .benefit-conclusion', {
-        opacity:0,
-        y:22,
-        scale:.98,
-        duration:.58,
-        ease:'power2.out',
-        stagger:.08,
-        scrollTrigger:{
-          trigger:'.benefit-map',
-          start:'top 74%',
-          once:true
-        }
-      });
-
-      gsap.from('.calculator .calc-context, .calculator label, .calculator .result', {
-        opacity:0,
-        y:18,
-        duration:.54,
-        ease:'power2.out',
-        stagger:.07,
-        scrollTrigger:{
-          trigger:'.calculator',
-          start:'top 78%',
-          once:true
-        }
-      });
-
-      ScrollTrigger.refresh();
-    }
-
-    if (hasScrollAnimations) {
-      initGsapAnimations();
     } else {
-      initFallbackReveal();
+      revealSections.forEach(section => section.classList.add('is-visible'));
     }
   </script>
 </body>
