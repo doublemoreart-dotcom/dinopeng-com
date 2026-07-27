@@ -60,3 +60,38 @@ npm run release:verify -- <commit>
 - `https://dinopeng.com/aidata/assets/company-logos/openai.ico`
 
 並與本機檔案做 SHA-256 比對。
+
+## Small Parties 更新流程
+
+`small-parties/` 採用分離式本機更新：所有修改先只在本機版完成，只有使用者明確說「推 git」時才提交與推送。
+
+### 本機更新
+
+```bash
+npm run small-parties:check
+```
+
+此指令會檢查：
+
+- `small-parties/index.html` inline script 語法。
+- favicon、社群縮圖、hero 圖、menu icon 與民眾黨 logo 是否存在。
+- GA、GSAP、ScrollTrigger、ScrollToPlugin、社群縮圖 meta 與成本試算連動邏輯是否仍在頁面中。
+
+### 推版後驗收
+
+```bash
+npm run small-parties:verify -- <commit>
+```
+
+此指令會抓取線上：
+
+- `https://dinopeng.com/small-parties/`
+- `https://dinopeng.com/small-parties/favicon.ico`
+- `https://dinopeng.com/small-parties/assets/social-thumbnail.png`
+- `https://dinopeng.com/small-parties/assets/menu-icon.png`
+
+並與本機檔案做 SHA-256 比對，確認 GitHub Pages 已部署到正式站。
+
+### 同步防呆
+
+若使用 `scripts/sync-projects.sh` 彙整多個專案，它會先檢查 Small Parties 來源是否包含 GSAP、GA、社群縮圖等新版必要內容。來源若是舊版，腳本會中止，避免 `chore: sync project sites` 把正式站覆蓋回舊版。

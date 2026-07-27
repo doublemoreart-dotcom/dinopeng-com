@@ -22,6 +22,18 @@ require_file() {
   fi
 }
 
+require_text() {
+  local file="$1"
+  local text="$2"
+  local label="$3"
+
+  if ! grep -Fq "$text" "$file"; then
+    echo "Required content is missing from $label: $text" >&2
+    echo "Refusing to sync because the source appears older than the portal copy." >&2
+    exit 67
+  fi
+}
+
 require_file "$aidata_source/index.html"
 require_file "$tptrees_source/index.html"
 require_file "$tptrees_source/lifecycle/index.html"
@@ -46,6 +58,12 @@ require_file "$taiwan_food_safety_source/opengraph-image.png"
 require_file "$portal_root/index.html"
 require_file "$portal_root/CNAME"
 require_file "$portal_root/.nojekyll"
+
+require_text "$small_parties_source/index.html" "gsap@3/dist/gsap.min.js" "Small Parties source"
+require_text "$small_parties_source/index.html" "ScrollTrigger.min.js" "Small Parties source"
+require_text "$small_parties_source/index.html" "ScrollToPlugin.min.js" "Small Parties source"
+require_text "$small_parties_source/index.html" "G-T2WMCYX21T" "Small Parties source"
+require_text "$small_parties_source/index.html" "assets/social-thumbnail.png" "Small Parties source"
 
 mkdir -p "$portal_root/aidata/assets" "$portal_root/tptrees" "$portal_root/sporttech/assets" "$portal_root/48DIRECTORY/assets" "$portal_root/small-parties/assets" "$portal_root/taiwan-food-safety"
 

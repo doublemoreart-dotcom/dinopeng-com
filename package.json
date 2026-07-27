@@ -5,6 +5,8 @@
   "scripts": {
     "release:prepare": "node scripts/release-prepare.mjs",
     "release:check": "node scripts/release-check.mjs",
-    "release:verify": "node scripts/release-verify.mjs"
+    "release:verify": "node scripts/release-verify.mjs",
+    "small-parties:check": "node scripts/small-parties-check.mjs",
+    "small-parties:verify": "node scripts/small-parties-check.mjs --remote"
   }
 }
