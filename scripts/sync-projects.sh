@@ -41,7 +41,16 @@ require_file "$tptrees_source/species/index.html"
 require_file "$tptrees_source/daily/index.html"
 require_file "$tptrees_source/data/tree-records.js"
 require_file "$tptrees_source/data/tree-data-manifest.json"
+require_file "$tptrees_source/data/site-release-manifest.json"
 require_file "$tptrees_source/favicon.svg"
+require_file "$tptrees_source/favicon.ico"
+require_file "$tptrees_source/app/analytics.js"
+require_file "$tptrees_source/app/heroicons.js"
+require_file "$tptrees_source/app/motion.css"
+require_file "$tptrees_source/app/motion.js"
+require_file "$tptrees_source/app/vendor/gsap.min.js"
+require_file "$tptrees_source/app/vendor/ScrollTrigger.min.js"
+require_file "$tptrees_source/public/social-preview.png"
 require_file "$sporttech_source/index.html"
 require_file "$sporttech_source/assets/favicon.svg"
 require_file "$sporttech_source/assets/sporttech-budget-hero-small.jpg"
@@ -73,10 +82,13 @@ rsync -a --delete "$aidata_source/assets/" "$portal_root/aidata/assets/"
 rsync -a --delete \
   --include "/index.html" \
   --include "/favicon.svg" \
+  --include "/favicon.ico" \
+  --include "/app/***" \
   --include "/lifecycle/***" \
   --include "/species/***" \
   --include "/daily/***" \
   --include "/data/***" \
+  --include "/public/***" \
   --exclude "*" \
   "$tptrees_source/" "$portal_root/tptrees/"
 

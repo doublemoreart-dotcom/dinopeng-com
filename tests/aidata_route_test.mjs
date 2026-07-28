@@ -21,9 +21,12 @@ const tpTreesSpeciesPath = new URL('../tptrees/species/index.html', import.meta.
 const tpTreesDailyPath = new URL('../tptrees/daily/index.html', import.meta.url);
 const tpTreesRecordsPath = new URL('../tptrees/data/tree-records.js', import.meta.url);
 const tpTreesManifestPath = new URL('../tptrees/data/tree-data-manifest.json', import.meta.url);
+const tpTreesReleaseManifestPath = new URL('../tptrees/data/site-release-manifest.json', import.meta.url);
 const tpTreesFaviconPath = new URL('../tptrees/favicon.svg', import.meta.url);
+const tpTreesRootPath = new URL('../tptrees/', import.meta.url);
 const readmePath = new URL('../README.md', import.meta.url);
 const updateGuidePath = new URL('../DATA_UPDATE.md', import.meta.url);
+const syncProjectsPath = new URL('../scripts/sync-projects.sh', import.meta.url);
 
 test('root publishes a project portal while /aidata/ keeps the AI report', async () => {
   const [portalPage, aidataPage] = await Promise.all([
@@ -113,7 +116,33 @@ test('tptrees route publishes every public page and data dependency', async () =
   assert.match(daily, /今天給我一棵樹/);
   assert.equal(existsSync(tpTreesRecordsPath), true, 'tree-records.js should load below /tptrees/');
   assert.equal(existsSync(tpTreesManifestPath), true, 'tree-data-manifest.json should load below /tptrees/');
+  assert.equal(existsSync(tpTreesReleaseManifestPath), true, 'site-release-manifest.json should load below /tptrees/');
   assert.equal(existsSync(tpTreesFaviconPath), true, 'favicon.svg should load below /tptrees/');
+
+  for (const path of [
+    'favicon.ico',
+    'app/analytics.js',
+    'app/heroicons.js',
+    'app/motion.css',
+    'app/motion.js',
+    'app/vendor/gsap.min.js',
+    'app/vendor/ScrollTrigger.min.js',
+    'public/social-preview.png',
+  ]) {
+    assert.equal(existsSync(new URL(path, tpTreesRootPath)), true, `${path} should load below /tptrees/`);
+  }
+});
+
+test('portal sync keeps every TP Trees runtime asset', async () => {
+  const syncScript = await readFile(syncProjectsPath, 'utf8');
+  for (const rule of [
+    '--include "/favicon.ico"',
+    '--include "/app/***"',
+    '--include "/public/***"',
+  ]) {
+    assert.match(syncScript, new RegExp(rule.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  }
+  assert.match(syncScript, /site-release-manifest\.json/);
 });
 
 test('aidata route includes every relative company logo asset used by the page', async () => {
