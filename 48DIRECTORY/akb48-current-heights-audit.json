@@ -1,0 +1,452 @@
+[
+  {
+    "name": "岩立 沙穂",
+    "en": "SAHO IWATATE",
+    "generation": "13期生",
+    "localHeight": 157,
+    "sourceTitle": "Iwatate Saho",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Iwatate_Saho",
+    "height": 157,
+    "statusText": "ready"
+  },
+  {
+    "name": "福岡 聖菜",
+    "en": "SEINA FUKUOKA",
+    "generation": "15期生",
+    "localHeight": 155,
+    "sourceTitle": "Fukuoka Seina",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Fukuoka_Seina",
+    "height": 155,
+    "statusText": "ready"
+  },
+  {
+    "name": "小栗 有以",
+    "en": "YUI OGURI",
+    "generation": "Team8",
+    "localHeight": 163,
+    "sourceTitle": "Oguri Yui",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Oguri_Yui",
+    "height": 163,
+    "statusText": "ready"
+  },
+  {
+    "name": "行天 優莉奈",
+    "en": "YURINA GYOTEN",
+    "generation": "Team8",
+    "localHeight": 162,
+    "sourceTitle": "Gyoten Yurina",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Gyoten_Yurina",
+    "height": 162,
+    "statusText": "ready"
+  },
+  {
+    "name": "倉野尾 成美",
+    "en": "NARUMI KURANOO",
+    "generation": "Team8",
+    "localHeight": 152,
+    "sourceTitle": "Kuranoo Narumi",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kuranoo_Narumi",
+    "height": 152,
+    "statusText": "ready"
+  },
+  {
+    "name": "坂川 陽香",
+    "en": "HIYUKA SAKAGAWA",
+    "generation": "Team8",
+    "localHeight": 159,
+    "sourceTitle": "Sakagawa Hiyuka",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Sakagawa_Hiyuka",
+    "height": 159,
+    "statusText": "ready"
+  },
+  {
+    "name": "下尾 みう",
+    "en": "MIU SHITAO",
+    "generation": "Team8",
+    "localHeight": 162,
+    "sourceTitle": "Shitao Miu",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Shitao_Miu",
+    "height": 162,
+    "statusText": "ready"
+  },
+  {
+    "name": "髙橋 彩音",
+    "en": "AYANE TAKAHASHI",
+    "generation": "Team8",
+    "localHeight": 153,
+    "sourceTitle": "Takahashi Ayane",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Takahashi_Ayane",
+    "height": 153,
+    "statusText": "ready"
+  },
+  {
+    "name": "徳永 羚海",
+    "en": "REMI TOKUNAGA",
+    "generation": "Team8",
+    "localHeight": 157,
+    "sourceTitle": "Tokunaga Remi",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Tokunaga_Remi",
+    "height": 157,
+    "statusText": "ready"
+  },
+  {
+    "name": "永野 芹佳",
+    "en": "SERIKA NAGANO",
+    "generation": "Team8",
+    "localHeight": 158,
+    "sourceTitle": "Nagano Serika",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Nagano_Serika",
+    "height": 158,
+    "statusText": "ready"
+  },
+  {
+    "name": "橋本 陽菜",
+    "en": "HARUNA HASHIMOTO",
+    "generation": "Team8",
+    "localHeight": 150,
+    "sourceTitle": "Hashimoto Haruna",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Hashimoto_Haruna",
+    "height": 150,
+    "statusText": "ready"
+  },
+  {
+    "name": "千葉 恵里",
+    "en": "ERII CHIBA",
+    "generation": "ドラフト2期生",
+    "localHeight": 165.5,
+    "sourceTitle": "Chiba Erii",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Chiba_Erii",
+    "height": 165.5,
+    "statusText": "ready"
+  },
+  {
+    "name": "黒須 遥香",
+    "en": "HARUKA KUROSU",
+    "generation": "16期生",
+    "localHeight": 160,
+    "sourceTitle": "Kurosu Haruka",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kurosu_Haruka",
+    "height": 160,
+    "statusText": "ready"
+  },
+  {
+    "name": "長友 彩海",
+    "en": "AYAMI NAGATOMO",
+    "generation": "16期生",
+    "localHeight": 161,
+    "sourceTitle": "Nagatomo Ayami",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Nagatomo_Ayami",
+    "height": 161,
+    "statusText": "ready"
+  },
+  {
+    "name": "武藤 小麟",
+    "en": "ORIN MUTO",
+    "generation": "16期生",
+    "localHeight": 153,
+    "sourceTitle": "Muto Orin",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Muto_Orin",
+    "height": 153,
+    "statusText": "ready"
+  },
+  {
+    "name": "山内 瑞葵",
+    "en": "MIZUKI YAMAUCHI",
+    "generation": "16期生",
+    "localHeight": 162.5,
+    "sourceTitle": "Yamauchi Mizuki",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Yamauchi_Mizuki",
+    "height": 162.5,
+    "statusText": "ready"
+  },
+  {
+    "name": "山根 涼羽",
+    "en": "SUZUHA YAMANE",
+    "generation": "16期生",
+    "localHeight": 158,
+    "sourceTitle": "Yamane Suzuha",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Yamane_Suzuha",
+    "height": 158,
+    "statusText": "ready"
+  },
+  {
+    "name": "太田 有紀",
+    "en": "YUKI OTA",
+    "generation": "17期生",
+    "localHeight": 157,
+    "sourceTitle": "Ota Yuki",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Ota_Yuki",
+    "height": 157,
+    "statusText": "ready"
+  },
+  {
+    "name": "佐藤 綺星",
+    "en": "AIRI SATO",
+    "generation": "17期生",
+    "localHeight": 156,
+    "sourceTitle": "Sato Airi",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Sato_Airi",
+    "height": 156,
+    "statusText": "ready"
+  },
+  {
+    "name": "橋本 恵理子",
+    "en": "ERIKO HASHIMOTO",
+    "generation": "17期生",
+    "localHeight": 156,
+    "sourceTitle": "Hashimoto Eriko",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Hashimoto_Eriko",
+    "height": 156,
+    "statusText": "ready"
+  },
+  {
+    "name": "畠山 希美",
+    "en": "NOZOMI HATAKEYAMA",
+    "generation": "17期生",
+    "localHeight": 159,
+    "sourceTitle": "Hatakeyama Nozomi",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Hatakeyama_Nozomi",
+    "height": 159,
+    "statusText": "ready"
+  },
+  {
+    "name": "平田 侑希",
+    "en": "YUKI HIRATA",
+    "generation": "17期生",
+    "localHeight": 157,
+    "sourceTitle": "Hirata Yuki",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Hirata_Yuki",
+    "height": 157,
+    "statusText": "ready"
+  },
+  {
+    "name": "布袋 百椛",
+    "en": "MOKA HOTEI",
+    "generation": "17期生",
+    "localHeight": 151,
+    "sourceTitle": "Hotei Moka",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Hotei_Moka",
+    "height": 151,
+    "statusText": "ready"
+  },
+  {
+    "name": "正鋳 真優",
+    "en": "MAYUU MASAI",
+    "generation": "17期生",
+    "localHeight": 154,
+    "sourceTitle": "Masai Mayuu",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Masai_Mayuu",
+    "height": 154,
+    "statusText": "ready"
+  },
+  {
+    "name": "水島 美結",
+    "en": "MIYUU MIZUSHIMA",
+    "generation": "17期生",
+    "localHeight": 157,
+    "sourceTitle": "Mizushima Miyuu",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Mizushima_Miyuu",
+    "height": 157,
+    "statusText": "ready"
+  },
+  {
+    "name": "山﨑 空",
+    "en": "SORA YAMAZAKI",
+    "generation": "17期生",
+    "localHeight": 152,
+    "sourceTitle": "Yamazaki Sora",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Yamazaki_Sora",
+    "height": 152,
+    "statusText": "ready"
+  },
+  {
+    "name": "秋山 由奈",
+    "en": "YUNA AKIYAMA",
+    "generation": "18期生",
+    "localHeight": 158,
+    "sourceTitle": "Akiyama Yuna",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Akiyama_Yuna",
+    "height": 158,
+    "statusText": "ready"
+  },
+  {
+    "name": "新井 彩永",
+    "en": "SAE ARAI",
+    "generation": "18期生",
+    "localHeight": 162,
+    "sourceTitle": "Arai Sae",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Arai_Sae",
+    "height": 162,
+    "statusText": "ready"
+  },
+  {
+    "name": "工藤 華純",
+    "en": "KASUMI KUDO",
+    "generation": "18期生",
+    "localHeight": 159,
+    "sourceTitle": "Kudo Kasumi",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kudo_Kasumi",
+    "height": 159,
+    "statusText": "ready"
+  },
+  {
+    "name": "久保 姫菜乃",
+    "en": "HINANO KUBO",
+    "generation": "18期生",
+    "localHeight": 163,
+    "sourceTitle": "Kubo Hinano",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kubo_Hinano",
+    "height": 163,
+    "statusText": "ready"
+  },
+  {
+    "name": "迫 由芽実",
+    "en": "YUMEMI SAKO",
+    "generation": "18期生",
+    "localHeight": 162,
+    "sourceTitle": "Sako Yumemi",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Sako_Yumemi",
+    "height": 162,
+    "statusText": "ready"
+  },
+  {
+    "name": "成田 香姫奈",
+    "en": "KOHINA NARITA",
+    "generation": "18期生",
+    "localHeight": 158,
+    "sourceTitle": "Narita Kohina",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Narita_Kohina",
+    "height": 158,
+    "statusText": "ready"
+  },
+  {
+    "name": "八木 愛月",
+    "en": "AZUKI YAGI",
+    "generation": "18期生",
+    "localHeight": 159,
+    "sourceTitle": "Yagi Azuki",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Yagi_Azuki",
+    "height": 159,
+    "statusText": "ready"
+  },
+  {
+    "name": "山口 結愛",
+    "en": "YUI YAMAGUCHI",
+    "generation": "18期生",
+    "localHeight": 158,
+    "sourceTitle": "Yamaguchi Yui",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Yamaguchi_Yui",
+    "height": 158,
+    "statusText": "ready"
+  },
+  {
+    "name": "伊藤 百花",
+    "en": "MOMOKA ITO",
+    "generation": "19期生",
+    "localHeight": 157,
+    "sourceTitle": "Ito Momoka",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Ito_Momoka",
+    "height": 157,
+    "statusText": "ready"
+  },
+  {
+    "name": "奥本 カイリ",
+    "en": "KAIRI OKUMOTO",
+    "generation": "19期生",
+    "localHeight": 155.5,
+    "sourceTitle": "Okumoto Kairi",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Okumoto_Kairi",
+    "height": 155.5,
+    "statusText": "ready"
+  },
+  {
+    "name": "川村 結衣",
+    "en": "YUI KAWAMURA",
+    "generation": "19期生",
+    "localHeight": 155,
+    "sourceTitle": "Kawamura Yui",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kawamura_Yui",
+    "height": 155,
+    "statusText": "ready"
+  },
+  {
+    "name": "大賀 彩姫",
+    "en": "SAKI OGA",
+    "generation": "20期研究生",
+    "localHeight": 168,
+    "sourceTitle": "Oga Saki",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Oga_Saki",
+    "height": 168,
+    "statusText": "ready"
+  },
+  {
+    "name": "近藤 沙樹",
+    "en": "SAKI KONDO",
+    "generation": "20期研究生",
+    "localHeight": 157,
+    "sourceTitle": "AKB48 official profile",
+    "sourceUrl": "https://www.akb48.co.jp/about/members/detail?mid=1099",
+    "height": 157,
+    "statusText": "ready"
+  },
+  {
+    "name": "丸山 ひなた",
+    "en": "HINATA MARUYAMA",
+    "generation": "20期研究生",
+    "localHeight": 159,
+    "sourceTitle": "Maruyama Hinata",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Maruyama_Hinata",
+    "height": 159,
+    "statusText": "ready"
+  },
+  {
+    "name": "髙橋 舞桜",
+    "en": "MAO TAKAHASHI",
+    "generation": "21期研究生",
+    "localHeight": 156,
+    "sourceTitle": "Takahashi Mao",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Takahashi_Mao",
+    "height": 156,
+    "statusText": "ready"
+  },
+  {
+    "name": "田中 沙友利",
+    "en": "SAYURI TANAKA",
+    "generation": "21期研究生",
+    "localHeight": 165,
+    "sourceTitle": "AKB48 official profile",
+    "sourceUrl": "https://www.akb48.co.jp/about/members/detail?mid=1102",
+    "height": 165,
+    "statusText": "ready"
+  },
+  {
+    "name": "牧戸 愛茉",
+    "en": "EMA MAKITO",
+    "generation": "21期研究生",
+    "localHeight": 156,
+    "sourceTitle": "Makito Ema",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Makito_Ema",
+    "height": 156,
+    "statusText": "ready"
+  },
+  {
+    "name": "森川 優",
+    "en": "YU MORIKAWA",
+    "generation": "21期研究生",
+    "localHeight": 161,
+    "sourceTitle": "Morikawa Yu",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Morikawa_Yu",
+    "height": 161,
+    "statusText": "ready"
+  },
+  {
+    "name": "渡邉 葵心",
+    "en": "KIKO WATANABE",
+    "generation": "21期研究生",
+    "localHeight": 160,
+    "sourceTitle": "Watanabe Kiko",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Watanabe_Kiko",
+    "height": 160,
+    "statusText": "ready"
+  }
+]

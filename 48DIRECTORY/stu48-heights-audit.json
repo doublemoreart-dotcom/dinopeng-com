@@ -1,0 +1,462 @@
+[
+  {
+    "name": "甲斐 心愛",
+    "en": "KAI COCOA",
+    "generation": "1期生",
+    "localHeight": null,
+    "sourceTitle": "Kai Cocoa",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kai_Cocoa",
+    "height": 154,
+    "statusText": "ready"
+  },
+  {
+    "name": "谷口 茉妃菜",
+    "en": "TANIGUCHI MAHINA",
+    "generation": "1期生",
+    "localHeight": null,
+    "sourceTitle": "Taniguchi Mahina",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Taniguchi_Mahina",
+    "height": 161,
+    "statusText": "ready"
+  },
+  {
+    "name": "兵頭 葵",
+    "en": "HYODO AOI",
+    "generation": "1期生",
+    "localHeight": null,
+    "sourceTitle": "Hyodo Aoi",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Hyodo_Aoi",
+    "height": 162,
+    "statusText": "ready"
+  },
+  {
+    "name": "福田 朱里",
+    "en": "FUKUDA AKARI",
+    "generation": "1期生",
+    "localHeight": null,
+    "sourceTitle": "Fukuda Akari",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Fukuda_Akari",
+    "height": 164,
+    "statusText": "ready"
+  },
+  {
+    "name": "信濃 宙花",
+    "en": "SHINANO SORAHA",
+    "generation": "ドラフト3期生",
+    "localHeight": null,
+    "sourceTitle": "Shinano Soraha",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Shinano_Soraha",
+    "height": 163,
+    "statusText": "ready"
+  },
+  {
+    "name": "中村 舞",
+    "en": "NAKAMURA MAI",
+    "generation": "ドラフト3期生",
+    "localHeight": null,
+    "sourceTitle": "Nakamura Mai",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Nakamura_Mai",
+    "height": 163,
+    "statusText": "ready"
+  },
+  {
+    "name": "池田 裕楽",
+    "en": "IKEDA YURA",
+    "generation": "2期生",
+    "localHeight": null,
+    "sourceTitle": "Ikeda Yura",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Ikeda_Yura",
+    "height": 152,
+    "statusText": "ready"
+  },
+  {
+    "name": "内海 里音",
+    "en": "UTSUMI RINE",
+    "generation": "2期生",
+    "localHeight": null,
+    "sourceTitle": "Utsumi Rine",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Utsumi_Rine",
+    "height": 153,
+    "statusText": "ready"
+  },
+  {
+    "name": "尾崎 世里花",
+    "en": "OSAKI SERIKA",
+    "generation": "2期生",
+    "localHeight": null,
+    "sourceTitle": "Osaki Serika",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Osaki_Serika",
+    "height": 161,
+    "statusText": "ready"
+  },
+  {
+    "name": "川又 優菜",
+    "en": "KAWAMATA YUUNA",
+    "generation": "2期生",
+    "localHeight": null,
+    "sourceTitle": "Kawamata Yuuna",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kawamata_Yuuna",
+    "height": 162,
+    "statusText": "ready"
+  },
+  {
+    "name": "工藤 理子",
+    "en": "KUDO RIKO",
+    "generation": "2期生",
+    "localHeight": null,
+    "sourceTitle": "Kudo Riko",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kudo_Riko",
+    "height": 156,
+    "statusText": "ready"
+  },
+  {
+    "name": "迫 姫華",
+    "en": "SAKO HIMEKA",
+    "generation": "2期生",
+    "localHeight": null,
+    "sourceTitle": "Sako Himeka",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Sako_Himeka",
+    "height": 161,
+    "statusText": "ready"
+  },
+  {
+    "name": "清水 紗良",
+    "en": "SHIMIZU SARA",
+    "generation": "2期生",
+    "localHeight": null,
+    "sourceTitle": "Shimizu Sara",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Shimizu_Sara",
+    "height": 157,
+    "statusText": "ready"
+  },
+  {
+    "name": "高雄 さやか",
+    "en": "TAKAO SAYAKA",
+    "generation": "2期生",
+    "localHeight": null,
+    "sourceTitle": "Takao Sayaka",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Takao_Sayaka",
+    "height": 153,
+    "statusText": "ready"
+  },
+  {
+    "name": "原田 清花",
+    "en": "HARADA SAYAKA",
+    "generation": "2期生",
+    "localHeight": null,
+    "sourceTitle": "Harada Sayaka",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Harada_Sayaka",
+    "height": 163.6,
+    "statusText": "ready"
+  },
+  {
+    "name": "宗雪 里香",
+    "en": "MUNEYUKI RIKA",
+    "generation": "2期生",
+    "localHeight": null,
+    "sourceTitle": "Muneyuki Rika",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Muneyuki_Rika",
+    "height": 167,
+    "statusText": "ready"
+  },
+  {
+    "name": "吉田 彩良",
+    "en": "YOSHIDA SARA",
+    "generation": "2期生",
+    "localHeight": null,
+    "sourceTitle": "Yoshida Sara",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Yoshida_Sara",
+    "height": 163,
+    "statusText": "ready"
+  },
+  {
+    "name": "渡辺 菜月",
+    "en": "WATANABE NATSUKI",
+    "generation": "2期生",
+    "localHeight": null,
+    "sourceTitle": "Watanabe Natsuki",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Watanabe_Natsuki",
+    "height": 156,
+    "statusText": "ready"
+  },
+  {
+    "name": "岡田 あずみ",
+    "en": "OKADA AZUMI",
+    "generation": "2.5期生",
+    "localHeight": null,
+    "sourceTitle": "Okada Azumi",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Okada_Azumi",
+    "height": 148,
+    "statusText": "ready"
+  },
+  {
+    "name": "岡村 梨央",
+    "en": "OKAMURA RIO",
+    "generation": "2.5期生",
+    "localHeight": null,
+    "sourceTitle": "Okamura Rio",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Okamura_Rio",
+    "height": 161,
+    "statusText": "ready"
+  },
+  {
+    "name": "久留島 優果",
+    "en": "KURUSHIMA YUKA",
+    "generation": "2.5期生",
+    "localHeight": null,
+    "sourceTitle": "Kurushima Yuka",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kurushima_Yuka",
+    "height": 150,
+    "statusText": "ready"
+  },
+  {
+    "name": "諸葛 望愛",
+    "en": "MOROKUZU NOA",
+    "generation": "2.5期生",
+    "localHeight": null,
+    "sourceTitle": "Morokuzu Noa",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Morokuzu_Noa",
+    "height": 156,
+    "statusText": "ready"
+  },
+  {
+    "name": "新井梨杏",
+    "en": "ARAI RIA",
+    "generation": "3期生",
+    "localHeight": null,
+    "sourceTitle": "Arai Ria",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Arai_Ria",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "石原侑奈",
+    "en": "ISHIHARA YUUNA",
+    "generation": "3期生",
+    "localHeight": null,
+    "sourceTitle": "Ishihara Yuuna",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Ishihara_Yuuna",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "奥田唯菜",
+    "en": "OKUDA YUINA",
+    "generation": "3期生",
+    "localHeight": null,
+    "sourceTitle": "Okuda Yuina",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Okuda_Yuina",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "北澤苺",
+    "en": "KITAZAWA ICHIGO",
+    "generation": "3期生",
+    "localHeight": null,
+    "sourceTitle": "Kitazawa Ichigo",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kitazawa_Ichigo",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "濵田響",
+    "en": "HAMADA HIBIKI",
+    "generation": "3期生",
+    "localHeight": null,
+    "sourceTitle": "Hamada Hibiki",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Hamada_Hibiki",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "森末妃奈",
+    "en": "MORISUE HIMENA",
+    "generation": "3期生",
+    "localHeight": null,
+    "sourceTitle": "Morisue Himena",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Morisue_Himena",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "石松 陽菜",
+    "en": "ISHIMATSU HARUNA",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Ishimatsu Haruna",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Ishimatsu_Haruna",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "井上 久伶杏",
+    "en": "INOUE KUREA",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Inoue Kurea",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Inoue_Kurea",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "蕪竹 真奈",
+    "en": "KABUTAKE MANA",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Kabutake Mana",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kabutake_Mana",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "木原 姫花世",
+    "en": "KIHARA HINAYO",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Kihara Hinayo",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kihara_Hinayo",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "小松 奈侑",
+    "en": "KOMATSU NAYU",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Komatsu Nayu",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Komatsu_Nayu",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "坂木 叶愛",
+    "en": "SAKAKI TOWANA",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Sakaki Towana",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Sakaki_Towana",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "坂崎 愛",
+    "en": "SAKAZAKI AI",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Sakazaki Ai",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Sakazaki_Ai",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "島田 紗香",
+    "en": "SHIMADA SAYAKA",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Shimada Sayaka",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Shimada_Sayaka",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "曽我部 あこ",
+    "en": "SOGABE AKO",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Sogabe Ako",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Sogabe_Ako",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "髙村 栞里",
+    "en": "TAKAMURA SHIORI",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Takamura Shiori",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Takamura_Shiori",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "田中 奈菜子",
+    "en": "TANAKA NANAKO",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Tanaka Nanako",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Tanaka_Nanako",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "道保 琉南",
+    "en": "DOUHO RUNA",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Douho Runa",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Douho_Runa",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "野中 莉央",
+    "en": "NONAKA RIO",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Nonaka Rio",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Nonaka_Rio",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "濵田 美惟",
+    "en": "HAMADA MII",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Hamada Mii",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Hamada_Mii",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "藤田 愛結",
+    "en": "FUJITA AMU",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Fujita Amu",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Fujita_Amu",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "三好 真綺",
+    "en": "MIYOSHI MAAYA",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Miyoshi Maaya",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Miyoshi_Maaya",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "屋木 優菜",
+    "en": "YAGI YUUNA",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Yagi Yuuna",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Yagi_Yuuna",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "横井 結菜",
+    "en": "YOKOI YUINA",
+    "generation": "4期研究生",
+    "localHeight": null,
+    "sourceTitle": "Yokoi Yuina",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Yokoi_Yuina",
+    "height": null,
+    "statusText": "missing-height"
+  }
+]

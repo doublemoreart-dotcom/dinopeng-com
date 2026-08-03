@@ -1,0 +1,352 @@
+[
+  {
+    "name": "清司麗菜",
+    "en": "SEIJI REINA",
+    "generation": "1期生",
+    "localHeight": null,
+    "sourceTitle": "Seiji Reina",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Seiji_Reina",
+    "height": 151,
+    "statusText": "ready"
+  },
+  {
+    "name": "西潟茉莉奈",
+    "en": "NISHIGATA MARINA",
+    "generation": "1期生",
+    "localHeight": null,
+    "sourceTitle": "Nishigata Marina",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Nishigata_Marina",
+    "height": 158,
+    "statusText": "ready"
+  },
+  {
+    "name": "佐藤海里",
+    "en": "SATO KAIRI",
+    "generation": "ドラフト3期生",
+    "localHeight": null,
+    "sourceTitle": "Sato Kairi",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Sato_Kairi",
+    "height": 160,
+    "statusText": "ready"
+  },
+  {
+    "name": "大塚七海",
+    "en": "OTSUKA NANAMI",
+    "generation": "2期生",
+    "localHeight": null,
+    "sourceTitle": "Otsuka Nanami",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Otsuka_Nanami",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "三村妃乃",
+    "en": "MIMURA HINO",
+    "generation": "2期生",
+    "localHeight": null,
+    "sourceTitle": "Mimura Hino",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Mimura_Hino",
+    "height": 158,
+    "statusText": "ready"
+  },
+  {
+    "name": "磯部瑠紅",
+    "en": "ISOBE RUA",
+    "generation": "3期生",
+    "localHeight": null,
+    "sourceTitle": "Isobe Rua",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Isobe_Rua",
+    "height": 160,
+    "statusText": "ready"
+  },
+  {
+    "name": "喜多花恵",
+    "en": "KITA HANAE",
+    "generation": "3期生",
+    "localHeight": null,
+    "sourceTitle": "Kita Hanae",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kita_Hanae",
+    "height": 158.5,
+    "statusText": "ready"
+  },
+  {
+    "name": "北村優羽",
+    "en": "KITAMURA YUHA",
+    "generation": "3期生",
+    "localHeight": null,
+    "sourceTitle": "Kitamura Yuha",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kitamura_Yuha",
+    "height": 154,
+    "statusText": "ready"
+  },
+  {
+    "name": "木本優菜",
+    "en": "KIMOTO YUNA",
+    "generation": "3期生",
+    "localHeight": null,
+    "sourceTitle": "Kimoto Yuna",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kimoto_Yuna",
+    "height": 160,
+    "statusText": "ready"
+  },
+  {
+    "name": "水津菜月",
+    "en": "SUIZU NATSUKI",
+    "generation": "3期生",
+    "localHeight": null,
+    "sourceTitle": "Suizu Natsuki",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Suizu_Natsuki",
+    "height": 153,
+    "statusText": "ready"
+  },
+  {
+    "name": "杉本萌",
+    "en": "SUGIMOTO MOE",
+    "generation": "3期生",
+    "localHeight": null,
+    "sourceTitle": "Sugimoto Moe",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Sugimoto_Moe",
+    "height": 166,
+    "statusText": "ready"
+  },
+  {
+    "name": "磯崎菜々",
+    "en": "ISOZAKI NANA",
+    "generation": "4期生",
+    "localHeight": null,
+    "sourceTitle": "Isozaki Nana",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Isozaki_Nana",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "木本杏菜",
+    "en": "KIMOTO ANNA",
+    "generation": "4期生",
+    "localHeight": null,
+    "sourceTitle": "Kimoto Anna",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kimoto_Anna",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "佐藤広花",
+    "en": "SATO HIROKA",
+    "generation": "4期生",
+    "localHeight": null,
+    "sourceTitle": "Sato Hiroka",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Sato_Hiroka",
+    "height": 154.5,
+    "statusText": "ready"
+  },
+  {
+    "name": "新沢葵唯",
+    "en": "SHINZAWA AOI",
+    "generation": "4期生",
+    "localHeight": null,
+    "sourceTitle": "Shinzawa Aoi",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Shinzawa_Aoi",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "高島柚愛",
+    "en": "TAKASHIMA YUA",
+    "generation": "4期生",
+    "localHeight": null,
+    "sourceTitle": "Takashima Yua",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Takashima_Yua",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "西川晴菜",
+    "en": "NISHIKAWA HARUNA",
+    "generation": "4期生",
+    "localHeight": null,
+    "sourceTitle": "Nishikawa Haruna",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Nishikawa_Haruna",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "安座間結",
+    "en": "AZAMA YUI",
+    "generation": "5期生",
+    "localHeight": null,
+    "sourceTitle": "Azama Yui",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Azama_Yui",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "阿達夢",
+    "en": "ADACHI YUME",
+    "generation": "5期生",
+    "localHeight": null,
+    "sourceTitle": "Adachi Yume",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Adachi_Yume",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "大町佑香",
+    "en": "OMACHI YUKA",
+    "generation": "5期生",
+    "localHeight": null,
+    "sourceTitle": "Omachi Yuka",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Omachi_Yuka",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "甲斐瑞季",
+    "en": "KAI MIZUKI",
+    "generation": "5期生",
+    "localHeight": null,
+    "sourceTitle": "Kai Mizuki",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kai_Mizuki",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "北澤百音",
+    "en": "KITAZAWA MONE",
+    "generation": "5期生",
+    "localHeight": null,
+    "sourceTitle": "Kitazawa Mone",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kitazawa_Mone",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "佐藤柚花",
+    "en": "SATO YUKA",
+    "generation": "5期生",
+    "localHeight": null,
+    "sourceTitle": "Sato Yuka",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Sato_Yuka",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "須藤凜華",
+    "en": "SUTO RINKA",
+    "generation": "5期生",
+    "localHeight": null,
+    "sourceTitle": "Suto Rinka",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Suto_Rinka",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "谷口陽香",
+    "en": "TANIGUCHI HARUKA",
+    "generation": "5期生",
+    "localHeight": null,
+    "sourceTitle": "Taniguchi Haruka",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Taniguchi_Haruka",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "中田麻実",
+    "en": "NAKATA ASAMI",
+    "generation": "5期生",
+    "localHeight": null,
+    "sourceTitle": "Nakata Asami",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Nakata_Asami",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "皆川日和",
+    "en": "MINAGAWA HIYORI",
+    "generation": "5期生",
+    "localHeight": null,
+    "sourceTitle": "Minagawa Hiyori",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Minagawa_Hiyori",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "相木茉采",
+    "en": "AIKI MAAYA",
+    "generation": "6期生",
+    "localHeight": null,
+    "sourceTitle": "Aiki Maaya",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Aiki_Maaya",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "猪股咲那",
+    "en": "INOMATA SANA",
+    "generation": "6期生",
+    "localHeight": null,
+    "sourceTitle": "Inomata Sana",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Inomata_Sana",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "大橋彩乃",
+    "en": "OHASHI AYANO",
+    "generation": "6期生",
+    "localHeight": null,
+    "sourceTitle": "Ohashi Ayano",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Ohashi_Ayano",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "片山珠吏",
+    "en": "KATAYAMA SHURI",
+    "generation": "6期生",
+    "localHeight": null,
+    "sourceTitle": "Katayama Shuri",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Katayama_Shuri",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "久我水羚",
+    "en": "KUGA MIREI",
+    "generation": "6期生",
+    "localHeight": null,
+    "sourceTitle": "Kuga Mirei",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Kuga_Mirei",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "佐藤歩夏",
+    "en": "SATO HONOKA",
+    "generation": "6期生",
+    "localHeight": null,
+    "sourceTitle": "Sato Honoka",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Sato_Honoka",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "平井柚葉",
+    "en": "HIRAI YUZUHA",
+    "generation": "6期生",
+    "localHeight": null,
+    "sourceTitle": "Hirai Yuzuha",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Hirai_Yuzuha",
+    "height": null,
+    "statusText": "missing-height"
+  },
+  {
+    "name": "細矢夏帆",
+    "en": "HOSOYA NAHO",
+    "generation": "6期生",
+    "localHeight": null,
+    "sourceTitle": "Hosoya Naho",
+    "sourceUrl": "https://akb48.fandom.com/wiki/Hosoya_Naho",
+    "height": null,
+    "statusText": "missing-height"
+  }
+]

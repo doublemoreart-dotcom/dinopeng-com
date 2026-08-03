@@ -1,0 +1,1525 @@
+{
+  "generatedAt": "2026-07-20T13:17:32.623Z",
+  "totalFormerAkb": 303,
+  "copied": [
+    {
+      "name": "宇佐美友紀",
+      "source": "assets/akb48-former-x/e5ae87e4bd90e7be8ee58f8be7b480-mcusms.jpg",
+      "target": "manual-assets/former-members/AKB48_宇佐美友紀.jpg"
+    },
+    {
+      "name": "折井步",
+      "source": "assets/akb48-former-x/e68a98e4ba95e6ada5-ayumiorii720.jpg",
+      "target": "manual-assets/former-members/AKB48_折井步.jpg"
+    },
+    {
+      "name": "星野滿",
+      "source": "assets/akb48-former-x/e6989fe9878ee6bbbf-michiru1119.jpg",
+      "target": "manual-assets/former-members/AKB48_星野滿.jpg"
+    },
+    {
+      "name": "駒谷仁美",
+      "source": "assets/akb48-former-x/e9a792e8b0b7e4bb81e7be8e-hitomi_komatani.jpg",
+      "target": "manual-assets/former-members/AKB48_駒谷仁美.jpg"
+    },
+    {
+      "name": "戶島花",
+      "source": "assets/akb48-former-x/e688b6e5b3b6e88ab1-hana_tojima.jpg",
+      "target": "manual-assets/former-members/AKB48_戶島花.jpg"
+    },
+    {
+      "name": "大島麻衣",
+      "source": "assets/akb48-former-x/e5a4a7e5b3b6e9babbe8a1a3-mai911oshima.jpg",
+      "target": "manual-assets/former-members/AKB48_大島麻衣.jpg"
+    },
+    {
+      "name": "指原莉乃",
+      "source": "assets/akb48-former/e68c87e58e9fe88e89e4b983.png",
+      "target": "manual-assets/former-members/AKB48_指原莉乃.png"
+    },
+    {
+      "name": "前田敦子",
+      "source": "assets/akb48-former/e5898de794b0e695a6e5ad90.jpg",
+      "target": "manual-assets/former-members/AKB48_前田敦子.jpg"
+    },
+    {
+      "name": "多田愛佳",
+      "source": "assets/akb48-former/e5a49ae794b0e6849be4bdb3.jpg",
+      "target": "manual-assets/former-members/AKB48_多田愛佳.jpg"
+    },
+    {
+      "name": "佐藤夏希",
+      "source": "assets/akb48-former/e4bd90e897a4e5a48fe5b88c.jpg",
+      "target": "manual-assets/former-members/AKB48_佐藤夏希.jpg"
+    },
+    {
+      "name": "仁藤萌乃",
+      "source": "assets/akb48-former/e4bb81e897a4e8908ce4b983.jpg",
+      "target": "manual-assets/former-members/AKB48_仁藤萌乃.jpg"
+    },
+    {
+      "name": "河西智美",
+      "source": "assets/akb48-former/e6b2b3e8a5bfe699bae7be8e.jpg",
+      "target": "manual-assets/former-members/AKB48_河西智美.jpg"
+    },
+    {
+      "name": "中塚智實",
+      "source": "assets/akb48-former/e4b8ade5a19ae699bae5afa6.jpg",
+      "target": "manual-assets/former-members/AKB48_中塚智實.jpg"
+    },
+    {
+      "name": "篠田麻里子",
+      "source": "assets/akb48-former/e7afa0e794b0e9babbe9878ce5ad90.png",
+      "target": "manual-assets/former-members/AKB48_篠田麻里子.png"
+    },
+    {
+      "name": "佐藤堇",
+      "source": "assets/akb48-former/e4bd90e897a4e5a087.jpg",
+      "target": "manual-assets/former-members/AKB48_佐藤堇.jpg"
+    },
+    {
+      "name": "菊地彩香",
+      "source": "assets/akb48-former/e88f8ae59cb0e5bda9e9a699.jpg",
+      "target": "manual-assets/former-members/AKB48_菊地彩香.jpg"
+    },
+    {
+      "name": "片山陽加",
+      "source": "assets/akb48-former/e78987e5b1b1e999bde58aa0.jpg",
+      "target": "manual-assets/former-members/AKB48_片山陽加.jpg"
+    },
+    {
+      "name": "古畑奈和",
+      "source": "assets/akb48-former-x/e58fa4e79591e5a588e5928c-alto_nao.jpg",
+      "target": "manual-assets/former-members/AKB48_古畑奈和.jpg"
+    },
+    {
+      "name": "矢倉楓子",
+      "source": "assets/akb48-former/e79fa2e58089e6a593e5ad90.jpg",
+      "target": "manual-assets/former-members/AKB48_矢倉楓子.jpg"
+    },
+    {
+      "name": "川榮李奈",
+      "source": "assets/akb48-former/e5b79de6a6aee69d8ee5a588.jpg",
+      "target": "manual-assets/former-members/AKB48_川榮李奈.jpg"
+    },
+    {
+      "name": "松井咲子",
+      "source": "assets/akb48-former/e69dbee4ba95e592b2e5ad90.png",
+      "target": "manual-assets/former-members/AKB48_松井咲子.png"
+    },
+    {
+      "name": "高橋南",
+      "source": "assets/akb48-former/e9ab98e6a98be58d97.jpg",
+      "target": "manual-assets/former-members/AKB48_高橋南.jpg"
+    },
+    {
+      "name": "岩田華怜",
+      "source": "assets/akb48-former/e5b2a9e794b0e88fafe6809c.jpg",
+      "target": "manual-assets/former-members/AKB48_岩田華怜.jpg"
+    },
+    {
+      "name": "平田梨奈",
+      "source": "assets/akb48-former/e5b9b3e794b0e6a2a8e5a588.jpg",
+      "target": "manual-assets/former-members/AKB48_平田梨奈.jpg"
+    },
+    {
+      "name": "前田亞美",
+      "source": "assets/akb48-former/e5898de794b0e4ba9ee7be8e.jpg",
+      "target": "manual-assets/former-members/AKB48_前田亞美.jpg"
+    },
+    {
+      "name": "小笠原茉由",
+      "source": "assets/akb48-former-x/e5b08fe7aca0e58e9fe88c89e794b1-chunma04.jpg",
+      "target": "manual-assets/former-members/AKB48_小笠原茉由.jpg"
+    },
+    {
+      "name": "島崎遙香",
+      "source": "assets/akb48-former/e5b3b6e5b48ee98199e9a699.jpg",
+      "target": "manual-assets/former-members/AKB48_島崎遙香.jpg"
+    },
+    {
+      "name": "大和田南那",
+      "source": "assets/akb48-former-x/e5a4a7e5928ce794b0e58d97e982a3-nana_owada728.jpg",
+      "target": "manual-assets/former-members/AKB48_大和田南那.jpg"
+    },
+    {
+      "name": "中村麻里子",
+      "source": "assets/akb48-former-x/e4b8ade69d91e9babbe9878ce5ad90-marikorima1216.jpg",
+      "target": "manual-assets/former-members/AKB48_中村麻里子.jpg"
+    },
+    {
+      "name": "小嶋陽菜",
+      "source": "assets/akb48-former/e5b08fe5b68be999bde88f9c.jpg",
+      "target": "manual-assets/former-members/AKB48_小嶋陽菜.jpg"
+    },
+    {
+      "name": "白間美瑠",
+      "source": "assets/akb48-former-x/e799bde99693e7be8ee791a0-shiromiru36.jpg",
+      "target": "manual-assets/former-members/AKB48_白間美瑠.jpg"
+    },
+    {
+      "name": "宮脇咲良",
+      "source": "assets/akb48-former/e5aeaee88487e592b2e889af.jpg",
+      "target": "manual-assets/former-members/AKB48_宮脇咲良.jpg"
+    },
+    {
+      "name": "小嶋菜月",
+      "source": "assets/akb48-former/e5b08fe5b68be88f9ce69c88.jpg",
+      "target": "manual-assets/former-members/AKB48_小嶋菜月.jpg"
+    },
+    {
+      "name": "後藤萌咲",
+      "source": "assets/akb48-former-x/e5be8ce897a4e8908ce592b2-moe_goto0520.jpg",
+      "target": "manual-assets/former-members/AKB48_後藤萌咲.jpg"
+    },
+    {
+      "name": "橫山由依",
+      "source": "assets/akb48-former/e6a9abe5b1b1e794b1e4be9d.jpg",
+      "target": "manual-assets/former-members/AKB48_橫山由依.jpg"
+    },
+    {
+      "name": "入山杏奈",
+      "source": "assets/akb48-former/e585a5e5b1b1e69d8fe5a588.jpg",
+      "target": "manual-assets/former-members/AKB48_入山杏奈.jpg"
+    },
+    {
+      "name": "宮崎美穗",
+      "source": "assets/akb48-former-x/e5aeaee5b48ee7be8ee7a997-730myao.jpg",
+      "target": "manual-assets/former-members/AKB48_宮崎美穗.jpg"
+    },
+    {
+      "name": "中西智代梨",
+      "source": "assets/akb48-former-x/e4b8ade8a5bfe699bae4bba3e6a2a8-chiyori_n512.jpg",
+      "target": "manual-assets/former-members/AKB48_中西智代梨.jpg"
+    },
+    {
+      "name": "上村彩子",
+      "source": "assets/akb48-former-x/e4b88ae69d91e5bda9e5ad90-uemura_ayako.jpg",
+      "target": "manual-assets/former-members/AKB48_上村彩子.jpg"
+    },
+    {
+      "name": "野呂佳代",
+      "source": "assets/akb48-former-x/e9878ee59182e4bdb3e4bba3-kapopo3.jpg",
+      "target": "manual-assets/former-members/AKB48_野呂佳代.jpg"
+    },
+    {
+      "name": "光宗薰",
+      "source": "assets/akb48-former-x/e58589e5ae97e896b0-mtmnkor.jpg",
+      "target": "manual-assets/former-members/AKB48_光宗薰.jpg"
+    },
+    {
+      "name": "增田有華",
+      "source": "assets/akb48-former-x/e5a29ee794b0e69c89e88faf-yuka_masuda.jpg",
+      "target": "manual-assets/former-members/AKB48_增田有華.jpg"
+    },
+    {
+      "name": "仲谷明香",
+      "source": "assets/akb48-former-x/e4bbb2e8b0b7e6988ee9a699-nkysyk_a.jpg",
+      "target": "manual-assets/former-members/AKB48_仲谷明香.jpg"
+    },
+    {
+      "name": "宮澤佐江",
+      "source": "assets/akb48-former-x/e5aeaee6bea4e4bd90e6b19f-oyasuminasae_m.jpg",
+      "target": "manual-assets/former-members/AKB48_宮澤佐江.jpg"
+    },
+    {
+      "name": "板野友美",
+      "source": "assets/akb48-former-x/e69dbfe9878ee58f8be7be8e-tomo_coco73.jpg",
+      "target": "manual-assets/former-members/AKB48_板野友美.jpg"
+    },
+    {
+      "name": "秋元才加",
+      "source": "assets/akb48-former-x/e7a78be58583e6898de58aa0-akimotooo726.jpg",
+      "target": "manual-assets/former-members/AKB48_秋元才加.jpg"
+    },
+    {
+      "name": "大島優子",
+      "source": "assets/akb48-former-x/e5a4a7e5b3b6e584aae5ad90-oshima__yuko.jpg",
+      "target": "manual-assets/former-members/AKB48_大島優子.jpg"
+    },
+    {
+      "name": "北原里英",
+      "source": "assets/akb48-former-x/e58c97e58e9fe9878ce88bb1-rie_kitahara3.jpg",
+      "target": "manual-assets/former-members/AKB48_北原里英.jpg"
+    },
+    {
+      "name": "松井珠理奈",
+      "source": "assets/akb48-former-x/e69dbee4ba95e78fa0e79086e5a588-jurina38g.jpg",
+      "target": "manual-assets/former-members/AKB48_松井珠理奈.jpg"
+    },
+    {
+      "name": "高城亞樹",
+      "source": "assets/akb48-former-x/e9ab98e59f8ee4ba9ee6a8b9-aki_wismalu.jpg",
+      "target": "manual-assets/former-members/AKB48_高城亞樹.jpg"
+    },
+    {
+      "name": "永尾瑪利亞",
+      "source": "assets/akb48-former-x/e6b0b8e5b0bee791aae588a9e4ba9e-mariyagiii310.jpg",
+      "target": "manual-assets/former-members/AKB48_永尾瑪利亞.jpg"
+    },
+    {
+      "name": "山本彩",
+      "source": "assets/akb48-former-x/e5b1b1e69cace5bda9-sayakaneon.jpg",
+      "target": "manual-assets/former-members/AKB48_山本彩.jpg"
+    },
+    {
+      "name": "石田晴香",
+      "source": "assets/akb48-former-x/e79fb3e794b0e699b4e9a699-can2525can.jpg",
+      "target": "manual-assets/former-members/AKB48_石田晴香.jpg"
+    },
+    {
+      "name": "鈴木瑪莉亞",
+      "source": "assets/akb48-former-x/e988b4e69ca8e791aae88e89e4ba9e-mariyannu_s.jpg",
+      "target": "manual-assets/former-members/AKB48_鈴木瑪莉亞.jpg"
+    },
+    {
+      "name": "島田晴香",
+      "source": "assets/akb48-former/e5b3b6e794b0e699b4e9a699.jpg",
+      "target": "manual-assets/former-members/AKB48_島田晴香.jpg"
+    },
+    {
+      "name": "兒玉遙",
+      "source": "assets/akb48-former-x/e58592e78e89e98199-haruka_kdm919.jpg",
+      "target": "manual-assets/former-members/AKB48_兒玉遙.jpg"
+    },
+    {
+      "name": "田野優花",
+      "source": "assets/akb48-former-x/e794b0e9878ee584aae88ab1-tanoyuka_0307.jpg",
+      "target": "manual-assets/former-members/AKB48_田野優花.jpg"
+    },
+    {
+      "name": "野澤玲奈",
+      "source": "assets/akb48-former-x/e9878ee6bea4e78eb2e5a588-renan0zawa.jpg",
+      "target": "manual-assets/former-members/AKB48_野澤玲奈.jpg"
+    },
+    {
+      "name": "小嶋真子",
+      "source": "assets/akb48-former-x/e5b08fe5b68be79c9fe5ad90-mak0_k0jima.jpg",
+      "target": "manual-assets/former-members/AKB48_小嶋真子.jpg"
+    },
+    {
+      "name": "峯岸南",
+      "source": "assets/akb48-former/e5b3afe5b2b8e58d97.jpeg",
+      "target": "manual-assets/former-members/AKB48_峯岸南.jpg"
+    },
+    {
+      "name": "市川愛美",
+      "source": "assets/akb48-former-x/e5b882e5b79de6849be7be8e-ickwmnm0826.jpg",
+      "target": "manual-assets/former-members/AKB48_市川愛美.jpg"
+    },
+    {
+      "name": "浦野一美",
+      "source": "assets/akb48-former-x/e6b5a6e9878ee4b880e7be8e-urano_cindy1023.jpg",
+      "target": "manual-assets/former-members/AKB48_浦野一美.jpg"
+    },
+    {
+      "name": "小原春香",
+      "source": "assets/akb48-former-x/e5b08fe58e9fe698a5e9a699-runrunrun0412k1.jpg",
+      "target": "manual-assets/former-members/AKB48_小原春香.jpg"
+    },
+    {
+      "name": "平嶋夏海",
+      "source": "assets/akb48-former-x/e5b9b3e5b68be5a48fe6b5b7-nacchan_h0528.jpg",
+      "target": "manual-assets/former-members/AKB48_平嶋夏海.jpg"
+    },
+    {
+      "name": "石田安奈",
+      "source": "assets/akb48-former-x/e79fb3e794b0e5ae89e5a588-annaishida_0527.jpg",
+      "target": "manual-assets/former-members/AKB48_石田安奈.jpg"
+    },
+    {
+      "name": "市川美織",
+      "source": "assets/akb48-former-x/e5b882e5b79de7be8ee7b994-miorin_lemon212.jpg",
+      "target": "manual-assets/former-members/AKB48_市川美織.jpg"
+    },
+    {
+      "name": "梅田彩佳",
+      "source": "assets/akb48-former-x/e6a285e794b0e5bda9e4bdb3-ayakaumeda.jpg",
+      "target": "manual-assets/former-members/AKB48_梅田彩佳.jpg"
+    },
+    {
+      "name": "大場美奈",
+      "source": "assets/akb48-former-x/e5a4a7e5a0b4e7be8ee5a588-mina_ovo.jpg",
+      "target": "manual-assets/former-members/AKB48_大場美奈.jpg"
+    },
+    {
+      "name": "藤江麗奈",
+      "source": "assets/akb48-former-x/e897a4e6b19fe9ba97e5a588-nya_n017.jpg",
+      "target": "manual-assets/former-members/AKB48_藤江麗奈.jpg"
+    },
+    {
+      "name": "山內鈴蘭",
+      "source": "assets/akb48-former-x/e5b1b1e585a7e988b4e898ad-suzuranchan1208.jpg",
+      "target": "manual-assets/former-members/AKB48_山內鈴蘭.jpg"
+    },
+    {
+      "name": "野中美鄉",
+      "source": "assets/akb48-former-x/e9878ee4b8ade7be8ee98489-mi3sa3to10n.jpg",
+      "target": "manual-assets/former-members/AKB48_野中美鄉.jpg"
+    },
+    {
+      "name": "生駒里奈",
+      "source": "assets/akb48-former/e7949fe9a792e9878ce5a588.jpg",
+      "target": "manual-assets/former-members/AKB48_生駒里奈.jpg"
+    },
+    {
+      "name": "橋本耀",
+      "source": "assets/akb48-former-x/e6a98be69cace88080-hikari_h_0617.jpg",
+      "target": "manual-assets/former-members/AKB48_橋本耀.jpg"
+    },
+    {
+      "name": "倉持明日香",
+      "source": "assets/akb48-former/e58089e68c81e6988ee697a5e9a699.jpg",
+      "target": "manual-assets/former-members/AKB48_倉持明日香.jpg"
+    },
+    {
+      "name": "內田真由美",
+      "source": "assets/akb48-former-x/e585a7e794b0e79c9fe794b1e7be8e-mayumi_mmm.jpg",
+      "target": "manual-assets/former-members/AKB48_內田真由美.jpg"
+    },
+    {
+      "name": "小林香菜",
+      "source": "assets/akb48-former-x/e5b08fe69e97e9a699e88f9c-kobayashikana48.jpg",
+      "target": "manual-assets/former-members/AKB48_小林香菜.jpg"
+    },
+    {
+      "name": "渡邊美優紀",
+      "source": "assets/akb48-former-x/e6b8a1e9828ae7be8ee584aae7b480-miyukiofficial9.jpg",
+      "target": "manual-assets/former-members/AKB48_渡邊美優紀.jpg"
+    },
+    {
+      "name": "木崎由里亞",
+      "source": "assets/akb48-former-x/e69ca8e5b48ee794b1e9878ce4ba9e-yuriaaa_peace.jpg",
+      "target": "manual-assets/former-members/AKB48_木崎由里亞.jpg"
+    },
+    {
+      "name": "渡邊麻友",
+      "source": "assets/akb48-former-x/e6b8a1e9828ae9babbe58f8b-karaage_mayu.jpg",
+      "target": "manual-assets/former-members/AKB48_渡邊麻友.jpg"
+    },
+    {
+      "name": "矢吹奈子",
+      "source": "assets/akb48-former-x/e79fa2e590b9e5a588e5ad90-nako_yabuki_75.jpg",
+      "target": "manual-assets/former-members/AKB48_矢吹奈子.jpg"
+    },
+    {
+      "name": "竹內美宥",
+      "source": "assets/akb48-former-x/e7abb9e585a7e7be8ee5aea5-take_miyu112.jpg",
+      "target": "manual-assets/former-members/AKB48_竹內美宥.jpg"
+    },
+    {
+      "name": "高橋朱里",
+      "source": "assets/akb48-former-x/e9ab98e6a98be69cb1e9878c-juri_1st_0724.jpg",
+      "target": "manual-assets/former-members/AKB48_高橋朱里.jpg"
+    },
+    {
+      "name": "樋渡結依",
+      "source": "assets/akb48-former-x/e6a88be6b8a1e7b590e4be9d-yui_hiwata430.jpg",
+      "target": "manual-assets/former-members/AKB48_樋渡結依.jpg"
+    },
+    {
+      "name": "大家志津香",
+      "source": "assets/akb48-former-x/e5a4a7e5aeb6e5bf97e6b4a5e9a699-ooyachaaan1228.jpg",
+      "target": "manual-assets/former-members/AKB48_大家志津香.jpg"
+    },
+    {
+      "name": "久保怜音",
+      "source": "assets/akb48-former/e4b985e4bf9de6809ce99fb3.jpg",
+      "target": "manual-assets/former-members/AKB48_久保怜音.jpg"
+    },
+    {
+      "name": "森杏奈",
+      "source": "assets/akb48-former-x/e6a3aee69d8fe5a588-_morianna.jpg",
+      "target": "manual-assets/former-members/AKB48_森杏奈.jpg"
+    },
+    {
+      "name": "西野未姬",
+      "source": "assets/akb48-former-x/e8a5bfe9878ee69caae5a7ac-mikinishino4.jpg",
+      "target": "manual-assets/former-members/AKB48_西野未姬.jpg"
+    },
+    {
+      "name": "伊豆田莉奈",
+      "source": "assets/akb48-former-x/e4bc8ae8b186e794b0e88e89e5a588-izuketsu_deen.jpg",
+      "target": "manual-assets/former-members/AKB48_伊豆田莉奈.jpg"
+    },
+    {
+      "name": "北川綾巴",
+      "source": "assets/akb48-former-x/e58c97e5b79de7b6bee5b7b4-ryoha_1009.jpg",
+      "target": "manual-assets/former-members/AKB48_北川綾巴.jpg"
+    },
+    {
+      "name": "澀谷凪咲",
+      "source": "assets/akb48-former-x/e6be80e8b0b7e587aae592b2-_nagisa_shibuya.jpg",
+      "target": "manual-assets/former-members/AKB48_澀谷凪咲.jpg"
+    },
+    {
+      "name": "朝長美櫻",
+      "source": "assets/akb48-former-x/e69c9de995b7e7be8ee6abbb-30_mio_0517.jpg",
+      "target": "manual-assets/former-members/AKB48_朝長美櫻.jpg"
+    },
+    {
+      "name": "川本紗矢",
+      "source": "assets/akb48-former-x/e5b79de69cace7b497e79fa2-sayaya_0388.jpg",
+      "target": "manual-assets/former-members/AKB48_川本紗矢.jpg"
+    },
+    {
+      "name": "達家真姬寶",
+      "source": "assets/akb48-former-x/e98194e5aeb6e79c9fe5a7ace5afb6-makiho_1019.jpg",
+      "target": "manual-assets/former-members/AKB48_達家真姬寶.jpg"
+    },
+    {
+      "name": "大森美優",
+      "source": "assets/akb48-former-x/e5a4a7e6a3aee7be8ee584aa-omorimyu_pon.jpg",
+      "target": "manual-assets/former-members/AKB48_大森美優.jpg"
+    },
+    {
+      "name": "茂木忍",
+      "source": "assets/akb48-former-x/e88c82e69ca8e5bf8d-mogi0_0216.jpg",
+      "target": "manual-assets/former-members/AKB48_茂木忍.jpg"
+    },
+    {
+      "name": "本田仁美",
+      "source": "assets/akb48-former-x/e69cace794b0e4bb81e7be8e-hnd_htm__1006.jpg",
+      "target": "manual-assets/former-members/AKB48_本田仁美.jpg"
+    },
+    {
+      "name": "篠崎彩奈",
+      "source": "assets/akb48-former-x/e7afa0e5b48ee5bda9e5a588-ayana18_48.jpg",
+      "target": "manual-assets/former-members/AKB48_篠崎彩奈.jpg"
+    },
+    {
+      "name": "大西桃香",
+      "source": "assets/akb48-former-x/e5a4a7e8a5bfe6a183e9a699-1stmomoka.jpg",
+      "target": "manual-assets/former-members/AKB48_大西桃香.jpg"
+    },
+    {
+      "name": "馬嘉伶",
+      "source": "assets/akb48-former-x/e9a6ace59889e4bcb6-macyacyarin.jpg",
+      "target": "manual-assets/former-members/AKB48_馬嘉伶.jpg"
+    },
+    {
+      "name": "岡部麟",
+      "source": "assets/akb48-former/e5b2a1e983a8e9ba9f.jpg",
+      "target": "manual-assets/former-members/AKB48_岡部麟.jpg"
+    },
+    {
+      "name": "柏木由紀",
+      "source": "assets/akb48-former-x/e69f8fe69ca8e794b1e7b480-yukiriiiin__k.jpg",
+      "target": "manual-assets/former-members/AKB48_柏木由紀.jpg"
+    },
+    {
+      "name": "谷口惠",
+      "source": "assets/akb48-former-x/e8b0b7e58fa3e683a0-o_megu1112.jpg",
+      "target": "manual-assets/former-members/AKB48_谷口惠.jpg"
+    },
+    {
+      "name": "込山榛香",
+      "source": "assets/akb48-former/e8bebce5b1b1e6a69be9a699.jpg",
+      "target": "manual-assets/former-members/AKB48_込山榛香.jpg"
+    },
+    {
+      "name": "村山彩希",
+      "source": "assets/akb48-former-x/e69d91e5b1b1e5bda9e5b88c-yuirii_murayama.jpg",
+      "target": "manual-assets/former-members/AKB48_村山彩希.jpg"
+    },
+    {
+      "name": "向井地美音",
+      "source": "assets/akb48-former-x/e59091e4ba95e59cb0e7be8ee99fb3-mionnn_48.jpg",
+      "target": "manual-assets/former-members/AKB48_向井地美音.jpg"
+    },
+    {
+      "name": "荻野由佳",
+      "source": "assets/akb48-former-x/e88dbbe9878ee794b1e4bdb3-rie_kitahara3.jpg",
+      "target": "manual-assets/former-members/AKB48_荻野由佳.jpg"
+    },
+    {
+      "name": "西潟茉莉奈",
+      "source": "assets/akb48-former-x/e8a5bfe6bd9fe88c89e88e89e5a588-marina_ngt48n.jpg",
+      "target": "manual-assets/former-members/AKB48_西潟茉莉奈.jpg"
+    },
+    {
+      "name": "松岡花",
+      "source": "assets/akb48-former-x/e69dbee5b2a1e88ab1-m_hana119.jpg",
+      "target": "manual-assets/former-members/AKB48_松岡花.jpg"
+    }
+  ],
+  "skipped": [
+    {
+      "name": "奥洞千捺",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de5a5a5e6b49ee58d83e68dba.jpg"
+    },
+    {
+      "name": "森脇由衣",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de6a3aee88487e794b1e8a1a3.jpg"
+    },
+    {
+      "name": "岩崎萌花",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de5b2a9e5b48ee8908ce88ab1.jpg"
+    },
+    {
+      "name": "藤村菜月",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de897a4e69d91e88f9ce69c88.jpg"
+    },
+    {
+      "name": "山本亞依",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de5b1b1e69cace4ba9ee4be9d.jpg"
+    },
+    {
+      "name": "北玲名",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de58c97e78eb2e5908d.jpg"
+    },
+    {
+      "name": "近藤萌惠里",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de8bf91e897a4e8908ce683a0e9878c.jpg"
+    },
+    {
+      "name": "吉野未優",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de59089e9878ee69caae584aa.jpg"
+    },
+    {
+      "name": "福地禮奈",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de7a68fe59cb0e7a6aee5a588.jpg"
+    },
+    {
+      "name": "谷優里",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de8b0b7e584aae9878c.jpg"
+    },
+    {
+      "name": "濱松里緒菜",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de6bfb1e69dbee9878ce7b792e88f9c.jpg"
+    },
+    {
+      "name": "阿部芽唯",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de998bfe983a8e88abde594af.jpg"
+    },
+    {
+      "name": "舞木香純",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de8889ee69ca8e9a699e7b494.jpg"
+    },
+    {
+      "name": "廣瀨夏樹",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de5bba3e780a8e5a48fe6a8b9.jpg"
+    },
+    {
+      "name": "早坂紬",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de697a9e59d82e7b4ac.jpg"
+    },
+    {
+      "name": "下青木香鈴",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de4b88be99d92e69ca8e9a699e988b4.jpg"
+    },
+    {
+      "name": "谷口萌香",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de8b0b7e58fa3e8908ce9a699.jpg"
+    },
+    {
+      "name": "長久玲奈",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de995b7e4b985e78eb2e5a588.jpg"
+    },
+    {
+      "name": "野田陽菜乃",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de9878ee794b0e999bde88f9ce4b983.jpg"
+    },
+    {
+      "name": "橫道侑里",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de6a9abe98193e4be91e9878c.jpg"
+    },
+    {
+      "name": "人見古都音",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de4babae8a68be58fa4e983bde99fb3.jpg"
+    },
+    {
+      "name": "中野郁海",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de4b8ade9878ee98381e6b5b7.jpg"
+    },
+    {
+      "name": "谷川聖",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de8b0b7e5b79de88196.jpg"
+    },
+    {
+      "name": "佐藤栞",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de4bd90e897a4e6a09e.jpg"
+    },
+    {
+      "name": "山田菜菜美",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de5b1b1e794b0e88f9ce88f9ce7be8e.jpg"
+    },
+    {
+      "name": "伊藤星彩",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de4bc8ae897a4e6989fe5bda9.jpg"
+    },
+    {
+      "name": "佐藤七海",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de4bd90e897a4e4b883e6b5b7.jpg"
+    },
+    {
+      "name": "寺田美咲",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de5afbae794b0e7be8ee592b2.jpg"
+    },
+    {
+      "name": "太田奈緒",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de5a4aae794b0e5a588e7b792.jpg"
+    },
+    {
+      "name": "山本瑠香",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de5b1b1e69cace791a0e9a699.jpg"
+    },
+    {
+      "name": "布谷梨琉",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de5b883e8b0b7e6a2a8e79089.jpg"
+    },
+    {
+      "name": "井上美優",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de4ba95e4b88ae7be8ee584aa.jpg"
+    },
+    {
+      "name": "鹽原香凜",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de9b9bde58e9fe9a699e5879c.jpg"
+    },
+    {
+      "name": "立仙愛理",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de7ab8be4bb99e6849be79086.jpg"
+    },
+    {
+      "name": "長谷川百百花",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de995b7e8b0b7e5b79de799bee799bee88ab1.jpg"
+    },
+    {
+      "name": "佐藤朱",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de4bd90e897a4e69cb1.jpg"
+    },
+    {
+      "name": "松村美紅",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de69dbee69d91e7be8ee7b485.jpg"
+    },
+    {
+      "name": "宮里莉羅",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de5aeaee9878ce88e89e7be85.jpg"
+    },
+    {
+      "name": "尾上美月",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de5b0bee4b88ae7be8ee69c88.jpg"
+    },
+    {
+      "name": "鈴木優香",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de988b4e69ca8e584aae9a699.jpg"
+    },
+    {
+      "name": "春本由紀",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de698a5e69cace794b1e7b480.jpg"
+    },
+    {
+      "name": "橫山結衣",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de6a9abe5b1b1e7b590e8a1a3.jpg"
+    },
+    {
+      "name": "奧本陽菜",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de5a5a7e69cace999bde88f9c.jpg"
+    },
+    {
+      "name": "福留光帆",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de7a68fe79599e58589e5b886.jpg"
+    },
+    {
+      "name": "御供茉白",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de5bea1e4be9be88c89e799bd.jpg"
+    },
+    {
+      "name": "平野光",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de5b9b3e9878ee58589.jpg"
+    },
+    {
+      "name": "濱咲友菜",
+      "reason": "already manual",
+      "image": "assets/former-members-manual/414b4234382de6bfb1e592b2e58f8be88f9c.jpg"
+    }
+  ],
+  "unresolved": [
+    {
+      "name": "增山加彌乃",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "大江朝美",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "中西里菜",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "成田梨紗",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "川崎希",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "佐藤由加理",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "仲川遙香",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "仲俣汐里",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "森川彩香",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "西山怜那",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "前田彩佳",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "本田空",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "加藤玲奈",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "古川夏凪",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "西川怜",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "岡田奈奈",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "清水麻璃亞",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "高橋彩香",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "道枝咲",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "高田彩奈",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "今井優",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "早野薰",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "成瀨理沙",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "大堀惠",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "小野惠令奈",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "米澤瑠美",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "松原夏海",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "近野莉菜",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "佐藤亚美菜",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "鈴木紫帆里",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "相笠萌",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "中田千智",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "阿部瑪利亞",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "藤田奈那",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "矢作萌夏",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "安田叶",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "武藤十夢",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "小林蘭",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "服部有菜",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "奧原妃奈子",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "上見天乃",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "渡邊志穗",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "井上奈瑠",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "野口玲菜",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "松岡由紀",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "早乙女美樹",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "佐伯美香",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "奧真奈美",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "小森美果",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "內山奈月",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "岩佐美咲",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "梅田綾乃",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "橫島亞衿",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "大島涼花",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "田名部生來",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "田北香世子",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "稻垣香織",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "永野惠",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "藤園麗",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "左伴彩佳",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "坂口渚沙",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "石綿星南",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "北澤早紀",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "高島祐利奈",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "小谷里步",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "前田美月",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "土保瑞希",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "小林茉里奈",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "名取稚菜",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "岡田彩花",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "飯野雅",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "大川莉央",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "田屋美咲",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "本間麻衣",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "藏本美結",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "歌田初夏",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "川原美咲",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "吉川七瀨",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "高岡薰",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "多田京加",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "佐藤妃星",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "吉田華戀",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "蒲地志奈",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "山邊步夢",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "湯本亞美",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "岡田梨奈",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "山田杏華",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "吉橋柚花",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "齋藤陽菜",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "大竹瞳",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "淺井七海",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "佐佐木優佳里",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "下口緋奈奈",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "小田繪里奈",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "佐藤美波",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "小濱心音",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "鈴木久留美",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "白鳥沙怜",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "田口愛佳",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "花田藍衣",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "大盛真步",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "赤坂美咲",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "阿部葉夢",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "荒木實波",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "荒木琳袈",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "飯倉早織",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "生田優香",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "伊田有紀",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "一色嶺奈",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "梅澤愛優香",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "海老澤惠美",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "大野彩乃",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "尾形穗菜美",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "方伊儀圓",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "上谷沙彌",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "川口真實",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "川村真穗",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "菊地智美",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "木下涼風",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "木下真佑",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "日下部愛菜",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "黒澤綾佳",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "小池優香",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "小泉里奈",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "齋藤梨奈",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "佐伯美香",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "澤木沙耶",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "柴田優衣",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "鈴木優民",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "清司麗菜",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "髙木茉白",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "竹內美沙樹",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "千田夢乃",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "千代田唯",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "中川里菜",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "中村優香",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "長坂亞利沙",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "成松美沙",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "福井有彩",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "藤江桃子",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "松浦夏穗",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "松本和夏",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "宮崎美希",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "女鹿椰子",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "八代嘉菜",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "山內亞紀",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "繁藤冬佳",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    },
+    {
+      "name": "日出有香",
+      "reason": "placeholder or missing image",
+      "image": "assets/tsh48-members/placeholder.svg"
+    }
+  ]
+}
