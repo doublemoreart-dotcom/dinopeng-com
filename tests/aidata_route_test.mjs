@@ -34,13 +34,13 @@ test('root publishes a project portal while /aidata/ keeps the AI report', async
     readFile(aidataPagePath, 'utf8'),
   ]);
 
-  assert.match(portalPage, /Dino Peng — Projects/);
-  assert.match(portalPage, /href="\/tptrees\/"/);
-  assert.match(portalPage, /href="\/aidata\/"/);
-  assert.match(portalPage, /href="\/sporttech\/"/);
-  assert.match(portalPage, /href="\/48DIRECTORY\/"/);
-  assert.match(portalPage, /href="\/small-parties\/"/);
-  assert.match(portalPage, /href="\/taiwan-food-safety\/"/);
+  assert.match(portalPage, /Dino Peng｜Learning My New Life/);
+  assert.match(portalPage, /https:\/\/dinopeng\.com\/tptrees\//);
+  assert.match(portalPage, /https:\/\/dinopeng\.com\/aidata\//);
+  assert.match(portalPage, /https:\/\/dinopeng\.com\/sporttech\//);
+  assert.match(portalPage, /https:\/\/dinopeng\.com\/48DIRECTORY\//);
+  assert.match(portalPage, /https:\/\/dinopeng\.com\/small-parties\//);
+  assert.match(portalPage, /https:\/\/dinopeng\.com\/taiwan-food-safety\//);
   assert.match(aidataPage, /AI 對產業的數據觀察/);
   assert.notEqual(aidataPage, portalPage);
 });

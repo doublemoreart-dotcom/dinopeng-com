@@ -24,7 +24,7 @@ requireFile('index.html');
 requireFile('aidata/index.html');
 requireFile(currentSnapshot);
 
-if (!/Dino Peng — Projects/.test(portalHtml)) {
+if (!/Dino Peng｜Learning My New Life/.test(portalHtml)) {
   throw new Error('index.html should remain the dinopeng.com project portal');
 }
 if (!/AI 對產業的數據觀察/.test(aidataHtml)) {
