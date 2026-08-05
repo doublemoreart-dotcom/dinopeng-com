@@ -41,6 +41,11 @@ test('root publishes a project portal while /aidata/ keeps the AI report', async
   assert.match(portalPage, /https:\/\/dinopeng\.com\/48DIRECTORY\//);
   assert.match(portalPage, /https:\/\/dinopeng\.com\/small-parties\//);
   assert.match(portalPage, /https:\/\/dinopeng\.com\/taiwan-food-safety\//);
+  assert.match(
+    portalPage,
+    /https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-RLCNPY896C/,
+  );
+  assert.match(portalPage, /gtag\("config", "G-RLCNPY896C"\)/);
   assert.match(aidataPage, /AI 對產業的數據觀察/);
   assert.notEqual(aidataPage, portalPage);
 });
