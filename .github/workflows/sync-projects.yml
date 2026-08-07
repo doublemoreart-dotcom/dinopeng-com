@@ -72,6 +72,14 @@ jobs:
           path: sources/taiwan-food-safety
           persist-credentials: false
 
+      - name: Check out MAE
+        uses: actions/checkout@v7
+        with:
+          repository: doublemoreart-dotcom/mae
+          ref: main
+          path: sources/mae
+          persist-credentials: false
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -85,7 +93,7 @@ jobs:
 
       - name: Sync published files
         working-directory: portal
-        run: ./scripts/sync-projects.sh ../sources/aidata ../sources/tptrees ../sources/sporttech ../sources/48DIRECTORY ../sources/small-parties ../sources/taiwan-food-safety/out .
+        run: ./scripts/sync-projects.sh ../sources/aidata ../sources/tptrees ../sources/sporttech ../sources/48DIRECTORY ../sources/small-parties ../sources/taiwan-food-safety/out ../sources/mae .
 
       - name: Verify portal routes
         working-directory: portal
@@ -94,7 +102,7 @@ jobs:
       - name: Commit updated snapshots
         working-directory: portal
         run: |
-          git add aidata tptrees sporttech 48DIRECTORY small-parties taiwan-food-safety
+          git add aidata tptrees sporttech 48DIRECTORY small-parties taiwan-food-safety mae
           if git diff --cached --quiet; then
             echo "Published snapshots are already current."
             exit 0
@@ -106,7 +114,8 @@ jobs:
           directory_sha="$(git -C ../sources/48DIRECTORY rev-parse --short HEAD)"
           small_parties_sha="$(git -C ../sources/small-parties rev-parse --short HEAD)"
           taiwan_food_safety_sha="$(git -C ../sources/taiwan-food-safety rev-parse --short HEAD)"
+          mae_sha="$(git -C ../sources/mae rev-parse --short HEAD)"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: sync project sites" -m "aidata: ${aidata_sha}\ntptrees: ${tptrees_sha}\nsporttech: ${sporttech_sha}\n48DIRECTORY: ${directory_sha}\nsmall-parties: ${small_parties_sha}\ntaiwan-food-safety: ${taiwan_food_safety_sha}"
+          git commit -m "chore: sync project sites" -m "aidata: ${aidata_sha}\ntptrees: ${tptrees_sha}\nsporttech: ${sporttech_sha}\n48DIRECTORY: ${directory_sha}\nsmall-parties: ${small_parties_sha}\ntaiwan-food-safety: ${taiwan_food_safety_sha}\nmae: ${mae_sha}"
           git push origin HEAD:main

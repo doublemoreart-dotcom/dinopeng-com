@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-if [[ $# -ne 7 ]]; then
-  echo "Usage: $0 <aidata-source> <tptrees-source> <sporttech-source> <48directory-source> <small-parties-source> <taiwan-food-safety-output> <portal-root>" >&2
+if [[ $# -ne 8 ]]; then
+  echo "Usage: $0 <aidata-source> <tptrees-source> <sporttech-source> <48directory-source> <small-parties-source> <taiwan-food-safety-output> <mae-source> <portal-root>" >&2
   exit 64
 fi
 
@@ -13,7 +13,8 @@ sporttech_source="$(cd "$3" && pwd)"
 directory_source="$(cd "$4" && pwd)"
 small_parties_source="$(cd "$5" && pwd)"
 taiwan_food_safety_source="$(cd "$6" && pwd)"
-portal_root="$(cd "$7" && pwd)"
+mae_source="$(cd "$7" && pwd)"
+portal_root="$(cd "$8" && pwd)"
 
 require_file() {
   if [[ ! -f "$1" ]]; then
@@ -64,6 +65,8 @@ require_file "$small_parties_source/assets/hero-social-discourse.png"
 require_file "$taiwan_food_safety_source/index.html"
 require_file "$taiwan_food_safety_source/favicon.ico"
 require_file "$taiwan_food_safety_source/opengraph-image.png"
+require_file "$mae_source/index.html"
+require_file "$mae_source/assets/placeholder-card.svg"
 require_file "$portal_root/index.html"
 require_file "$portal_root/CNAME"
 require_file "$portal_root/.nojekyll"
@@ -73,8 +76,9 @@ require_text "$small_parties_source/index.html" "ScrollTrigger.min.js" "Small Pa
 require_text "$small_parties_source/index.html" "ScrollToPlugin.min.js" "Small Parties source"
 require_text "$small_parties_source/index.html" "G-T2WMCYX21T" "Small Parties source"
 require_text "$small_parties_source/index.html" "assets/social-thumbnail.png" "Small Parties source"
+require_text "$mae_source/index.html" "assets/placeholder-card.svg" "MAE source"
 
-mkdir -p "$portal_root/aidata/assets" "$portal_root/tptrees" "$portal_root/sporttech/assets" "$portal_root/48DIRECTORY/assets" "$portal_root/small-parties/assets" "$portal_root/taiwan-food-safety"
+mkdir -p "$portal_root/aidata/assets" "$portal_root/tptrees" "$portal_root/sporttech/assets" "$portal_root/48DIRECTORY/assets" "$portal_root/small-parties/assets" "$portal_root/taiwan-food-safety" "$portal_root/mae/assets"
 
 cp "$aidata_source/index.html" "$portal_root/aidata/index.html"
 rsync -a --delete "$aidata_source/assets/" "$portal_root/aidata/assets/"
@@ -106,4 +110,7 @@ rsync -a --delete "$small_parties_source/assets/" "$portal_root/small-parties/as
 
 rsync -a --delete "$taiwan_food_safety_source/" "$portal_root/taiwan-food-safety/"
 
-echo "Synced AI Data, TP Trees, SportTech, 48 DIRECTORY, Small Parties, and Taiwan Food Safety into the portal repository."
+cp "$mae_source/index.html" "$portal_root/mae/index.html"
+rsync -a --delete "$mae_source/assets/" "$portal_root/mae/assets/"
+
+echo "Synced AI Data, TP Trees, SportTech, 48 DIRECTORY, Small Parties, Taiwan Food Safety, and MAE into the portal repository."

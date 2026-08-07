@@ -1,0 +1,1241 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>天使牌卡庫｜純本機版</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200..900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" as="image" href="assets/placeholder-card.svg" type="image/svg+xml">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200..900&display=swap" rel="stylesheet"></noscript>
+  <style>
+    :root {
+      color-scheme: light;
+      --font-serif-tc: "Noto Serif TC", Georgia, "Times New Roman", "PingFang TC", "Microsoft JhengHei", serif;
+      --topbar-height: 72px;
+      --bg: #f4ede1;
+      --paper: #fffaf0;
+      --paper-soft: #f9f2e6;
+      --ink: #1f211c;
+      --muted: #746f66;
+      --line: #d8cbb8;
+      --line-strong: #b7a892;
+      --olive: #59654b;
+      --olive-dark: #313a2d;
+      --clay: #9a6a45;
+      --butter: #efe2bd;
+      --success: #eef3df;
+      --shadow: 0 24px 70px rgba(49, 42, 32, .22);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(90deg, rgba(31, 33, 28, .035) 1px, transparent 1px) 0 0 / 42px 42px,
+        linear-gradient(180deg, #fbf6ec 0%, var(--bg) 46%, #eee2d0 100%);
+      color: var(--ink);
+      font-family: var(--font-serif-tc);
+      line-height: 1.6;
+    }
+
+    button,
+    input,
+    select { font: inherit; }
+
+    button { cursor: pointer; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(248, 240, 226, .88);
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar-inner {
+      width: min(1180px, calc(100% - 28px));
+      min-height: 72px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: var(--font-serif-tc);
+      font-size: clamp(24px, 4vw, 32px);
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 11px;
+      background: rgba(255, 250, 240, .78);
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .button {
+      min-height: 38px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 8px 13px;
+      background: var(--olive);
+      color: #fff;
+      transition: background .16s ease, transform .16s ease, border-color .16s ease;
+    }
+
+    .button:hover {
+      background: var(--olive-dark);
+      transform: translateY(-1px);
+    }
+
+    .button.secondary {
+      background: var(--paper);
+      color: var(--olive-dark);
+      border-color: var(--line);
+    }
+
+    .button.secondary:hover {
+      background: #f1e7d6;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 24px 0 56px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      align-items: stretch;
+      margin-bottom: 20px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 250, 240, .76);
+      box-shadow: 0 18px 46px rgba(80, 63, 39, .08);
+      overflow: hidden;
+    }
+
+    .hero-copy {
+      padding: clamp(22px, 4vw, 38px);
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--clay);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      max-width: none;
+      margin: 0;
+      font-family: var(--font-serif-tc);
+      font-weight: 400;
+      font-size: 56px;
+      line-height: 1.08;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .hero-text {
+      max-width: 660px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: clamp(16px, 2.4vw, 19px);
+    }
+
+    .toolbar {
+      position: sticky;
+      top: calc(var(--topbar-height) - 1px);
+      z-index: 18;
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) minmax(240px, 320px);
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 28px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: rgba(255, 250, 240, .92);
+      box-shadow: 0 16px 36px rgba(80, 63, 39, .1);
+      backdrop-filter: blur(14px);
+    }
+
+    label,
+    .field-label {
+      display: grid;
+      gap: 7px;
+      color: #8d877e;
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .field {
+      display: grid;
+      grid-template-rows: auto 54px;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    input,
+    select,
+    .multi-button {
+      width: 100%;
+      min-height: 54px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 11px 14px;
+      background: #fffaf0;
+      color: var(--ink);
+      font-size: 17px;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #a19a90;
+    }
+
+    input:focus,
+    select:focus,
+    .multi-button:focus-visible {
+      border-color: var(--olive);
+      box-shadow: 0 0 0 3px rgba(89, 101, 75, .16);
+    }
+
+    .multi-select {
+      position: relative;
+      display: grid;
+      grid-template-rows: auto 54px;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .multi-button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .multi-label {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .multi-arrow {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 18px;
+      color: var(--muted);
+      transition: transform .16s ease;
+    }
+
+    .multi-select.open .multi-arrow {
+      transform: rotate(180deg);
+    }
+
+    .multi-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      z-index: 26;
+      display: none;
+      max-height: 280px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px;
+      background: var(--paper);
+      box-shadow: 0 18px 44px rgba(49, 42, 32, .18);
+    }
+
+    .multi-select.open .multi-menu {
+      display: grid;
+      gap: 4px;
+    }
+
+    .multi-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 7px;
+      padding: 9px 10px;
+      color: var(--ink);
+      font-size: 17px;
+      font-weight: 400;
+      cursor: pointer;
+    }
+
+    .multi-option:hover {
+      background: #f2e8d9;
+    }
+
+    .multi-option input {
+      width: 16px;
+      min-height: 16px;
+      height: 16px;
+      accent-color: var(--olive);
+      cursor: pointer;
+    }
+
+    .heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .heading h2 {
+      margin: 0;
+      font-family: var(--font-serif-tc);
+      font-size: 26px;
+      font-weight: 600;
+    }
+
+    .count {
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      position: relative;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      overflow: hidden;
+      text-align: left;
+      color: inherit;
+      padding: 0;
+      box-shadow: 0 10px 28px rgba(80, 63, 39, .08);
+      transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease, filter .16s ease;
+    }
+
+    .card:hover {
+      border-color: var(--clay);
+      box-shadow: 0 18px 42px rgba(80, 63, 39, .18), 0 0 0 4px rgba(215, 187, 114, .18), 0 0 34px rgba(215, 187, 114, .34);
+      filter: saturate(1.04);
+      transform: translateY(-2px);
+    }
+
+    .card-art,
+    .modal-art {
+      position: relative;
+      overflow: hidden;
+      background: #ece4d4;
+    }
+
+    .card-art {
+      aspect-ratio: 72 / 104;
+    }
+
+    .modal-art {
+      align-self: start;
+      aspect-ratio: 72 / 104;
+    }
+
+    .card-art img,
+    .modal-image {
+      width: 100%;
+      aspect-ratio: 72 / 104;
+      display: block;
+      object-fit: cover;
+      background: #ece4d4;
+    }
+
+    .card-art img {
+      height: 100%;
+    }
+
+    .modal-image {
+      height: auto;
+    }
+
+    .card-image-meta {
+      position: absolute;
+      left: 50%;
+      right: auto;
+      top: 50%;
+      bottom: auto;
+      display: block;
+      width: max-content;
+      max-width: calc(100% - 24px);
+      border: 1px solid rgba(138, 116, 79, .32);
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: rgba(255, 250, 240, .84);
+      color: var(--olive-dark);
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.35;
+      text-align: center;
+      box-shadow: 0 10px 24px rgba(49, 42, 32, .12);
+      backdrop-filter: blur(8px);
+      transform: translate(-50%, -50%);
+    }
+
+    .modal-art .card-image-meta {
+      max-width: calc(100% - 36px);
+      padding: 12px 22px;
+      font-size: 22px;
+    }
+
+    .card-body {
+      display: grid;
+      gap: 9px;
+      padding: 14px;
+    }
+
+    .card-title {
+      margin: 0;
+      font-family: var(--font-serif-tc);
+      font-size: 18px;
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      border: 1px solid #d3b690;
+      border-radius: 999px;
+      padding: 2px 7px;
+      color: #6b5434;
+      background: #f8edda;
+      font-size: 12px;
+    }
+
+    .empty {
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      padding: 24px;
+      background: rgba(255, 255, 255, .55);
+      color: var(--muted);
+    }
+
+    .site-footer {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 0 0 28px;
+      color: rgba(31, 33, 28, .48);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(31, 33, 28, .62);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .28s ease;
+    }
+
+    .modal.active,
+    .modal.closing {
+      display: flex;
+    }
+
+    .modal.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-panel {
+      width: min(900px, 100%);
+      max-height: min(860px, calc(100vh - 48px));
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      border: 1px solid #d7bb72;
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(48px);
+      transition: transform .32s cubic-bezier(.2, .8, .2, 1), opacity .24s ease;
+      will-change: transform, opacity;
+    }
+
+    .modal.open .modal-panel {
+      opacity: 1;
+      transform: translateY(0);
+      animation: modalSlideIn .34s cubic-bezier(.2, .8, .2, 1) both;
+    }
+
+    .modal.closing .modal-panel {
+      opacity: 0;
+      transform: translateY(48px);
+      animation: modalSlideOut .28s ease both;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(64px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes modalSlideOut {
+      from {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      to {
+        opacity: 0;
+        transform: translateY(64px);
+      }
+    }
+
+    .modal-head {
+      position: relative;
+      padding: 24px 64px 18px 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .modal-kicker {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .modal-title {
+      margin: 0;
+      font-family: var(--font-serif-tc);
+      font-size: clamp(28px, 6vw, 42px);
+      line-height: 1.18;
+    }
+
+    .modal-subtitle {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .icon-button {
+      position: absolute;
+      right: 14px;
+      top: 14px;
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 30px;
+      line-height: 1;
+    }
+
+    .icon-button:hover { background: #f2eee4; }
+
+    .modal-content {
+      min-height: 0;
+      overflow: auto;
+      padding: 18px 24px;
+      display: grid;
+      grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+      gap: 24px;
+    }
+
+    .modal-body {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+      font-size: 17px;
+      line-height: 1.72;
+    }
+
+    .modal-body .tag {
+      font-size: 13px;
+      padding: 3px 8px;
+    }
+
+    .section h3 {
+      margin: 0 0 6px;
+      color: var(--olive-dark);
+      font-size: 17px;
+    }
+
+    .section p { margin: 0; }
+
+    .affirmation {
+      border-radius: 8px;
+      padding: 14px 16px;
+      background: var(--success);
+      color: #315a3a;
+      font-size: 17px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 14px 24px;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 980px) {
+      .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .toolbar { grid-template-columns: 1fr 220px; }
+
+      .hero-title {
+        font-size: 44px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .modal {
+        align-items: stretch;
+        padding: 0;
+      }
+
+      .modal-panel {
+        width: 100%;
+        max-height: none;
+        min-height: 100vh;
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+
+      .modal-content {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding: 22px 18px 96px;
+      }
+
+      .modal-art {
+        width: min(52vw, 360px);
+        height: min(75vw, 520px);
+        flex: 0 0 auto;
+        align-self: center;
+        justify-self: center;
+      }
+
+      .modal-art .modal-image {
+        height: 100%;
+      }
+
+      .modal-body {
+        width: min(100%, 720px);
+        justify-self: center;
+        align-self: center;
+      }
+
+      .modal-body .tags {
+        justify-content: center;
+      }
+
+      .modal-actions {
+        position: sticky;
+        bottom: 0;
+        justify-content: stretch;
+        padding: 14px 24px;
+        background: rgba(255, 250, 240, .96);
+        backdrop-filter: blur(10px);
+      }
+
+      .modal-actions .button {
+        flex: 1 1 140px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .topbar-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .toolbar { grid-template-columns: 1fr; }
+      .hero-copy {
+        padding: 20px;
+      }
+
+      .hero-title {
+        font-size: 34px;
+        white-space: normal;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .modal-head {
+        padding: 20px 54px 16px 20px;
+      }
+
+      .modal-title {
+        font-size: clamp(34px, 11vw, 46px);
+      }
+
+      .modal-subtitle {
+        font-size: 18px;
+      }
+
+      .modal-content {
+        gap: 14px;
+        padding: 16px 16px 92px;
+      }
+
+      .modal-art {
+        width: min(64vw, 260px);
+        height: min(92vw, 376px);
+      }
+
+      .modal-art .card-image-meta {
+        max-width: calc(100% - 24px);
+        padding: 8px 14px;
+        font-size: 16px;
+      }
+
+      .modal-body {
+        gap: 12px;
+        font-size: 17px;
+        line-height: 1.74;
+      }
+
+      .modal-body .tags {
+        justify-content: center;
+        padding-bottom: 4px;
+      }
+
+      .modal-body .tag {
+        font-size: 14px;
+        padding: 3px 9px;
+      }
+
+      .section {
+        border: 1px solid rgba(216, 203, 184, .72);
+        border-radius: 8px;
+        padding: 14px 15px;
+        background: rgba(255, 250, 240, .72);
+      }
+
+      .section h3 {
+        margin-bottom: 8px;
+        font-size: 19px;
+      }
+
+      .affirmation {
+        padding: 15px;
+        font-size: 17px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .modal,
+      .modal-panel {
+        transition: none;
+        animation: none;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero-title { font-size: 30px; }
+
+      .modal-head {
+        padding: 18px 48px 14px 18px;
+      }
+
+      .modal-title {
+        font-size: 32px;
+      }
+
+      .modal-art {
+        width: min(68vw, 220px);
+        height: min(98vw, 318px);
+      }
+
+      .icon-button {
+        right: 10px;
+        top: 10px;
+        width: 36px;
+        height: 36px;
+        font-size: 26px;
+      }
+
+      main,
+      .topbar-inner,
+      .site-footer { width: min(100% - 20px, 1180px); }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar" id="topbar">
+    <div class="topbar-inner">
+      <div>
+        <h1>天使牌卡庫</h1>
+        <p class="subtitle">Oatmeal-inspired local oracle library.</p>
+      </div>
+      <div class="actions">
+        <button class="button" id="drawButton" type="button">隨機抽一張</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-label="天使牌卡庫介紹">
+      <div class="hero-copy">
+        <p class="eyebrow">Local oracle archive</p>
+        <h2 class="hero-title">一套溫柔、可離線使用的天使牌查找工具。</h2>
+        <p class="hero-text">依照當下感受搜尋、篩選或抽一張牌，查看每張卡的完整指引。</p>
+      </div>
+    </section>
+
+    <section class="toolbar" aria-label="卡牌查找工具">
+      <label class="field">
+        搜尋
+        <input id="searchInput" type="search" placeholder="例：排名、天使、關鍵字、訊息">
+      </label>
+      <div class="multi-select" id="categoryMultiSelect">
+        <span class="field-label" id="categoryLabel">分類</span>
+        <button class="multi-button" id="categoryButton" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="categoryLabel categoryButtonText">
+          <span class="multi-label" id="categoryButtonText">全部分類</span>
+          <svg class="multi-arrow" viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M5.5 7.5 10 12l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="multi-menu" id="categoryMenu" role="listbox" aria-multiselectable="true" aria-labelledby="categoryLabel"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="heading">
+        <h2>全部卡牌</h2>
+        <span class="count" id="resultCount">0 張</span>
+      </div>
+      <div class="grid" id="cardGrid"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    Copyright © 2026 麥堂主. All rights reserved.
+  </footer>
+
+  <div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <p class="modal-kicker" id="modalKicker"></p>
+        <h2 class="modal-title" id="modalTitle"></h2>
+        <p class="modal-subtitle" id="modalSubtitle"></p>
+        <button class="icon-button" id="closeButton" type="button" aria-label="關閉詳情">×</button>
+      </div>
+      <div class="modal-content">
+        <div class="modal-art">
+          <img class="modal-image" id="modalImage" src="assets/placeholder-card.svg" alt="">
+          <span class="card-image-meta" id="modalImageMeta"></span>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="button" id="modalDrawButton" type="button">再抽一張</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const RAW_CSV = "id,name,angel,subtitle,keywords,category,message,detail,guidance,affirmation,image,sort_order,is_active\nall-is-well,一切安好,大天使耶利米爾,事情正按更高秩序展開,\"安心,信任,轉化\",療癒,眼前的變化正在把你帶向更完整的安排。,即使事情看起來尚未定案，內在與外在的線索都在重新排列。這張牌提醒你先穩住心，讓理解慢慢追上事件的發展。,今天不要急著下結論，先記錄三個已經變好的小跡象。,我信任生命正在用溫柔而清楚的方式支持我。,assets/cards/all-is-well.jpg,1,TRUE\nangel-therapy,天使療法,大天使拉斐爾,把擔憂交給光,\"療癒,釋放,支持\",療癒,你不需要獨自扛住所有壓力。,把身體的緊繃和心裡的擔憂當成需要被照顧的訊號。當你願意求助，療癒會從更容易的位置開始。,閉上眼深呼吸三次，想像把最重的一件事交給可被信任的支持。,我允許自己被療癒也被支持。,assets/cards/angel-therapy.jpg,2,TRUE\nbeloved-one,摯愛之人,大天使夏彌爾,愛正在靠近你,\"愛,伴侶,關係\",愛,愛不只是一個答案，也是你此刻可以選擇的態度。,這張牌提醒你把焦點從追尋轉回內在。當你的思想、行動與界線都更有愛，關係會自然回到更健康的位置。,用一個具體行動對自己或重要的人表達善意。,我在愛中被看見，也以愛回應世界。,assets/cards/beloved-one.jpg,3,TRUE\nbreathe,呼吸,大天使拉斐爾,先回到身體,\"呼吸,放鬆,安定\",健康,答案會在你放慢之後變得清楚。,你的系統可能累了，需要先穩定神經與節奏。呼吸不是暫停進展，而是讓你重新取得選擇權。,做一輪緩慢吸氣與吐氣，再處理下一個決定。,我的呼吸帶我回到平靜與清明。,assets/cards/breathe.jpg,4,TRUE\nbrilliant-idea,絕妙點子！,大天使烏列爾,靈感值得被採取行動,\"靈感,創意,洞見\",直覺,你收到的想法不是偶然，它正在指向下一步。,靈感剛出現時可能還不完整，但它有值得探索的核心。先保存它，再用行動驗證它。,把這個點子寫下來，列出今天可以測試的一個小步驟。,我尊重自己的靈感並讓它落地。,assets/cards/brilliant-idea.jpg,5,TRUE\ncareer-transition,職涯轉換,大天使夏彌爾,工作的方向正在更新,\"職涯,轉換,使命\",使命,你的工作生命正在向更貼近內心的方向調整。,轉換不一定代表立刻離開，也可能是角色、方法或價值排序的改變。聽見不滿背後真正的渴望，你會看見路。,列出工作中讓你有能量與耗能的各三件事。,我允許自己的工作與靈魂方向重新對齊。,assets/cards/career-transition.jpg,6,TRUE\nchakra-clearing,脈輪淨化,大天使麥達昶,讓能量重新流動,\"脈輪,清理,能量\",能量,你的能量場需要更乾淨的空間與節奏。,累積的情緒、雜訊與他人的期待可能讓你感到卡住。透過呼吸、整理、靜心或身體伸展，能量會再次通暢。,整理一個小區域，並想像每次呼氣都釋放多餘負擔。,我的能量清澈流動，我回到自己的中心。,assets/cards/chakra-clearing.jpg,7,TRUE\nclairaudience,清聽力,大天使薩基爾,留意你聽見的指引,\"聆聽,聲音,訊息\",直覺,內在或外在反覆出現的話語正在提醒你。,這張牌指向透過聲音接收指引：一句話、一段歌詞、一次談話，或心中安靜卻堅定的聲音。分辨它是否溫柔清楚且有建設性。,今天留意反覆聽見的關鍵句，並寫下它帶來的感受。,我聽見愛與智慧的指引。,assets/cards/clairaudience.jpg,8,TRUE\nclaircognizance,清知力,大天使烏列爾,你知道你知道,\"知道,洞察,判斷\",直覺,內在的確定感正在給你方向。,有些答案不會以戲劇化方式出現，而是像突然明白一樣浮現。若這份知道帶著平靜和清晰，值得被你信任。,把腦中最明確的答案寫下來，再觀察身體是否放鬆。,我信任內在清楚而安靜的智慧。,assets/cards/claircognizance.jpg,9,TRUE\nclairsentience,清感力,大天使拉貴爾,身體正在替你讀取真相,\"感受,共感,身體\",直覺,你的感受是重要資訊，不是多餘反應。,這張牌提醒你透過身體感覺辨識人事物。收縮、開放、沉重、輕盈，都可能是界線與方向的線索。,面對一個選擇時，分別想像兩種結果並觀察身體反應。,我的感受清楚而可靠，我溫柔地聽見它。,assets/cards/clairsentience.jpg,10,TRUE\nclairvoyance,清視力,大天使拉結爾,畫面與象徵正在說話,\"視覺,象徵,想像\",直覺,你看見的意象可能正是指引的語言。,夢境、腦海畫面、顏色或重複出現的象徵，都可能在協助你理解現況。不要急著解釋，先把它們記錄下來。,畫下或寫下最近反覆出現的圖像，觀察它連到哪個主題。,我看見更深層的真相與可能。,assets/cards/clairvoyance.jpg,11,TRUE\nclear-your-space,淨化你的空間,大天使約菲爾,環境會影響能量,\"整理,清理,空間\",能量,清理外在空間也會清理內在思緒。,你的生活環境可能累積了過期物品、舊情緒或他人的能量。從一個角落開始，讓新的流動進來。,丟棄或移走三樣不再支持你的物品。,我清出空間，迎接新鮮的光與秩序。,assets/cards/clear-your-space.jpg,12,TRUE\ncomfort,安慰,大天使亞茲拉爾,悲傷中仍有陪伴,\"安慰,悲傷,陪伴\",療癒,你被溫柔地陪著，不需要急著好起來。,這張牌承認失落與脆弱的真實。療癒不是否認疼痛，而是在疼痛中允許愛和支持進來。,今天給自己一個不評價情緒的空間，也向可信任的人說出需要。,我允許被安慰，也允許心慢慢復原。,assets/cards/comfort.jpg,13,TRUE\ncompassion,慈悲,大天使薩基爾,把心放柔但保有界線,\"慈悲,寬恕,柔軟\",關係,用慈悲看待此事，會帶來新的出口。,慈悲不是縱容，而是看見自己與他人都在學習。當心變柔，防衛會下降，真正可行的界線也會更清楚。,對自己說一句理解的話，再決定下一個成熟行動。,我以慈悲回應，也尊重自己的界線。,assets/cards/compassion.jpg,14,TRUE\ncounselor,諮商師,大天使亞茲拉爾,你的安定能支持他人,\"諮詢,陪伴,傾聽\",使命,你天生能讓人感到被理解與安定。,這張牌指出你有陪伴、傾聽、指引或療癒他人的能力。記得好的支持不是替別人承擔，而是幫助他重新看見力量。,練習傾聽一個人，不急著給答案，只回應你聽見的重點。,我的陪伴清楚而溫柔，能帶來安定。,assets/cards/counselor.jpg,15,TRUE\ncourage,勇氣,大天使亞列爾,越過舒適圈,\"勇氣,行動,突破\",行動,新的可能正在靠近，你已準備好跨出下一步。,害怕並不代表你不適合前進，它只是提醒你正在靠近更大的版本。把注意力放在服務、熱情與真心想完成的事情上。,把目標拆成今天可以完成的一步，不需要一次證明全部。,我信任自己的翅膀已經足夠有力。,assets/cards/courage.jpg,16,TRUE\ncreative-writing,創意書寫,大天使加百列,把訊息寫出來,\"書寫,表達,創造\",創作,你的文字能承載療癒與啟發。,無論是日記、文章、課程、故事或祈禱，書寫都能幫你整理內在，也可能支持他人。先允許初稿不完美。,設定十分鐘自由書寫，不刪改不評價。,我的文字自然流動並服務真實表達。,assets/cards/creative-writing.jpg,17,TRUE\ncrystal-clear-intentions,水晶般清楚的意念,大天使麥可,清楚決定你的方向,\"意圖,保護,決心\",行動,越清楚的意圖，越能召喚相符的支持。,模糊會消耗能量，清楚會聚焦力量。這張牌邀請你明確說出想要什麼，以及不再接受什麼。,用一句肯定句寫下你的核心意圖，放在今天看得到的地方。,我的意圖清澈堅定，行動也隨之對齊。,assets/cards/crystal-clear-intentions.jpg,18,TRUE\ndivine-order,神聖秩序,大天使拉貴爾,公平正在成形,\"秩序,公平,因果\",關係,事情會在適當的時機回到平衡。,當你感到不公平，先不要讓情緒替你判決全局。更大的秩序正在調整位置，你需要的是誠實、耐心與成熟的行動。,把事實和情緒分開寫下，從事實中選擇下一步。,我信任平衡正在被恢復。,assets/cards/divine-order.jpg,19,TRUE\ngentleness,溫柔,大天使聖德芬,用柔軟方式前進,\"溫柔,放慢,善待\",療癒,此刻不需要用力推進，你需要更溫柔地對待自己。,過度緊繃可能讓你忽略了真正的需要。溫柔不是軟弱，而是讓身心有空間恢復彈性。,今天降低一個不必要的標準，讓自己輕一點。,我以溫柔的方式照顧自己並完成重要的事。,assets/cards/gentleness.jpg,20,TRUE\ngifts-from-god,來自神的禮物,大天使聖德芬,接受正在抵達的祝福,\"祝福,禮物,接收\",豐盛,支持可能會以你沒預期的形式出現。,你正在收到禮物，也許是機會、靈感、人脈、資源或一句剛好的話。練習接收能讓祝福延續。,今天對一個小小的好運說謝謝，並真的收下它。,我敞開雙手接收生命的善意。,assets/cards/gifts-from-god.jpg,21,TRUE\nhealthy-lifestyle,健康的生活方式,大天使拉斐爾,照顧你的能量,\"健康,休息,生活\",健康,你的身體正在要求更友善的節奏。,你可能已經收到一些內在提醒：多休息、調整飲食、伸展、補水，或離開消耗過度的安排。這些提醒會讓你恢復清明。,選一個最容易做到的照顧行動，今天就完成它。,我以溫柔而穩定的方式照顧自己。,assets/cards/healthy-lifestyle.jpg,22,TRUE\nhello-from-heaven,來自天堂的問候,大天使亞茲拉爾,愛沒有真正離開,\"祖先,思念,訊息\",療癒,你思念的人或祝福正在以溫柔方式靠近。,這張牌帶來安慰：有些連結超越形式。夢、氣味、歌、回憶或突然的溫暖感，都可能是愛的提醒。,留意今天出現的溫柔巧合，並向那份愛說謝謝。,愛以不同形式持續陪伴我。,assets/cards/hello-from-heaven.jpg,23,TRUE\nindigo-and-crystal-children,靛藍色小孩與水晶小孩,大天使麥達昶,守護敏銳的新世代,\"孩子,敏感,教導\",使命,你的經驗能支持更年輕或更敏銳的生命。,這張牌提醒你，教導不一定在正式課堂。你的耐心、示範、陪伴與真實分享，都可能成為他人的方向。,找一個可以分享經驗或提供鼓勵的對象，用簡單真誠的方式支持他。,我的陪伴能帶來清楚、安定與希望。,assets/cards/indigo-and-crystal-children.jpg,24,TRUE\nleadership,領導力,大天使加百列,站到該站的位置,\"領導,責任,發聲\",使命,你被邀請以清楚而真誠的方式帶路。,領導不是控制所有人，而是願意承擔願景、溝通方向並保護重要價值。你的聲音需要被聽見。,今天主動釐清一件事的方向或下一步。,我以真誠和清楚承擔我的位置。,assets/cards/leadership.jpg,25,TRUE\nlife-review,生命的回顧,大天使耶利米爾,整理過去帶來自由,\"回顧,整合,釋放\",療癒,回看不是停留，而是為了帶著智慧前進。,某些模式正在要求被看見。當你誠實承認學到什麼、失去什麼、仍珍惜什麼，就能釋放不再需要的重量。,寫下最近一段經歷教會你的三件事。,我帶著理解回看過去，也帶著自由走向前方。,assets/cards/life-review.jpg,26,TRUE\nmoon-cycles,月亮週期,大天使漢尼爾,順著週期工作,\"月亮,週期,顯化\",直覺,你的能量與創造力有自己的潮汐。,不是每一天都適合同一種行動。觀察你的高峰、低谷、釋放與開始的節奏，會讓努力更自然有效。,記錄今天的情緒與能量，對照月相或身體週期。,我尊重自己的週期並與之合作。,assets/cards/moon-cycles.jpg,27,TRUE\nnurture,滋養,大天使加百列,照顧自己也照亮他人,\"滋養,照顧,母性\",療癒,你付出的愛也需要回到自己身上。,如果你長期照顧他人，現在需要確認自己是否也被照顧。真正穩定的支持來自充足而非耗盡。,安排一件滋養自己的小事，不把它排到最後。,我滋養自己，也讓愛更穩定地流動。,assets/cards/nurture.jpg,28,TRUE\noutdoors,走出戶外,大天使約菲爾,自然會替你重新校準,\"自然,空氣,創意\",能量,離開封閉空間，讓自然幫你恢復清明。,大自然能重置你的節奏，也能帶來新的創意。陽光、風、樹、土地會提醒你生命比問題更寬廣。,到戶外走十分鐘，先不滑手機，只觀察周圍。,我與自然連結，能量重新明亮。,assets/cards/outdoors.jpg,29,TRUE\novercoming-difficulties,克服困難,大天使耶利米爾,你正在越過這一關,\"困難,突破,復原\",行動,最艱難的部分正在被你穿越。,你已經比自己以為的更強。這張牌提醒你，過去的挑戰正在轉化成能力、同理心與更高層次的選擇。,回顧一件你已經撐過的事，承認自己的成長。,我正在越過困難並帶著智慧前進。,assets/cards/overcoming-difficulties.jpg,30,TRUE\npassion,熱情,大天使漢尼爾,讓心中的火重新帶路,\"熱情,渴望,創造\",創作,你的熱情正在提醒你真正想活出的方向。,安全但無感的選擇可能讓生命失去色彩。當熱情和清楚感同時出現，它值得被你認真對待。,今天花二十分鐘做一件讓你心亮起來的事。,我的熱情是神聖的方向感。,assets/cards/passion.jpg,31,TRUE\npatience,耐心,大天使約菲爾,花正在按自己的時間開,\"耐心,孕育,等待\",行動,你的願望正在生長，請給它時間成熟。,不是所有延遲都代表失敗。有些事需要扎根、累積與對齊。耐心讓你看見過程中的美，也保護成果。,為正在等待的事做一個可照顧但不催促的小行動。,我信任花開的時間，也珍惜生長的每一步。,assets/cards/patience.jpg,32,TRUE\npeace,寧靜,大天使夏彌爾,回到愛的根本,\"和平,愛,安定\",關係,真正的平靜來自記得愛仍然存在。,表象可能混亂，但你可以選擇先看見更深的真相。當你不再被恐懼推著走，解法會更柔和也更有效。,在回應前先停一拍，問自己：怎樣做更接近愛？,我選擇寧靜，也選擇愛。,assets/cards/peace.jpg,33,TRUE\nprioritize,優先順序,大天使麥達昶,把時間交給最重要的事,\"優先,整理,專注\",行動,你的能量需要被放在真正重要的位置。,忙碌不等於有效。這張牌請你辨識最核心的任務、關係或使命，讓其餘事情回到次要位置。,列出今天最重要的三件事，先完成第一件。,我專注於最重要的事，並讓行動變得清楚。,assets/cards/prioritize.jpg,34,TRUE\nprosperity,富足,大天使亞列爾,允許資源流向你,\"豐盛,機會,接納\",豐盛,張開雙臂接受生命送來的支持。,你正在進入資源重新流動的時期。富足不只來自金錢，也可能以靈感、合作、時間、善意與清楚方向出現。,今天選一件可以讓事情前進的小行動，並明確提出請求。,我允許合適的支持流向我。,assets/cards/prosperity.jpg,35,TRUE\nrelationship-harmony,關係和諧,大天使拉貴爾,讓互動回到公平與尊重,\"關係,和諧,修復\",關係,關係中的緊張正在尋找更平衡的出口。,和諧不是壓下真話，而是讓真話以尊重的方式被聽見。願意調整位置的人，會讓關係重新流動。,選擇一段關係，先釐清你真正想修復的是什麼。,我以公平與尊重創造和諧的連結。,assets/cards/relationship-harmony.jpg,36,TRUE\nremember-who-you-are,記得你是誰,大天使麥可,不要縮小自己的光,\"力量,身份,自信\",使命,你比目前的恐懼與懷疑更大。,這張牌提醒你回到本質：你的經驗、價值與天賦都有其位置。不要為了讓他人舒服而忘記自己的力量。,寫下三個你已經證明過的能力，今天帶著它們行動。,我記得自己的力量並以光明方式使用它。,assets/cards/remember-who-you-are.jpg,37,TRUE\nsensitivity,敏感度,大天使漢尼爾,敏感是禮物,\"敏感,界線,直覺\",直覺,你的感受力正在提醒你相信內在知道的事。,敏感不是負擔，而是一種細緻的導航。當環境、人際或選擇讓你收縮，先不要急著說服自己忽略它。,今天為自己保留一段不被打擾的時間，聽見真正的直覺。,我的敏銳值得被珍惜，也值得有清楚界線。,assets/cards/sensitivity.jpg,38,TRUE\nspiritual-understanding,靈性的了解,大天使拉結爾,更深的理解正在開啟,\"靈性,學習,洞見\",直覺,你正在看懂事件背後更大的課題。,某些經歷不只是表面問題，也是在引導你理解信念、模式與靈魂成長。保持開放，答案會逐步展開。,閱讀或聆聽一段能擴展視野的內容，並記下最觸動你的句子。,我敞開理解更高層次的智慧。,assets/cards/spiritual-understanding.jpg,39,TRUE\nspread-your-wings,展開你的翅膀！,大天使亞列爾,你已準備好飛翔,\"自由,冒險,擴展\",行動,不要再等待所有條件完美才開始。,你的能力已經足夠支撐下一段旅程。這張牌鼓勵你離開過度熟悉的限制，讓生命有機會回應你的勇敢。,做一件象徵展開的行動，例如投遞、邀約、報名或公開表達。,我展開翅膀，允許自己進入更大的天空。,assets/cards/spread-your-wings.jpg,40,TRUE\ntake-back-your-power,拿回你的力量！,大天使拉結爾,你可以重新選擇,\"力量,界線,自主\",行動,把選擇權從恐懼手中拿回來。,你可能把太多權力交給別人的看法、舊故事或外在壓力。這張牌提醒你，你可以重新定義自己的角色與行動。,說出一個你今天要收回主導權的地方。,我拿回自己的力量，並以智慧使用它。,assets/cards/take-back-your-power.jpg,41,TRUE\nteaching-and-learning,教與學,大天使薩基爾,學習與分享形成循環,\"學習,教導,智慧\",使命,你正在同時成為學生與老師。,當你學到新東西，分享會讓理解更深。當你教導他人，也會看見自己仍能學習的地方。,把最近學到的一個觀點，用簡單方式分享給需要的人。,我開放學習，也慷慨分享智慧。,assets/cards/teaching-and-learning.jpg,42,TRUE\nvictory,勝利！,大天使聖德芬,努力正在開花結果,\"勝利,完成,肯定\",豐盛,你的堅持正在帶來可見成果。,這張牌不是要你停止努力，而是提醒你承認進展。慶祝會讓能量穩定，也讓你更有力量走下一段路。,今天為一個已完成或正在成形的成果做小小慶祝。,我承認自己的努力，也歡迎勝利到來。,assets/cards/victory.jpg,43,TRUE\nyou-are-safe,你是安全的,大天使麥可,保護正在你身邊,\"安全,保護,信任\",保護,你被保護著，可以放下過度警戒。,恐懼可能讓你一直預演最壞結果。這張牌提醒你，清楚界線與內在信任可以同時存在。,想像一道穩定的光包圍你，然後做一個讓自己更安心的實際安排。,我是安全的，也有力量保護自己的道路。,assets/cards/you-are-safe.jpg,44,TRUE\nyou-know-what-to-do,你知道該做什麼,大天使烏列爾,內在智慧已經給出答案,\"智慧,決定,行動\",行動,你其實已經知道下一步，只需要信任並行動。,若你一直尋找更多確認，可能是害怕承擔答案。回到最安靜的內在聲音，你會知道什麼最誠實。,今天採取一個你早就知道該做的小行動。,我信任自己的智慧，並立即採取清楚行動。,assets/cards/you-know-what-to-do.jpg,45,TRUE\n";
+    const PLACEHOLDER_IMAGE = "assets/placeholder-card.svg";
+    const LEGACY_CARD_ALIASES = {
+      "ariel-abundance": "prosperity",
+      "ariel-courage": "courage",
+      "haniel-sensitivity": "sensitivity",
+      "chamuel-love": "beloved-one",
+      "raphael-healing": "healthy-lifestyle",
+      "metatron-children": "indigo-and-crystal-children"
+    };
+
+    const state = {
+      cards: [],
+      filtered: [],
+      selectedCategories: new Set(),
+      selected: null
+    };
+    let modalCloseTimer = 0;
+    let modalOpenFrame = 0;
+
+    const els = {
+      cardGrid: document.querySelector("#cardGrid"),
+      categoryButton: document.querySelector("#categoryButton"),
+      categoryButtonText: document.querySelector("#categoryButtonText"),
+      categoryMenu: document.querySelector("#categoryMenu"),
+      categoryMultiSelect: document.querySelector("#categoryMultiSelect"),
+      closeButton: document.querySelector("#closeButton"),
+      detailModal: document.querySelector("#detailModal"),
+      drawButton: document.querySelector("#drawButton"),
+      modalBody: document.querySelector("#modalBody"),
+      modalDrawButton: document.querySelector("#modalDrawButton"),
+      modalImage: document.querySelector("#modalImage"),
+      modalImageMeta: document.querySelector("#modalImageMeta"),
+      modalKicker: document.querySelector("#modalKicker"),
+      modalSubtitle: document.querySelector("#modalSubtitle"),
+      modalTitle: document.querySelector("#modalTitle"),
+      resultCount: document.querySelector("#resultCount"),
+      searchInput: document.querySelector("#searchInput")
+    };
+
+    function syncStickyOffset() {
+      const topbar = document.querySelector("#topbar");
+      if (!topbar) return;
+      document.documentElement.style.setProperty("--topbar-height", topbar.offsetHeight + "px");
+    }
+
+    function parseCsv(csvText) {
+      const rows = [];
+      let row = [];
+      let value = "";
+      let insideQuotes = false;
+      const text = String(csvText || "").replace(/^\uFEFF/, "");
+
+      for (let index = 0; index < text.length; index += 1) {
+        const char = text[index];
+        const next = text[index + 1];
+
+        if (char === '"') {
+          if (insideQuotes && next === '"') {
+            value += '"';
+            index += 1;
+          } else {
+            insideQuotes = !insideQuotes;
+          }
+          continue;
+        }
+
+        if (char === "," && !insideQuotes) {
+          row.push(value);
+          value = "";
+          continue;
+        }
+
+        if ((char === "\n" || char === "\r") && !insideQuotes) {
+          if (char === "\r" && next === "\n") index += 1;
+          row.push(value);
+          if (row.some((cell) => cell.trim() !== "")) rows.push(row);
+          row = [];
+          value = "";
+          continue;
+        }
+
+        value += char;
+      }
+
+      row.push(value);
+      if (row.some((cell) => cell.trim() !== "")) rows.push(row);
+      if (rows.length === 0) return [];
+
+      const headers = rows[0].map((header) => header.trim());
+      return rows.slice(1).map((cells) => {
+        const record = {};
+        headers.forEach((header, index) => {
+          record[header] = (cells[index] || "").trim();
+        });
+        return record;
+      });
+    }
+
+    function normalizeCards(rows) {
+      return rows
+        .filter((row) => String(row.is_active || "").trim().toUpperCase() === "TRUE")
+        .map((row, index) => {
+          const keywordList = String(row.keywords || "")
+            .split(",")
+            .map((keyword) => keyword.trim())
+            .filter(Boolean);
+          const sortOrder = Number.parseFloat(row.sort_order);
+
+          return {
+            id: row.id || "card-" + (index + 1),
+            name: row.name || "未命名牌卡",
+            angel: row.angel || "未指定天使",
+            subtitle: row.subtitle || "",
+            keywords: row.keywords || "",
+            keywordList,
+            category: row.category || "未分類",
+            message: row.message || "",
+            detail: row.detail || "",
+            guidance: row.guidance || "",
+            affirmation: row.affirmation || "",
+            image: row.image || PLACEHOLDER_IMAGE,
+            sort_order: Number.isFinite(sortOrder) ? sortOrder : index + 1
+          };
+        })
+        .sort((a, b) => a.sort_order - b.sort_order || a.name.localeCompare(b.name, "zh-Hant"));
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function cardIdFromHash(hash) {
+      const match = String(hash || "").match(/(?:^#|&)card=([^&]+)/);
+      if (!match) return "";
+      const id = decodeURIComponent(match[1]);
+      return LEGACY_CARD_ALIASES[id] || id;
+    }
+
+    function uniqueCategories(cards) {
+      return [...new Set(cards.map((card) => card.category).filter(Boolean))]
+        .sort((a, b) => a.localeCompare(b, "zh-Hant"));
+    }
+
+    function filterCards() {
+      const query = els.searchInput.value.trim().toLocaleLowerCase();
+      state.filtered = state.cards.filter((card) => {
+        if (state.selectedCategories.size > 0 && !state.selectedCategories.has(card.category)) return false;
+        if (!query) return true;
+        return [
+          card.name,
+          card.angel,
+          card.subtitle,
+          card.keywords,
+          card.category,
+          card.message,
+          card.detail,
+          card.guidance,
+          card.affirmation
+        ].join(" ").toLocaleLowerCase().includes(query);
+      });
+      renderCards();
+    }
+
+    function updateCategoryButtonText() {
+      if (state.selectedCategories.size === 0) {
+        els.categoryButtonText.textContent = "全部分類";
+        return;
+      }
+
+      const selected = [...state.selectedCategories];
+      els.categoryButtonText.textContent = selected.length <= 2
+        ? selected.join("、")
+        : selected.slice(0, 2).join("、") + " +" + (selected.length - 2);
+    }
+
+    function toggleCategoryMenu(forceOpen) {
+      const shouldOpen = typeof forceOpen === "boolean"
+        ? forceOpen
+        : !els.categoryMultiSelect.classList.contains("open");
+      els.categoryMultiSelect.classList.toggle("open", shouldOpen);
+      els.categoryButton.setAttribute("aria-expanded", String(shouldOpen));
+    }
+
+    function renderCategories() {
+      els.categoryMenu.innerHTML = "";
+      for (const category of uniqueCategories(state.cards)) {
+        const option = document.createElement("label");
+        option.className = "multi-option";
+        option.innerHTML = '<input type="checkbox" value="' + escapeHtml(category) + '"><span>' + escapeHtml(category) + '</span>';
+        const checkbox = option.querySelector("input");
+        checkbox.addEventListener("change", () => {
+          if (checkbox.checked) {
+            state.selectedCategories.add(category);
+          } else {
+            state.selectedCategories.delete(category);
+          }
+          updateCategoryButtonText();
+          filterCards();
+        });
+        els.categoryMenu.append(option);
+      }
+      updateCategoryButtonText();
+    }
+
+    function renderCards() {
+      els.cardGrid.innerHTML = "";
+      els.resultCount.textContent = state.filtered.length + " 張";
+
+      if (state.filtered.length === 0) {
+        els.cardGrid.innerHTML = '<div class="empty">找不到符合條件的卡牌。</div>';
+        return;
+      }
+
+      for (const card of state.filtered) {
+        const button = document.createElement("button");
+        button.className = "card";
+        button.type = "button";
+        const cardMeta = card.angel + " · " + card.category;
+        button.setAttribute("aria-label", card.name + "，" + cardMeta);
+        button.innerHTML = [
+          '<div class="card-art">',
+          '<img src="' + escapeHtml(card.image) + '" alt="' + escapeHtml(card.name) + '" loading="lazy">',
+          '<span class="card-image-meta">' + escapeHtml(cardMeta) + '</span>',
+          '</div>',
+          '<div class="card-body">',
+          '<h3 class="card-title">' + escapeHtml(card.name) + '</h3>',
+          '<div class="tags">' + card.keywordList.slice(0, 3).map((keyword) => '<span class="tag">' + escapeHtml(keyword) + '</span>').join("") + '</div>',
+          '</div>'
+        ].join("");
+        button.querySelector("img").addEventListener("error", (event) => {
+          event.currentTarget.src = PLACEHOLDER_IMAGE;
+        });
+        button.addEventListener("click", () => selectCard(card, true));
+        els.cardGrid.append(button);
+      }
+    }
+
+    function renderModal(card) {
+      els.modalKicker.textContent = card.angel + " · " + card.category;
+      els.modalTitle.textContent = card.name;
+      els.modalSubtitle.textContent = card.subtitle;
+      els.modalImage.src = card.image || PLACEHOLDER_IMAGE;
+      els.modalImage.alt = card.name;
+      els.modalImageMeta.textContent = card.angel + " · " + card.category;
+      els.modalBody.innerHTML = [
+        '<div class="tags">' + card.keywordList.map((keyword) => '<span class="tag">' + escapeHtml(keyword) + '</span>').join("") + '</div>',
+        '<section class="section"><h3>主要訊息</h3><p>' + escapeHtml(card.message) + '</p></section>',
+        '<section class="section"><h3>詳細解釋</h3><p>' + escapeHtml(card.detail) + '</p></section>',
+        '<section class="section"><h3>今日指引</h3><p>' + escapeHtml(card.guidance) + '</p></section>',
+        '<p class="affirmation">' + escapeHtml(card.affirmation) + '</p>'
+      ].join("");
+      els.modalImage.onerror = () => {
+        els.modalImage.src = PLACEHOLDER_IMAGE;
+      };
+    }
+
+    function selectCard(card, updateHash) {
+      state.selected = card;
+      renderModal(card);
+      window.clearTimeout(modalCloseTimer);
+      window.cancelAnimationFrame(modalOpenFrame);
+      els.detailModal.classList.remove("closing");
+      els.detailModal.classList.add("active");
+      void els.detailModal.offsetHeight;
+      modalOpenFrame = window.requestAnimationFrame(() => {
+        els.detailModal.classList.add("open");
+      });
+      if (updateHash) {
+        history.replaceState(null, "", "#card=" + encodeURIComponent(card.id));
+      }
+    }
+
+    function closeModal() {
+      if (!els.detailModal.classList.contains("active")) return;
+      window.cancelAnimationFrame(modalOpenFrame);
+      els.detailModal.classList.remove("open");
+      els.detailModal.classList.add("closing");
+      window.clearTimeout(modalCloseTimer);
+      modalCloseTimer = window.setTimeout(() => {
+        els.detailModal.classList.remove("active");
+        els.detailModal.classList.remove("closing");
+        state.selected = null;
+      }, 340);
+      history.replaceState(null, "", location.pathname);
+    }
+
+    function drawCard() {
+      if (state.cards.length === 0) return;
+      selectCard(state.cards[Math.floor(Math.random() * state.cards.length)], true);
+    }
+
+    function init() {
+      syncStickyOffset();
+      state.cards = normalizeCards(parseCsv(RAW_CSV));
+      state.filtered = state.cards;
+      renderCategories();
+      renderCards();
+
+      const initialCardId = cardIdFromHash(location.hash);
+      const initialCard = state.cards.find((card) => card.id === initialCardId);
+      if (initialCard) selectCard(initialCard, false);
+    }
+
+    window.addEventListener("resize", syncStickyOffset);
+    els.searchInput.addEventListener("input", filterCards);
+    els.categoryButton.addEventListener("click", () => toggleCategoryMenu());
+    els.drawButton.addEventListener("click", drawCard);
+    els.modalDrawButton.addEventListener("click", drawCard);
+    els.closeButton.addEventListener("click", closeModal);
+    els.detailModal.addEventListener("click", (event) => {
+      if (event.target === els.detailModal) closeModal();
+    });
+    document.addEventListener("click", (event) => {
+      if (!els.categoryMultiSelect.contains(event.target)) toggleCategoryMenu(false);
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        if (els.detailModal.classList.contains("active")) closeModal();
+        toggleCategoryMenu(false);
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>
