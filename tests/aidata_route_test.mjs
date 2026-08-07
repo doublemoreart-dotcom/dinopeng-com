@@ -15,6 +15,8 @@ const smallPartiesPagePath = new URL('../small-parties/index.html', import.meta.
 const smallPartiesRootPath = new URL('../small-parties/', import.meta.url);
 const taiwanFoodSafetyPagePath = new URL('../taiwan-food-safety/index.html', import.meta.url);
 const taiwanFoodSafetyRootPath = new URL('../taiwan-food-safety/', import.meta.url);
+const maePagePath = new URL('../mae/index.html', import.meta.url);
+const maeRootPath = new URL('../mae/', import.meta.url);
 const tpTreesPagePath = new URL('../tptrees/index.html', import.meta.url);
 const tpTreesLifecyclePath = new URL('../tptrees/lifecycle/index.html', import.meta.url);
 const tpTreesSpeciesPath = new URL('../tptrees/species/index.html', import.meta.url);
@@ -80,6 +82,19 @@ test('small-parties route publishes its static page and local assets', async () 
 
   for (const path of ['favicon.ico', 'favicon.svg', 'assets/hero-social-discourse.png']) {
     assert.equal(existsSync(new URL(path, smallPartiesRootPath)), true, `${path} should load below /small-parties/`);
+  }
+});
+
+test('mae route publishes its standalone page and local assets', async () => {
+  const html = await readFile(maePagePath, 'utf8');
+  assert.match(html, /<title>天使牌卡庫｜純本機版<\/title>/);
+  assert.match(html, /id="drawButton"/);
+  assert.match(html, /id="cardGrid"/);
+
+  const paths = [...html.matchAll(/["']((?:\.\/)?assets\/[^"']+)["']/g)].map(match => match[1]);
+  assert.ok(paths.length >= 2, `expected MAE local asset references, got ${paths.length}`);
+  for (const path of new Set(paths)) {
+    assert.equal(existsSync(new URL(path, maeRootPath)), true, `${path} should load below /mae/`);
   }
 });
 
