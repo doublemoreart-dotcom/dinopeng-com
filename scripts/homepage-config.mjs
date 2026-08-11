@@ -5,6 +5,7 @@ export const projectPreviewNames = [
   "48directory.png",
   "small-parties.png",
   "taiwan-food-safety.png",
+  "ccp-stability-spending.png",
 ];
 
 export const homepageFiles = [

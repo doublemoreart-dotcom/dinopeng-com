@@ -3,3 +3,6 @@
 
 # Local-only homepage previews must never be published.
 /outputs/
+
+# Browser QA artifacts are local-only.
+/.playwright-cli/

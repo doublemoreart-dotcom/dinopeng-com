@@ -12,7 +12,7 @@
 - `index.html`
 - `assets/favicon.png`
 - `assets/og.png`
-- `assets/projects/*.png` 中列入 `scripts/homepage-config.mjs` 的六張預覽圖
+- `assets/projects/*.png` 中列入 `scripts/homepage-config.mjs` 的預覽圖
 
 ## 每次主頁更新
 

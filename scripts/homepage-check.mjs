@@ -45,6 +45,7 @@ const requiredHomepageText = [
   "https://dinopeng.com/48DIRECTORY/",
   "https://dinopeng.com/small-parties/",
   "https://dinopeng.com/taiwan-food-safety/",
+  "https://dinopeng.com/ccp-stability-spending/",
   "https://www.googletagmanager.com/gtag/js?id=G-RLCNPY896C",
   'gtag("config", "G-RLCNPY896C")',
 ];
