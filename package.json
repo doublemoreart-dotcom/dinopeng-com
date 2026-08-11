@@ -3,6 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "homepage:sync": "node scripts/homepage-sync.mjs",
+    "homepage:check": "node scripts/homepage-check.mjs",
+    "homepage:check:staged": "node scripts/homepage-check.mjs --staged",
     "release:prepare": "node scripts/release-prepare.mjs",
     "release:check": "node scripts/release-check.mjs",
     "release:verify": "node scripts/release-verify.mjs",
