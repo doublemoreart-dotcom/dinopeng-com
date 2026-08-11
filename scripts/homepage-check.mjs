@@ -46,6 +46,9 @@ const requiredHomepageText = [
   "https://dinopeng.com/small-parties/",
   "https://dinopeng.com/taiwan-food-safety/",
   "https://dinopeng.com/ccp-stability-spending/",
+  'title: "運動X科技預算小幫手"',
+  'title: "為什麼小黨可以攪動社群言論？"',
+  'title: "台灣食安管理流程與權責分工"',
   "https://www.googletagmanager.com/gtag/js?id=G-RLCNPY896C",
   'gtag("config", "G-RLCNPY896C")',
 ];
