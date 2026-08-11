@@ -22,4 +22,5 @@ export const homepageWorkflowFiles = [
   "scripts/homepage-check.mjs",
   "scripts/homepage-config.mjs",
   "scripts/homepage-sync.mjs",
+  "scripts/homepage-update.mjs",
 ];

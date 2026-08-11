@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "homepage:update": "node scripts/homepage-update.mjs",
     "homepage:sync": "node scripts/homepage-sync.mjs",
     "homepage:check": "node scripts/homepage-check.mjs",
     "homepage:check:staged": "node scripts/homepage-check.mjs --staged",

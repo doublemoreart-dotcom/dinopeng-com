@@ -23,7 +23,18 @@ git fetch --prune origin
 git worktree add -b codex/homepage-<change> ../dinopeng-com-homepage-<change> origin/main
 ```
 
-在新工作目錄同步本機版：
+在新工作目錄執行一次主頁更新：
+
+```bash
+npm run homepage:update -- /absolute/path/to/local/dinopeng-com --dry-run
+npm run homepage:update -- /absolute/path/to/local/dinopeng-com
+```
+
+`--dry-run` 只驗證，不寫入檔案。正式執行會依序預檢、同步、驗證及精準暫存白名單內的主頁檔案；任何一步失敗就停止，而且不會自動 commit 或 push。
+
+確認輸出的 staged 差異只包含主頁後，再提交、推送及建立 PR。PR 合併後等待 GitHub Pages 完成，最後檢查正式首頁。
+
+若需要分步除錯，仍可個別使用：
 
 ```bash
 npm run homepage:sync -- /absolute/path/to/local/dinopeng-com --dry-run
@@ -32,8 +43,6 @@ npm run homepage:check
 git add index.html assets/favicon.png assets/og.png assets/projects
 npm run homepage:check:staged
 ```
-
-確認差異只包含主頁後，再提交、推送及建立 PR。PR 合併後等待 GitHub Pages 完成，最後檢查正式首頁。
 
 ## 推送錯誤
 
