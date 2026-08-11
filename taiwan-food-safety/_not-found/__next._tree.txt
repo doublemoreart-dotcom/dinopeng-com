@@ -1,3 +1,3 @@
 :HL["/taiwan-food-safety/_next/static/chunks/0mo~ub10ec.4d.css","style"]
 :HL["https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@100..900&family=SN+Pro:wght@300..900&display=swap","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"bc6153d0e910f6f46735d33f91ecbcca1855541a"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"00717ab2a6ba5e53c487f4d24b0633035d32acd2"}
