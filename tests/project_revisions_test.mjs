@@ -2,7 +2,13 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-import { compareStates, createState, formatSummary, validateConfig } from '../scripts/project-revisions.mjs';
+import {
+  compareStates,
+  createState,
+  formatSummary,
+  selectSources,
+  validateConfig,
+} from '../scripts/project-revisions.mjs';
 
 const config = {
   version: 1,
@@ -41,6 +47,20 @@ test('state comparison detects only source or configuration changes', () => {
   assert.equal(compareStates(previous, current)[0].status, 'configuration');
 });
 
+test('project selection resolves only validated configured sources', () => {
+  assert.deepEqual(
+    selectSources(config, 'sporttech').map(source => source.id),
+    ['sporttech'],
+  );
+  assert.deepEqual(
+    selectSources(config, 'sporttech,aidata').map(source => source.id),
+    ['sporttech', 'aidata'],
+  );
+  assert.throws(() => selectSources(config, 'unknown'), /Unknown project selection/);
+  assert.throws(() => selectSources(config, 'aidata,aidata'), /Duplicate project selection/);
+  assert.throws(() => selectSources(config, ''), /comma-separated list/);
+});
+
 test('summary exposes every revision and whether an update is needed', () => {
   const current = createState(config, revisions);
   const changes = compareStates({ version: 1, sources: {} }, current);
@@ -54,11 +74,15 @@ test('sync workflow skips expensive work when revisions are current', async () =
   const workflow = await readFile(new URL('../.github/workflows/sync-projects.yml', import.meta.url), 'utf8');
   assert.match(workflow, /force_sync:/);
   assert.match(workflow, /project-revisions\.mjs check config\/project-sources\.json \.project-sync-state\.json/);
-  assert.match(workflow, /project-revisions\.mjs checkout config\/project-sources\.json \.\.\/sources/);
+  assert.match(workflow, /project-revisions\.mjs checkout config\/project-sources\.json \.\.\/sources "\$\{\{ steps\.revisions\.outputs\.changed_projects \}\}"/);
   assert.match(workflow, /actions\/setup-node@v6/);
+  assert.match(workflow, /contains\(steps\.revisions\.outputs\.changed_projects, 'taiwan-food-safety'\)/);
+  assert.match(workflow, /sync-projects\.sh \.\.\/sources \. "\$\{\{ steps\.revisions\.outputs\.changed_projects \}\}"/);
+  assert.match(workflow, /project-revisions\.mjs capture config\/project-sources\.json \.\.\/sources \.project-sync-state\.json "\$\{\{ steps\.revisions\.outputs\.changed_projects \}\}"/);
   assert.ok(
-    workflow.match(/if: steps\.revisions\.outputs\.changed == 'true'/g)?.length >= 6,
+    workflow.match(/if: steps\.revisions\.outputs\.changed == 'true'/g)?.length >= 5,
     'all expensive sync steps should depend on source changes',
   );
   assert.match(workflow, /git add \.project-sync-state\.json/);
+  assert.match(workflow, /git add -- "\$\{project_paths\[@\]\}"/);
 });

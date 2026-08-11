@@ -40,10 +40,10 @@ jobs:
       - name: Check out changed project sources
         if: steps.revisions.outputs.changed == 'true'
         working-directory: portal
-        run: node scripts/project-revisions.mjs checkout config/project-sources.json ../sources
+        run: node scripts/project-revisions.mjs checkout config/project-sources.json ../sources "${{ steps.revisions.outputs.changed_projects }}"
 
       - name: Set up Node.js
-        if: steps.revisions.outputs.changed == 'true'
+        if: contains(steps.revisions.outputs.changed_projects, 'taiwan-food-safety')
         uses: actions/setup-node@v6
         with:
           node-version: 22
@@ -51,14 +51,14 @@ jobs:
           cache-dependency-path: sources/taiwan-food-safety/package-lock.json
 
       - name: Build Taiwan Food Safety
-        if: steps.revisions.outputs.changed == 'true'
+        if: contains(steps.revisions.outputs.changed_projects, 'taiwan-food-safety')
         working-directory: sources/taiwan-food-safety
         run: npm ci && NEXT_BUILD_ID="$(git rev-parse HEAD)" npm run build:pages
 
       - name: Sync published files
         if: steps.revisions.outputs.changed == 'true'
         working-directory: portal
-        run: ./scripts/sync-projects.sh ../sources/aidata ../sources/tptrees ../sources/sporttech ../sources/48DIRECTORY ../sources/small-parties ../sources/taiwan-food-safety/out ../sources/mae ../sources/ccp-stability-spending .
+        run: ./scripts/sync-projects.sh ../sources . "${{ steps.revisions.outputs.changed_projects }}"
 
       - name: Verify portal routes
         if: steps.revisions.outputs.changed == 'true'
@@ -68,19 +68,21 @@ jobs:
       - name: Record published revisions
         if: steps.revisions.outputs.changed == 'true'
         working-directory: portal
-        run: node scripts/project-revisions.mjs capture config/project-sources.json ../sources .project-sync-state.json
+        run: node scripts/project-revisions.mjs capture config/project-sources.json ../sources .project-sync-state.json "${{ steps.revisions.outputs.changed_projects }}"
 
       - name: Commit updated snapshots
         if: steps.revisions.outputs.changed == 'true'
         working-directory: portal
         run: |
-          git add .project-sync-state.json aidata tptrees sporttech 48DIRECTORY small-parties taiwan-food-safety mae ccp-stability-spending
+          changed_projects="${{ steps.revisions.outputs.changed_projects }}"
+          IFS=',' read -r -a project_paths <<< "$changed_projects"
+          git add .project-sync-state.json
+          git add -- "${project_paths[@]}"
           if git diff --cached --quiet; then
             echo "Published snapshots and source revisions are already current."
             exit 0
           fi
 
-          changed_projects="${{ steps.revisions.outputs.changed_projects }}"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "chore: sync project sites" -m "Changed sources: ${changed_projects:-forced verification}"

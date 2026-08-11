@@ -2,20 +2,14 @@
 
 set -euo pipefail
 
-if [[ $# -ne 9 ]]; then
-  echo "Usage: $0 <aidata-source> <tptrees-source> <sporttech-source> <48directory-source> <small-parties-source> <taiwan-food-safety-output> <mae-source> <ccp-stability-spending-source> <portal-root>" >&2
+if [[ $# -ne 3 ]]; then
+  echo "Usage: $0 <sources-root> <portal-root> <project-ids>" >&2
   exit 64
 fi
 
-aidata_source="$(cd "$1" && pwd)"
-tptrees_source="$(cd "$2" && pwd)"
-sporttech_source="$(cd "$3" && pwd)"
-directory_source="$(cd "$4" && pwd)"
-small_parties_source="$(cd "$5" && pwd)"
-taiwan_food_safety_source="$(cd "$6" && pwd)"
-mae_source="$(cd "$7" && pwd)"
-ccp_stability_spending_source="$(cd "$8" && pwd)"
-portal_root="$(cd "$9" && pwd)"
+sources_root="$(cd "$1" && pwd)"
+portal_root="$(cd "$2" && pwd)"
+project_ids="$3"
 
 require_file() {
   if [[ ! -f "$1" ]]; then
@@ -36,98 +30,159 @@ require_text() {
   fi
 }
 
-require_file "$aidata_source/index.html"
-require_file "$tptrees_source/index.html"
-require_file "$tptrees_source/lifecycle/index.html"
-require_file "$tptrees_source/species/index.html"
-require_file "$tptrees_source/daily/index.html"
-require_file "$tptrees_source/data/tree-records.js"
-require_file "$tptrees_source/data/tree-data-manifest.json"
-require_file "$tptrees_source/data/site-release-manifest.json"
-require_file "$tptrees_source/favicon.svg"
-require_file "$tptrees_source/favicon.ico"
-require_file "$tptrees_source/app/analytics.js"
-require_file "$tptrees_source/app/heroicons.js"
-require_file "$tptrees_source/app/motion.css"
-require_file "$tptrees_source/app/motion.js"
-require_file "$tptrees_source/app/vendor/gsap.min.js"
-require_file "$tptrees_source/app/vendor/ScrollTrigger.min.js"
-require_file "$tptrees_source/public/social-preview.png"
-require_file "$sporttech_source/index.html"
-require_file "$sporttech_source/assets/favicon.svg"
-require_file "$sporttech_source/assets/sporttech-budget-hero-small.jpg"
-require_file "$directory_source/index.html"
-require_file "$directory_source/favicon.svg"
-require_file "$directory_source/assets/klp48-members/devi.jpg"
-require_file "$small_parties_source/index.html"
-require_file "$small_parties_source/favicon.ico"
-require_file "$small_parties_source/favicon.svg"
-require_file "$small_parties_source/assets/hero-social-discourse.png"
-require_file "$taiwan_food_safety_source/index.html"
-require_file "$taiwan_food_safety_source/favicon.ico"
-require_file "$taiwan_food_safety_source/opengraph-image.png"
-require_file "$mae_source/index.html"
-require_file "$mae_source/assets/placeholder-card.svg"
-require_file "$ccp_stability_spending_source/index.html"
-require_file "$ccp_stability_spending_source/styles.css"
-require_file "$ccp_stability_spending_source/script.js"
-require_file "$ccp_stability_spending_source/assets/fonts/SNPro-Variable.ttf"
-require_file "$ccp_stability_spending_source/public/favicon.ico"
-require_file "$ccp_stability_spending_source/public/social-share.png"
+source_root() {
+  local id="$1"
+  if [[ ! -d "$sources_root/$id" ]]; then
+    echo "Selected source checkout is missing: $sources_root/$id" >&2
+    exit 66
+  fi
+  (cd "$sources_root/$id" && pwd)
+}
+
+sync_aidata() {
+  local source
+  source="$(source_root aidata)"
+  require_file "$source/index.html"
+  mkdir -p "$portal_root/aidata/assets"
+  cp "$source/index.html" "$portal_root/aidata/index.html"
+  rsync -a --delete "$source/assets/" "$portal_root/aidata/assets/"
+}
+
+sync_tptrees() {
+  local source
+  source="$(source_root tptrees)"
+  for path in \
+    index.html lifecycle/index.html species/index.html daily/index.html \
+    data/tree-records.js data/tree-data-manifest.json data/site-release-manifest.json \
+    favicon.svg favicon.ico app/analytics.js app/heroicons.js app/motion.css app/motion.js \
+    app/vendor/gsap.min.js app/vendor/ScrollTrigger.min.js public/social-preview.png
+  do
+    require_file "$source/$path"
+  done
+  mkdir -p "$portal_root/tptrees"
+  rsync -a --delete \
+    --include "/index.html" \
+    --include "/favicon.svg" \
+    --include "/favicon.ico" \
+    --include "/app/***" \
+    --include "/lifecycle/***" \
+    --include "/species/***" \
+    --include "/daily/***" \
+    --include "/data/***" \
+    --include "/public/***" \
+    --exclude "*" \
+    "$source/" "$portal_root/tptrees/"
+}
+
+sync_sporttech() {
+  local source
+  source="$(source_root sporttech)"
+  require_file "$source/index.html"
+  require_file "$source/assets/favicon.svg"
+  require_file "$source/assets/sporttech-budget-hero-small.jpg"
+  mkdir -p "$portal_root/sporttech/assets"
+  cp "$source/index.html" "$portal_root/sporttech/index.html"
+  rsync -a --delete "$source/assets/" "$portal_root/sporttech/assets/"
+}
+
+sync_48directory() {
+  local source
+  source="$(source_root 48DIRECTORY)"
+  require_file "$source/index.html"
+  require_file "$source/favicon.svg"
+  require_file "$source/assets/klp48-members/devi.jpg"
+  mkdir -p "$portal_root/48DIRECTORY/assets"
+  cp "$source/index.html" "$portal_root/48DIRECTORY/index.html"
+  cp "$source/favicon.svg" "$portal_root/48DIRECTORY/favicon.svg"
+  rsync -a --delete "$source/assets/" "$portal_root/48DIRECTORY/assets/"
+}
+
+sync_small_parties() {
+  local source
+  source="$(source_root small-parties)"
+  require_file "$source/index.html"
+  require_file "$source/favicon.ico"
+  require_file "$source/favicon.svg"
+  require_file "$source/assets/hero-social-discourse.png"
+  require_text "$source/index.html" "gsap@3/dist/gsap.min.js" "Small Parties source"
+  require_text "$source/index.html" "ScrollTrigger.min.js" "Small Parties source"
+  require_text "$source/index.html" "ScrollToPlugin.min.js" "Small Parties source"
+  require_text "$source/index.html" "G-T2WMCYX21T" "Small Parties source"
+  require_text "$source/index.html" "assets/social-thumbnail.png" "Small Parties source"
+  mkdir -p "$portal_root/small-parties/assets"
+  cp "$source/index.html" "$portal_root/small-parties/index.html"
+  cp "$source/favicon.ico" "$portal_root/small-parties/favicon.ico"
+  cp "$source/favicon.svg" "$portal_root/small-parties/favicon.svg"
+  rsync -a --delete "$source/assets/" "$portal_root/small-parties/assets/"
+}
+
+sync_taiwan_food_safety() {
+  local source
+  source="$(source_root taiwan-food-safety)/out"
+  require_file "$source/index.html"
+  require_file "$source/favicon.ico"
+  require_file "$source/opengraph-image.png"
+  mkdir -p "$portal_root/taiwan-food-safety"
+  rsync -a --delete "$source/" "$portal_root/taiwan-food-safety/"
+}
+
+sync_mae() {
+  local source
+  source="$(source_root mae)"
+  require_file "$source/index.html"
+  require_file "$source/assets/placeholder-card.svg"
+  require_text "$source/index.html" "assets/placeholder-card.svg" "MAE source"
+  mkdir -p "$portal_root/mae/assets"
+  cp "$source/index.html" "$portal_root/mae/index.html"
+  rsync -a --delete "$source/assets/" "$portal_root/mae/assets/"
+}
+
+sync_ccp_stability_spending() {
+  local source
+  source="$(source_root ccp-stability-spending)"
+  require_file "$source/index.html"
+  require_file "$source/styles.css"
+  require_file "$source/script.js"
+  require_file "$source/assets/fonts/SNPro-Variable.ttf"
+  require_file "$source/public/favicon.ico"
+  require_file "$source/public/social-share.png"
+  require_text "$source/index.html" "中共如何使用維穩費？" "CCP Stability Spending source"
+  mkdir -p "$portal_root/ccp-stability-spending"
+  rsync -a --delete \
+    --include "/index.html" \
+    --include "/styles.css" \
+    --include "/script.js" \
+    --include "/assets/***" \
+    --include "/public/***" \
+    --exclude "*" \
+    "$source/" "$portal_root/ccp-stability-spending/"
+}
+
 require_file "$portal_root/index.html"
 require_file "$portal_root/CNAME"
 require_file "$portal_root/.nojekyll"
 
-require_text "$small_parties_source/index.html" "gsap@3/dist/gsap.min.js" "Small Parties source"
-require_text "$small_parties_source/index.html" "ScrollTrigger.min.js" "Small Parties source"
-require_text "$small_parties_source/index.html" "ScrollToPlugin.min.js" "Small Parties source"
-require_text "$small_parties_source/index.html" "G-T2WMCYX21T" "Small Parties source"
-require_text "$small_parties_source/index.html" "assets/social-thumbnail.png" "Small Parties source"
-require_text "$mae_source/index.html" "assets/placeholder-card.svg" "MAE source"
-require_text "$ccp_stability_spending_source/index.html" "中共如何使用維穩費？" "CCP Stability Spending source"
+if [[ -z "$project_ids" ]]; then
+  echo "At least one project id is required." >&2
+  exit 64
+fi
 
-mkdir -p "$portal_root/aidata/assets" "$portal_root/tptrees" "$portal_root/sporttech/assets" "$portal_root/48DIRECTORY/assets" "$portal_root/small-parties/assets" "$portal_root/taiwan-food-safety" "$portal_root/mae/assets" "$portal_root/ccp-stability-spending"
+IFS=',' read -r -a projects <<< "$project_ids"
+for project in "${projects[@]}"; do
+  case "$project" in
+    aidata) sync_aidata ;;
+    tptrees) sync_tptrees ;;
+    sporttech) sync_sporttech ;;
+    48DIRECTORY) sync_48directory ;;
+    small-parties) sync_small_parties ;;
+    taiwan-food-safety) sync_taiwan_food_safety ;;
+    mae) sync_mae ;;
+    ccp-stability-spending) sync_ccp_stability_spending ;;
+    *)
+      echo "Unknown project id: $project" >&2
+      exit 65
+      ;;
+  esac
+done
 
-cp "$aidata_source/index.html" "$portal_root/aidata/index.html"
-rsync -a --delete "$aidata_source/assets/" "$portal_root/aidata/assets/"
-
-rsync -a --delete \
-  --include "/index.html" \
-  --include "/favicon.svg" \
-  --include "/favicon.ico" \
-  --include "/app/***" \
-  --include "/lifecycle/***" \
-  --include "/species/***" \
-  --include "/daily/***" \
-  --include "/data/***" \
-  --include "/public/***" \
-  --exclude "*" \
-  "$tptrees_source/" "$portal_root/tptrees/"
-
-cp "$sporttech_source/index.html" "$portal_root/sporttech/index.html"
-rsync -a --delete "$sporttech_source/assets/" "$portal_root/sporttech/assets/"
-
-cp "$directory_source/index.html" "$portal_root/48DIRECTORY/index.html"
-cp "$directory_source/favicon.svg" "$portal_root/48DIRECTORY/favicon.svg"
-rsync -a --delete "$directory_source/assets/" "$portal_root/48DIRECTORY/assets/"
-
-cp "$small_parties_source/index.html" "$portal_root/small-parties/index.html"
-cp "$small_parties_source/favicon.ico" "$portal_root/small-parties/favicon.ico"
-cp "$small_parties_source/favicon.svg" "$portal_root/small-parties/favicon.svg"
-rsync -a --delete "$small_parties_source/assets/" "$portal_root/small-parties/assets/"
-
-rsync -a --delete "$taiwan_food_safety_source/" "$portal_root/taiwan-food-safety/"
-
-cp "$mae_source/index.html" "$portal_root/mae/index.html"
-rsync -a --delete "$mae_source/assets/" "$portal_root/mae/assets/"
-
-rsync -a --delete \
-  --include "/index.html" \
-  --include "/styles.css" \
-  --include "/script.js" \
-  --include "/assets/***" \
-  --include "/public/***" \
-  --exclude "*" \
-  "$ccp_stability_spending_source/" "$portal_root/ccp-stability-spending/"
-
-echo "Synced AI Data, TP Trees, SportTech, 48 DIRECTORY, Small Parties, Taiwan Food Safety, MAE, and CCP Stability Spending into the portal repository."
+echo "Synced selected projects into the portal repository: $project_ids"

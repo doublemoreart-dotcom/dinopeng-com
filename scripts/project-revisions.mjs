@@ -55,6 +55,24 @@ export function compareStates(previous, current) {
   });
 }
 
+export function selectSources(config, selection) {
+  const validated = validateConfig(config);
+  if (selection === undefined) return validated.sources;
+
+  const ids = selection.split(',');
+  if (ids.length === 0 || ids.some(id => id.length === 0)) {
+    throw new Error('Project selection must be a comma-separated list of source ids.');
+  }
+  if (new Set(ids).size !== ids.length) throw new Error(`Duplicate project selection: ${selection}`);
+
+  const sourcesById = new Map(validated.sources.map(source => [source.id, source]));
+  return ids.map(id => {
+    const source = sourcesById.get(id);
+    if (!source) throw new Error(`Unknown project selection: ${id}`);
+    return source;
+  });
+}
+
 export function formatSummary(config, current, changes, forced = false) {
   const changedIds = new Set(changes.map(change => change.id));
   const lines = [
@@ -121,15 +139,19 @@ async function check(configPath, statePath) {
   const changes = compareStates(previous, current);
   const forced = /^(1|true|yes)$/i.test(process.env.FORCE_SYNC ?? '');
   const shouldSync = forced || changes.length > 0;
+  const changedProjects = forced
+    ? config.sources.map(source => source.id)
+    : changes.map(change => change.id);
 
   await writeOutput('changed', String(shouldSync));
-  await writeOutput('changed_projects', changes.map(change => change.id).join(','));
+  await writeOutput('changed_projects', changedProjects.join(','));
   await writeSummary(formatSummary(config, current, changes, forced));
   console.log(shouldSync ? `Sync required: ${forced ? 'forced' : changes.map(change => change.id).join(', ')}` : 'No source changes detected.');
 }
 
-async function checkout(configPath, sourcesRootPath) {
+async function checkout(configPath, sourcesRootPath, selection) {
   const config = validateConfig(await readJson(configPath));
+  const selectedSources = selectSources(config, selection);
   const sourcesRoot = resolve(sourcesRootPath);
   if (basename(sourcesRoot) !== 'sources') {
     throw new Error(`Refusing to replace a checkout directory not named sources: ${sourcesRoot}`);
@@ -137,7 +159,7 @@ async function checkout(configPath, sourcesRootPath) {
   await rm(sourcesRoot, { recursive: true, force: true });
   await mkdir(sourcesRoot, { recursive: true });
 
-  await Promise.all(config.sources.map(async source => {
+  await Promise.all(selectedSources.map(async source => {
     const destination = join(sourcesRoot, source.id);
     console.log(`Checking out ${source.repository}@${source.ref} into ${destination}`);
     await execFileAsync('git', [
@@ -147,10 +169,25 @@ async function checkout(configPath, sourcesRootPath) {
   }));
 }
 
-async function capture(configPath, sourcesRootPath, statePath) {
+async function capture(configPath, sourcesRootPath, statePath, selection) {
   const config = validateConfig(await readJson(configPath));
+  const previous = await readJson(statePath, { version: 1, sources: {} });
+  const selectedSources = selectSources(config, selection);
+  const selectedIds = new Set(selectedSources.map(source => source.id));
   const sourcesRoot = resolve(sourcesRootPath);
-  const revisions = await collectRevisions(config, source => localRevision(source, sourcesRoot));
+  const revisions = await collectRevisions(config, async source => {
+    if (selectedIds.has(source.id)) return localRevision(source, sourcesRoot);
+
+    const previousSource = previous?.sources?.[source.id];
+    if (
+      previousSource?.repository !== source.repository
+      || previousSource?.ref !== source.ref
+      || !SHA_PATTERN.test(previousSource?.sha ?? '')
+    ) {
+      throw new Error(`Cannot preserve an invalid published revision for ${source.id}`);
+    }
+    return previousSource.sha;
+  });
   const state = createState(config, revisions);
   const destination = resolve(statePath);
   const temporary = `${destination}.tmp`;
@@ -163,9 +200,9 @@ async function capture(configPath, sourcesRootPath, statePath) {
 async function main() {
   const [command, ...args] = process.argv.slice(2);
   if (command === 'check' && args.length === 2) return check(args[0], args[1]);
-  if (command === 'checkout' && args.length === 2) return checkout(args[0], args[1]);
-  if (command === 'capture' && args.length === 3) return capture(args[0], args[1], args[2]);
-  throw new Error('Usage: project-revisions.mjs <check CONFIG STATE | checkout CONFIG SOURCES_ROOT | capture CONFIG SOURCES_ROOT STATE>');
+  if (command === 'checkout' && (args.length === 2 || args.length === 3)) return checkout(args[0], args[1], args[2]);
+  if (command === 'capture' && (args.length === 3 || args.length === 4)) return capture(args[0], args[1], args[2], args[3]);
+  throw new Error('Usage: project-revisions.mjs <check CONFIG STATE | checkout CONFIG SOURCES_ROOT [PROJECT_IDS] | capture CONFIG SOURCES_ROOT STATE [PROJECT_IDS]>');
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url))) {
