@@ -17,6 +17,8 @@ const taiwanFoodSafetyPagePath = new URL('../taiwan-food-safety/index.html', imp
 const taiwanFoodSafetyRootPath = new URL('../taiwan-food-safety/', import.meta.url);
 const maePagePath = new URL('../mae/index.html', import.meta.url);
 const maeRootPath = new URL('../mae/', import.meta.url);
+const ccpStabilitySpendingPagePath = new URL('../ccp-stability-spending/index.html', import.meta.url);
+const ccpStabilitySpendingRootPath = new URL('../ccp-stability-spending/', import.meta.url);
 const tpTreesPagePath = new URL('../tptrees/index.html', import.meta.url);
 const tpTreesLifecyclePath = new URL('../tptrees/lifecycle/index.html', import.meta.url);
 const tpTreesSpeciesPath = new URL('../tptrees/species/index.html', import.meta.url);
@@ -95,6 +97,28 @@ test('mae route publishes its standalone page and local assets', async () => {
   assert.ok(paths.length >= 2, `expected MAE local asset references, got ${paths.length}`);
   for (const path of new Set(paths)) {
     assert.equal(existsSync(new URL(path, maeRootPath)), true, `${path} should load below /mae/`);
+  }
+});
+
+test('ccp-stability-spending route publishes the complete static site', async () => {
+  const html = await readFile(ccpStabilitySpendingPagePath, 'utf8');
+  assert.match(html, /<title>中共如何使用維穩費？｜成本、財政與權力運作<\/title>/);
+  assert.match(html, /id="definition"/);
+  assert.match(html, /id="cost"/);
+  assert.match(html, /id="funding"/);
+  assert.match(html, /id="system"/);
+
+  for (const path of [
+    'styles.css',
+    'script.js',
+    'assets/fonts/SNPro-Variable.ttf',
+    'assets/images/hero-main.webp',
+    'assets/images/scenario-core.jpg',
+    'assets/vendor/gsap.min.js',
+    'public/favicon.ico',
+    'public/social-share.png',
+  ]) {
+    assert.equal(existsSync(new URL(path, ccpStabilitySpendingRootPath)), true, `${path} should load below /ccp-stability-spending/`);
   }
 });
 

@@ -2,6 +2,12 @@ name: Sync project sites
 
 on:
   workflow_dispatch:
+    inputs:
+      force_sync:
+        description: Rebuild and verify every project even when source revisions are unchanged
+        required: false
+        default: false
+        type: boolean
   schedule:
     - cron: "17 * * * *"
 
@@ -24,98 +30,58 @@ jobs:
           ref: main
           path: portal
 
-      - name: Check out AI Data
-        uses: actions/checkout@v7
-        with:
-          repository: doublemoreart-dotcom/aidata
-          ref: main
-          path: sources/aidata
-          persist-credentials: false
+      - name: Check source revisions
+        id: revisions
+        working-directory: portal
+        env:
+          FORCE_SYNC: ${{ github.event_name == 'workflow_dispatch' && inputs.force_sync || false }}
+        run: node scripts/project-revisions.mjs check config/project-sources.json .project-sync-state.json
 
-      - name: Check out TP Trees
-        uses: actions/checkout@v7
-        with:
-          repository: doublemoreart-dotcom/tptrees
-          ref: main
-          path: sources/tptrees
-          persist-credentials: false
-
-      - name: Check out SportTech deployment
-        uses: actions/checkout@v7
-        with:
-          repository: doublemoreart-dotcom/sporttech
-          ref: gh-pages
-          path: sources/sporttech
-          persist-credentials: false
-
-      - name: Check out 48 DIRECTORY deployment
-        uses: actions/checkout@v7
-        with:
-          repository: doublemoreart-dotcom/48DIRECTORY
-          ref: gh-pages
-          path: sources/48DIRECTORY
-          persist-credentials: false
-
-      - name: Check out Small Parties
-        uses: actions/checkout@v7
-        with:
-          repository: doublemoreart-dotcom/small-parties
-          ref: main
-          path: sources/small-parties
-          persist-credentials: false
-
-      - name: Check out Taiwan Food Safety
-        uses: actions/checkout@v7
-        with:
-          repository: doublemoreart-dotcom/taiwan-food-safety
-          ref: main
-          path: sources/taiwan-food-safety
-          persist-credentials: false
-
-      - name: Check out MAE
-        uses: actions/checkout@v7
-        with:
-          repository: doublemoreart-dotcom/mae
-          ref: main
-          path: sources/mae
-          persist-credentials: false
+      - name: Check out changed project sources
+        if: steps.revisions.outputs.changed == 'true'
+        working-directory: portal
+        run: node scripts/project-revisions.mjs checkout config/project-sources.json ../sources
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        if: steps.revisions.outputs.changed == 'true'
+        uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: sources/taiwan-food-safety/package-lock.json
 
       - name: Build Taiwan Food Safety
+        if: steps.revisions.outputs.changed == 'true'
         working-directory: sources/taiwan-food-safety
         run: npm ci && NEXT_BUILD_ID="$(git rev-parse HEAD)" npm run build:pages
 
       - name: Sync published files
+        if: steps.revisions.outputs.changed == 'true'
         working-directory: portal
-        run: ./scripts/sync-projects.sh ../sources/aidata ../sources/tptrees ../sources/sporttech ../sources/48DIRECTORY ../sources/small-parties ../sources/taiwan-food-safety/out ../sources/mae .
+        run: ./scripts/sync-projects.sh ../sources/aidata ../sources/tptrees ../sources/sporttech ../sources/48DIRECTORY ../sources/small-parties ../sources/taiwan-food-safety/out ../sources/mae ../sources/ccp-stability-spending .
 
       - name: Verify portal routes
+        if: steps.revisions.outputs.changed == 'true'
         working-directory: portal
         run: node --test tests/*.mjs
 
+      - name: Record published revisions
+        if: steps.revisions.outputs.changed == 'true'
+        working-directory: portal
+        run: node scripts/project-revisions.mjs capture config/project-sources.json ../sources .project-sync-state.json
+
       - name: Commit updated snapshots
+        if: steps.revisions.outputs.changed == 'true'
         working-directory: portal
         run: |
-          git add aidata tptrees sporttech 48DIRECTORY small-parties taiwan-food-safety mae
+          git add .project-sync-state.json aidata tptrees sporttech 48DIRECTORY small-parties taiwan-food-safety mae ccp-stability-spending
           if git diff --cached --quiet; then
-            echo "Published snapshots are already current."
+            echo "Published snapshots and source revisions are already current."
             exit 0
           fi
 
-          aidata_sha="$(git -C ../sources/aidata rev-parse --short HEAD)"
-          tptrees_sha="$(git -C ../sources/tptrees rev-parse --short HEAD)"
-          sporttech_sha="$(git -C ../sources/sporttech rev-parse --short HEAD)"
-          directory_sha="$(git -C ../sources/48DIRECTORY rev-parse --short HEAD)"
-          small_parties_sha="$(git -C ../sources/small-parties rev-parse --short HEAD)"
-          taiwan_food_safety_sha="$(git -C ../sources/taiwan-food-safety rev-parse --short HEAD)"
-          mae_sha="$(git -C ../sources/mae rev-parse --short HEAD)"
+          changed_projects="${{ steps.revisions.outputs.changed_projects }}"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: sync project sites" -m "aidata: ${aidata_sha}\ntptrees: ${tptrees_sha}\nsporttech: ${sporttech_sha}\n48DIRECTORY: ${directory_sha}\nsmall-parties: ${small_parties_sha}\ntaiwan-food-safety: ${taiwan_food_safety_sha}\nmae: ${mae_sha}"
+          git commit -m "chore: sync project sites" -m "Changed sources: ${changed_projects:-forced verification}"
           git push origin HEAD:main

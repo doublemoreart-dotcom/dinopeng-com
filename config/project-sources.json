@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": "aidata",
+      "repository": "doublemoreart-dotcom/aidata",
+      "ref": "main"
+    },
+    {
+      "id": "tptrees",
+      "repository": "doublemoreart-dotcom/tptrees",
+      "ref": "main"
+    },
+    {
+      "id": "sporttech",
+      "repository": "doublemoreart-dotcom/sporttech",
+      "ref": "gh-pages"
+    },
+    {
+      "id": "48DIRECTORY",
+      "repository": "doublemoreart-dotcom/48DIRECTORY",
+      "ref": "gh-pages"
+    },
+    {
+      "id": "small-parties",
+      "repository": "doublemoreart-dotcom/small-parties",
+      "ref": "main"
+    },
+    {
+      "id": "taiwan-food-safety",
+      "repository": "doublemoreart-dotcom/taiwan-food-safety",
+      "ref": "main"
+    },
+    {
+      "id": "mae",
+      "repository": "doublemoreart-dotcom/mae",
+      "ref": "main"
+    },
+    {
+      "id": "ccp-stability-spending",
+      "repository": "doublemoreart-dotcom/ccp-stability-spending",
+      "ref": "main"
+    }
+  ]
+}
