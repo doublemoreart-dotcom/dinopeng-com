@@ -63,11 +63,16 @@ https://dinopeng.com/aidata/
 - Small Parties：https://github.com/doublemoreart-dotcom/small-parties
 - Taiwan Food Safety：https://github.com/doublemoreart-dotcom/taiwan-food-safety
 - MAE：https://github.com/doublemoreart-dotcom/mae
+- CCP Stability Spending：https://github.com/doublemoreart-dotcom/ccp-stability-spending
 
-本 repo 保留 `dinopeng.com` 的唯一 `CNAME` 與 GitHub Pages 發布責任。`.github/workflows/sync-projects.yml` 每小時及手動執行時，會從 AI Data、TP Trees、Small Parties、Taiwan Food Safety、MAE 的 `main`，以及 SportTech、48 DIRECTORY 的 `gh-pages` 同步公開網站檔案至各自子路徑；Taiwan Food Safety 會先建置 Next.js 靜態輸出，再通過既有路由測試後提交更新。同步腳本也可在本機執行：
+本 repo 保留 `dinopeng.com` 的唯一 `CNAME` 與 GitHub Pages 發布責任。`.github/workflows/sync-projects.yml` 每小時及手動執行時，會先依 `config/project-sources.json` 比對各來源分支與 `.project-sync-state.json` 的發布版本。來源沒有變更時會直接結束，不再重複下載大型資源或建置 Taiwan Food Safety；有變更時才會下載所有來源、建置 Next.js 靜態輸出、同步允許清單、執行路由測試並提交更新。Actions 執行摘要會列出每個來源的 ref、SHA 與更新狀態。
+
+若需要排除來源版本判斷、完整重建並驗證所有專案，可在 Actions → **Sync project sites** → **Run workflow** 勾選 `force_sync`。新增或調整來源 repo 時，先修改 `config/project-sources.json`；同步腳本仍負責各專案的發布檔案允許清單。同步腳本也可在本機執行：
+
+優化流程部署後的第一次執行會建立 `.project-sync-state.json` 基準，因此仍會完整同步一次；後續執行才會在來源 SHA 全部相同時提前結束。
 
 ```bash
-./scripts/sync-projects.sh ../aidata ../tptrees ../sporttech-gh-pages ../48DIRECTORY-pages ../small-parties ../taiwan-food-safety/out ../mae .
+./scripts/sync-projects.sh ../aidata ../tptrees ../sporttech-gh-pages ../48DIRECTORY-pages ../small-parties ../taiwan-food-safety/out ../mae ../ccp-stability-spending .
 ```
 
 自訂網域由根目錄的 `CNAME` 管理。網域供應商的 DNS 需另外設定：

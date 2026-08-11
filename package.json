@@ -3,6 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test": "node --test tests/*.mjs",
+    "sync:check": "node scripts/project-revisions.mjs check config/project-sources.json .project-sync-state.json",
     "release:prepare": "node scripts/release-prepare.mjs",
     "release:check": "node scripts/release-check.mjs",
     "release:verify": "node scripts/release-verify.mjs",

@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-if [[ $# -ne 8 ]]; then
-  echo "Usage: $0 <aidata-source> <tptrees-source> <sporttech-source> <48directory-source> <small-parties-source> <taiwan-food-safety-output> <mae-source> <portal-root>" >&2
+if [[ $# -ne 9 ]]; then
+  echo "Usage: $0 <aidata-source> <tptrees-source> <sporttech-source> <48directory-source> <small-parties-source> <taiwan-food-safety-output> <mae-source> <ccp-stability-spending-source> <portal-root>" >&2
   exit 64
 fi
 
@@ -14,7 +14,8 @@ directory_source="$(cd "$4" && pwd)"
 small_parties_source="$(cd "$5" && pwd)"
 taiwan_food_safety_source="$(cd "$6" && pwd)"
 mae_source="$(cd "$7" && pwd)"
-portal_root="$(cd "$8" && pwd)"
+ccp_stability_spending_source="$(cd "$8" && pwd)"
+portal_root="$(cd "$9" && pwd)"
 
 require_file() {
   if [[ ! -f "$1" ]]; then
@@ -67,6 +68,12 @@ require_file "$taiwan_food_safety_source/favicon.ico"
 require_file "$taiwan_food_safety_source/opengraph-image.png"
 require_file "$mae_source/index.html"
 require_file "$mae_source/assets/placeholder-card.svg"
+require_file "$ccp_stability_spending_source/index.html"
+require_file "$ccp_stability_spending_source/styles.css"
+require_file "$ccp_stability_spending_source/script.js"
+require_file "$ccp_stability_spending_source/assets/fonts/SNPro-Variable.ttf"
+require_file "$ccp_stability_spending_source/public/favicon.ico"
+require_file "$ccp_stability_spending_source/public/social-share.png"
 require_file "$portal_root/index.html"
 require_file "$portal_root/CNAME"
 require_file "$portal_root/.nojekyll"
@@ -77,8 +84,9 @@ require_text "$small_parties_source/index.html" "ScrollToPlugin.min.js" "Small P
 require_text "$small_parties_source/index.html" "G-T2WMCYX21T" "Small Parties source"
 require_text "$small_parties_source/index.html" "assets/social-thumbnail.png" "Small Parties source"
 require_text "$mae_source/index.html" "assets/placeholder-card.svg" "MAE source"
+require_text "$ccp_stability_spending_source/index.html" "中共如何使用維穩費？" "CCP Stability Spending source"
 
-mkdir -p "$portal_root/aidata/assets" "$portal_root/tptrees" "$portal_root/sporttech/assets" "$portal_root/48DIRECTORY/assets" "$portal_root/small-parties/assets" "$portal_root/taiwan-food-safety" "$portal_root/mae/assets"
+mkdir -p "$portal_root/aidata/assets" "$portal_root/tptrees" "$portal_root/sporttech/assets" "$portal_root/48DIRECTORY/assets" "$portal_root/small-parties/assets" "$portal_root/taiwan-food-safety" "$portal_root/mae/assets" "$portal_root/ccp-stability-spending"
 
 cp "$aidata_source/index.html" "$portal_root/aidata/index.html"
 rsync -a --delete "$aidata_source/assets/" "$portal_root/aidata/assets/"
@@ -113,4 +121,13 @@ rsync -a --delete "$taiwan_food_safety_source/" "$portal_root/taiwan-food-safety
 cp "$mae_source/index.html" "$portal_root/mae/index.html"
 rsync -a --delete "$mae_source/assets/" "$portal_root/mae/assets/"
 
-echo "Synced AI Data, TP Trees, SportTech, 48 DIRECTORY, Small Parties, Taiwan Food Safety, and MAE into the portal repository."
+rsync -a --delete \
+  --include "/index.html" \
+  --include "/styles.css" \
+  --include "/script.js" \
+  --include "/assets/***" \
+  --include "/public/***" \
+  --exclude "*" \
+  "$ccp_stability_spending_source/" "$portal_root/ccp-stability-spending/"
+
+echo "Synced AI Data, TP Trees, SportTech, 48 DIRECTORY, Small Parties, Taiwan Food Safety, MAE, and CCP Stability Spending into the portal repository."
