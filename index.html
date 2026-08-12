@@ -1367,9 +1367,6 @@
             project.demoUrl
               ? `<a href="${escapeHtml(project.demoUrl)}" target="_blank" rel="noopener noreferrer">Visit work <span aria-hidden="true">↗</span></a>`
               : "",
-            project.repositoryUrl
-              ? `<a href="${escapeHtml(project.repositoryUrl)}" target="_blank" rel="noopener noreferrer">Archive <span aria-hidden="true">↗</span></a>`
-              : "",
           ]
             .filter(Boolean)
             .join("");
