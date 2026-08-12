@@ -5,7 +5,7 @@
 ## 檔案
 
 - `index.html`：`dinopeng.com` 展覽型首頁，導向六個獨立專案與設計師簡介。
-- `aidata/index.html`：AI Data 正式專案網址入口，目前同步 `ai_industry_penetration_2026-07-14.html`。
+- `aidata/index.html`：AI Data 正式專案網址入口，目前同步 `ai_industry_penetration_2026-08-12.html`。
 - `ai_industry_penetration.html`：原本機版視覺化頁面，保留作為初始版本，不因 MVP 上線入口而覆蓋。
 - `ai_industry_penetration_YYYY-MM-DD.html`：週更後的歷史版本檔案，不覆蓋舊版。
 - `AGENTS.md`：給 Codex / Claude Code / Cursor Agent 讀取的專案規範與任務指引。
@@ -13,7 +13,7 @@
 - `RELEASE.md`：Git 上版流程，包含 prepare / check / verify 三段腳本。
 - `WEB_SPEC.md`：每次週更都必須遵守的網頁閱讀性、主題、字級與 RWD 規範。
 - `data/ai_public_reports_for_codex.csv`：公開報告來源索引，只作為引用候選與選題提示；未核定口徑前不直接改 KPI 或圖表數字。
-- `data/ai_company_valuation_2026-07-13.csv`：AI 公司估值排行榜的最新查核快照，保存估值／市值、基準日、來源層級與方法備註。
+- `data/ai_company_valuation_2026-08-12.csv`：AI 公司估值排行榜的最新查核快照，保存估值／市值、基準日、來源層級與方法備註。
 - `ai_company_valuation_ranking_test.html`：AI 公司估值排行榜的獨立 UI 測試頁，不列入正式頁面導覽。
 - `tests/ai_company_valuation_ranking_test.mjs`：排行榜原型的 Node 靜態契約測試。
 
@@ -31,7 +31,7 @@ open aidata/index.html
 open ai_industry_penetration.html
 ```
 
-AI Data 使用 Chart.js CDN，需有網路連線才能正常載入泡泡圖與採用階段圖表。`aidata/index.html` 已加入載入失敗提示；若 CDN 受阻，文字內容、KPI、產業滲透率長條與互動卡片仍可閱讀。
+AI Data 使用 Chart.js CDN 呈現泡泡圖與採用階段圖表，並使用 GSAP Core / ScrollTrigger 強化主視覺、區塊進場、KPI 與側欄動態。兩者都採漸進增強：Chart.js 失敗時會顯示圖表提示；GSAP 失敗或使用者啟用減少動態時，頁面維持完整靜態內容與原生互動。
 
 ## 本機 MVP 與 GitHub Pages
 
@@ -75,6 +75,14 @@ https://dinopeng.com/aidata/
 ./scripts/sync-projects.sh ../sources . ccp-stability-spending
 ```
 
+本機的 AI Data 獨立來源 repo 預設放在 `.worktrees/aidata-source/`；`aidata/` 只作為入口網站的部署快照。每次準備提交前，可檢查來源頁面、資源與 GA4 是否和部署快照一致：
+
+```bash
+npm run aidata:source:status -- --strict
+```
+
+GA4 追蹤 ID 為 `G-BGHM581VD4`，必須同時存在於獨立來源與 `aidata/index.html`，且每份頁面只能初始化一次。若獨立來源推送後發現錯誤，應在 `doublemoreart-dotcom/aidata` 使用 `git revert <錯誤提交>` 建立反向提交並推送；入口網站下一次同步會恢復到可追溯版本，不需覆寫 Git 歷史。
+
 自訂網域由根目錄的 `CNAME` 管理。網域供應商的 DNS 需另外設定：
 
 - 根網域 `@`：四筆 `A` 紀錄，分別指向 `185.199.108.153`、`185.199.109.153`、`185.199.110.153`、`185.199.111.153`。
@@ -106,14 +114,15 @@ ai_industry_penetration_YYYY-MM-DD.html
 - 可選擇小 / 中 / 大三種字級。
 - 符合 RWD，手機版不溢出。
 
-推版前可使用腳本守住入口檔、日期快照與資源同步：
+更新流程固定為「開始更新」與「完成更新」兩步。先完成來源確認，尤其是 `AI 公司估值排行榜`，再執行：
 
 ```bash
-npm run release:prepare
-npm run update:check
+npm run update:start -- --date YYYY-MM-DD --sources-checked --valuation-checked
+# 編輯 .worktrees/aidata-source/index.html
+npm run update:finish
 ```
 
-`npm run update:check` 與 `npm run release:check` 目前等效；前者作為日常更新守門，後者保留給正式 release 語境。
+`update:start` 會在同時收到一般來源與估值查核確認後，同步獨立來源、部署快照的版本日、兩種查核日、版號與 README 快照名稱。`update:finish` 會先測試獨立來源與 GA4，再單向同步 HTML／assets、建立當期日期快照並執行完整測試。編輯期間需要診斷時才使用 `npm run update:status`；可用 `npm run update:help` 隨時查看正確路徑與步驟。核心來源清單統一維護於 `data/source_registry.json`。
 
 GitHub Pages 部署成功後，可用最新 commit 做線上雜湊驗收：
 
@@ -125,7 +134,7 @@ npm run release:verify -- <commit>
 
 ### 建議更新節奏
 
-- 快速更新：只改 UI、文案、主視覺或互動。先確認 AI 公司估值排行榜沒有明顯新資料，再執行 `release:prepare` 與 `update:check`。
+- 快速更新：只改 UI、文案、主視覺或互動。先確認 AI 公司估值排行榜沒有明顯新資料，再使用 `update:start` 與 `update:finish`。
 - 資料更新：會改 KPI、圖表、排行或來源。先依 `DATA_UPDATE.md` 查核來源口徑，再同步頁面、CSV、註記與日期版本。
 - 正式推版：完成本機檢查後 commit / push，部署成功後執行 `release:verify`。
 

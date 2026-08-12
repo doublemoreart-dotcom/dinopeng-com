@@ -26,7 +26,7 @@
 
 - 檢查 `AI 公司估值排行榜` 是否有明顯新的公司公告、一線媒體報導或上市公司市值基準日。
 - 若無可信新資料，只記錄「本次不更新排行榜數據」即可。
-- 執行 `npm run release:prepare` 與 `npm run update:check`。
+- 使用 `npm run update:start -- --date YYYY-MM-DD --sources-checked --valuation-checked` 開始，完成獨立來源編輯後執行 `npm run update:finish`；只有需要中途診斷時才執行 `npm run update:status`。
 
 ### B. 資料更新
 
@@ -40,7 +40,7 @@
 - 完成低強度來源確認；若新資料會改圖表或 KPI，升級為中強度更新。
 - 每個新增數字都保留年份、來源、樣本或口徑。
 - 同步更新頁面文案、資料註記、公開報告來源池與必要的 CSV。
-- 執行 `npm run release:prepare`、`npm run update:check`。
+- 使用 `npm run update:start -- --date YYYY-MM-DD --sources-checked --valuation-checked` 開始，完成獨立來源編輯後執行 `npm run update:finish`；只有需要中途診斷時才執行 `npm run update:status`。
 
 ### C. 正式推版
 
@@ -78,14 +78,16 @@ ai_industry_penetration_2026-06-09.html
 
 - Stanford AI Index
 - McKinsey State of AI
-- PwC AI economic impact / GDP estimate
-- Deloitte State of Generative AI in the Enterprise
+- PwC Sizing the Prize（2017 年發布的 2030 年經濟影響估計）/ Global AI Jobs Barometer
+- Deloitte State of AI in the Enterprise
 - OECD firm-level AI adoption / OECD AI governance reports
-- Microsoft AI Economy Institute / AI Diffusion reports
+- Microsoft AI Economy Institute / State of Global AI Diffusion reports
 - World Economic Forum Future of Jobs / AI in Action reports
 - BCG AI Radar、EY AI Pulse、Wharton AI Adoption Report 等企業採用與 ROI 報告
 - Anthropic Economic Index、Microsoft Copilot Usage Report 等任務層級使用資料
 - 主要 AI 公司、顧問公司、研究機構的最新企業採用報告
+
+2026-08-03 查核基準：Stanford AI Index 2026、McKinsey State of AI 2025、Deloitte State of AI in the Enterprise 2026、OECD 2026 企業採用更新、Microsoft State of Global AI Diffusion 2026、Anthropic Economic Index June 2026 與 PwC 2026 Global AI Jobs Barometer。PwC US$15.7 兆指標必須同時標示「2017 年發布、2030 年估計」。
 
 若引用新聞摘要，需回查原始報告、官方公告或研究 PDF。
 
@@ -163,14 +165,15 @@ ai_industry_penetration_2026-06-09.html
 1. 判斷更新屬於快速更新、資料更新或正式推版。
 2. 執行推版前低強度來源確認，並必查 `AI 公司估值排行榜` 是否仍為最新數據；若發現重大新資料，再升級為中強度更新。
 3. 若是資料更新，查核固定來源池與當週重要 AI 產業資料。
-4. 編輯 `aidata/index.html`。根目錄 `index.html` 是 `dinopeng.com` 跨專案入口，不得由 AI Data 更新流程覆蓋。
-5. 若修改資料，同步更新 KPI、圖表資料、tooltip、文字敘事、來源註記與必要 CSV。
-6. 若沿用上一期數據，在頁面摘要或更新紀錄中清楚標註。
-7. 執行 `npm run release:prepare`，依 `aidata/index.html` 的 `page-version-date` 建立當期 `ai_industry_penetration_YYYY-MM-DD.html`，並同步 `assets/` 至 `aidata/assets/`。
-8. 確認新的日期檔格式為 `ai_industry_penetration_YYYY-MM-DD.html`，日期需對應 `aidata/index.html` 的 `page-version-date`。
-9. 依照 `WEB_SPEC.md` 檢查閱讀性、留白、Light / Dark Mode、三種字級與 RWD。
-10. 用瀏覽器開啟 `aidata/index.html` 或新日期檔，確認長條圖、泡泡圖、階段分佈圖與新增互動正常渲染。
-11. 推版前執行 `npm run update:check`；GitHub Pages 部署成功後執行 `npm run release:verify -- <commit>`。
+4. 執行 `npm run update:start -- --date YYYY-MM-DD --sources-checked --valuation-checked`。此步會同步版本日期、一般來源查核日、估值查核日、版號與 README 快照名稱；任一類來源未確認時不會開始。
+5. 只編輯 `.worktrees/aidata-source/index.html`；`aidata/index.html` 是自動同步的部署快照，根目錄 `index.html` 則是 `dinopeng.com` 跨專案入口，兩者都不應作為 AI Data 內容的主要編輯檔。
+6. 若修改資料，同步更新 KPI、圖表資料、tooltip、文字敘事、來源註記與必要 CSV。
+7. 若沿用上一期數據，在頁面摘要或更新紀錄中清楚標註。
+8. 依照 `WEB_SPEC.md` 檢查閱讀性、留白、Light / Dark Mode、三種字級與 RWD。
+9. 執行 `npm run update:finish`。完成指令會先測試來源與 GA4，接著單向同步 HTML／assets，通過預檢後建立當期日期快照並執行完整守門檢查；只有需要中途診斷時才執行 `npm run update:status`。
+10. 執行 `npm run aidata:source:status -- --strict`，確認獨立來源、部署快照、資源與 GA4 `G-BGHM581VD4` 完全一致，且每份正式 HTML 只初始化一次 GA4。
+11. 用瀏覽器開啟 `aidata/index.html` 或新日期檔，確認長條圖、泡泡圖、階段分佈圖與新增互動正常渲染。
+12. GitHub Pages 部署成功後執行 `npm run release:verify -- <commit>`。
 
 ## 驗收標準
 
@@ -181,4 +184,5 @@ ai_industry_penetration_2026-06-09.html
 - 所有更新後的數字都有年份、來源與口徑。
 - 若沿用上一期資料，頁面或更新紀錄有明確標註。
 - 三個圖表都能正常渲染。
+- 獨立來源與入口網站部署快照一致，GA4 `G-BGHM581VD4` 沒有遺漏或重複初始化。
 - 符合 `WEB_SPEC.md` 的網頁閱讀性與 RWD 規範。

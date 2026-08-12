@@ -8,7 +8,7 @@
 
 - 快速更新：只改 UI、文案、樣式、圖像或互動。仍需檢查 AI 公司估值排行榜是否有明顯新資料，但若無新可信來源，不改資料。
 - 資料更新：會改 KPI、圖表、tooltip、排行或來源說明。需依 `DATA_UPDATE.md` 做低強度或中強度來源確認。
-- 正式推版：準備發佈到 `https://dinopeng.com/aidata/`。需執行 prepare、check、commit、push、verify。
+- 正式推版：準備發佈到 `https://dinopeng.com/aidata/`。需執行 update:start、update:finish、commit、push、verify。
 
 ## 2. 推版前來源確認
 
@@ -18,35 +18,42 @@
 - 必查 AI 公司估值排行榜的私人公司估值、上市公司市值基準日、30 日股價區間、來源連結與資料整理時間。
 - 若發現會影響 KPI、圖表或 tooltip 的新數字，改為中強度更新。
 
-## 3. 編輯來源檔
+## 3. 開始更新
+
+完成來源確認後執行：
+
+```bash
+npm run update:start -- --date YYYY-MM-DD --sources-checked --valuation-checked
+```
+
+此指令會同步頁面版本日、一般來源查核日、估值查核日、版號與 README 快照名稱。`--sources-checked` 代表已確認核心公開報告，`--valuation-checked` 代表已確認 AI 公司估值排行榜；腳本也會拒絕較舊日期及覆寫既有歷史快照。
+
+## 4. 編輯來源檔
 
 AI Data 的主要編輯入口是：
 
 ```text
-aidata/index.html
+.worktrees/aidata-source/index.html
 ```
 
-根目錄 `index.html` 是 `dinopeng.com` 跨專案入口，不是 AI Data 報告頁。更新 AI Data 時不要用 `aidata/index.html` 覆蓋根目錄 `index.html`，也不要把根目錄入口改回報告頁。
+入口 repo 的 `aidata/index.html` 是自動產生的部署快照，不再作為主要編輯入口。根目錄 `index.html` 是 `dinopeng.com` 跨專案入口，也不應由 AI Data 更新流程覆蓋。
 
-## 4. 準備本機發布檔
+## 5. 完成更新與本機守門
 
 ```bash
-npm run release:prepare
+npm run update:finish
 ```
+
+`update:status` 是選用診斷工具；`update:finish` 已包含嚴格狀態檢查，不需在每次更新時重複執行。
 
 此指令會：
 
+- 先在獨立來源 repo 執行測試，確認 GA4 `G-BGHM581VD4` 只初始化一次。
+- 將來源 `index.html` 與 `assets/` 單向同步至入口 repo；部署快照不會反向覆蓋來源。
+- 檢查頁面版本、兩種來源查核日、核心來源登錄檔、README 與 inline JavaScript；預檢失敗時不寫入日期快照。
 - 依 `aidata/index.html` 的 `page-version-date` 建立或更新 `ai_industry_penetration_YYYY-MM-DD.html`。
-- 將 `assets/` 同步到 `aidata/assets/`。
 - 保留根目錄 `index.html` 作為跨專案入口，不會覆蓋它。
-
-## 5. 本機守門檢查
-
-```bash
-npm run update:check
-```
-
-此指令會檢查：
+- 接著自動執行以下檢查：
 
 - 根目錄 `index.html` 仍是專案入口，`aidata/index.html` 仍是 AI Data 報告。
 - `aidata/index.html` 與當期日期快照完全一致。
@@ -55,18 +62,36 @@ npm run update:check
 - 主要 HTML inline script 可解析。
 - `tests/*.mjs` 全部通過。
 
-`npm run release:check` 與 `npm run update:check` 目前等效；日常更新建議使用 `update:check`，正式推版文件或 CI 可保留 `release:check`。
+`npm run release:prepare`、`npm run update:check` 與 `npm run release:check` 保留為除錯或 CI 使用的底層個別命令；日常更新直接使用 `update:finish`。
 
 ## 6. Git 上版
 
+AI Data 應先在獨立來源 repo 完成檢查與提交，再由入口網站同步部署快照。提交前先從入口網站根目錄執行：
+
 ```bash
+npm run aidata:source:status -- --strict
+```
+
+此檢查會比對獨立來源與 `aidata/` 的 HTML、資源及 GA4 `G-BGHM581VD4`。來源工作樹有未提交內容時會提示，但只有 repo、分支、頁面、資源或 GA 不一致才會在 `--strict` 模式下失敗。
+
+```bash
+cd .worktrees/aidata-source
 git status --short
 git add .
 git commit -m "..."
 git push origin main
 ```
 
-推送後等待 GitHub Pages Actions 成功。
+推送後等待入口 repo 的 `Sync project sites` workflow 完成；該 workflow 會重新驗證並提交 `aidata/` 部署快照。
+
+若 AI Data 推送後發現問題，在獨立來源 repo 執行非破壞式回退：
+
+```bash
+git revert <錯誤提交 SHA>
+git push origin main
+```
+
+完成後手動執行入口網站的 `Sync project sites` workflow，或等待排程同步。不要使用 `git reset --hard` 改寫已發布歷史。
 
 ## 7. 線上驗收
 
@@ -122,8 +147,9 @@ npm run small-parties:verify -- <commit>
 若只是修 UI 或文案，建議至少完成：
 
 ```bash
-npm run release:prepare
-npm run update:check
+npm run update:start -- --date YYYY-MM-DD --sources-checked --valuation-checked
+# 完成 .worktrees/aidata-source/index.html 編輯
+npm run update:finish
 ```
 
 若改到資料、排行或來源，先完成 `DATA_UPDATE.md` 的來源確認，再執行上述指令。

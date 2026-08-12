@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "checkedDate": "2026-08-12",
+  "sources": [
+    {
+      "id": "stanford-ai-index-2026",
+      "category": "adoption",
+      "title": "Stanford AI Index Report 2026",
+      "url": "https://hai.stanford.edu/ai-index/2026-ai-index-report",
+      "status": "active"
+    },
+    {
+      "id": "mckinsey-state-of-ai-2025",
+      "category": "adoption",
+      "title": "McKinsey The State of AI 2025",
+      "url": "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai",
+      "status": "active"
+    },
+    {
+      "id": "deloitte-state-of-ai-2026",
+      "category": "enterprise-readiness",
+      "title": "Deloitte State of AI in the Enterprise 2026",
+      "url": "https://www.deloitte.com/us/en/what-we-do/capabilities/applied-artificial-intelligence/content/state-of-ai-in-the-enterprise.html",
+      "status": "active"
+    },
+    {
+      "id": "oecd-firm-adoption-2026",
+      "category": "diffusion",
+      "title": "OECD AI adoption by firms 2026 update",
+      "url": "https://www.oecd.org/en/about/news/announcements/2026/01/ai-use-by-individuals-surges-across-the-oecd-as-adoption-by-firms-continues-to-expand.html",
+      "status": "active"
+    },
+    {
+      "id": "microsoft-global-ai-diffusion-2026",
+      "category": "diffusion",
+      "title": "Microsoft State of Global AI Diffusion 2026",
+      "url": "https://blogs.microsoft.com/on-the-issues/2026/05/07/the-state-of-global-ai-diffusion-in-2026/",
+      "status": "active"
+    },
+    {
+      "id": "anthropic-economic-index-2026-06",
+      "category": "workforce",
+      "title": "Anthropic Economic Index: Cadences",
+      "url": "https://www.anthropic.com/research/economic-index-june-2026-report",
+      "status": "active"
+    },
+    {
+      "id": "pwc-sizing-the-prize",
+      "category": "economic-impact",
+      "title": "PwC Sizing the Prize",
+      "url": "https://www.pwc.com/gx/en/issues/analytics/assets/pwc-ai-analysis-sizing-the-prize-report.pdf",
+      "status": "active"
+    },
+    {
+      "id": "pwc-ai-jobs-barometer-2026",
+      "category": "workforce",
+      "title": "PwC 2026 Global AI Jobs Barometer",
+      "url": "https://www.pwc.com/gx/en/issues/artificial-intelligence/publications/artificial-intelligence-study.html",
+      "status": "active"
+    }
+  ]
+}

@@ -122,6 +122,19 @@ test('ccp-stability-spending route publishes the complete static site', async ()
   }
 });
 
+test('GA4 tracking is installed once on AI Data and not on the project portal', async () => {
+  const [portalPage, aidataPage] = await Promise.all([
+    readFile(portalPagePath, 'utf8'),
+    readFile(aidataPagePath, 'utf8'),
+  ]);
+  const measurementId = 'G-BGHM581VD4';
+
+  assert.equal((aidataPage.match(/googletagmanager\.com\/gtag\/js\?id=G-BGHM581VD4/g) || []).length, 1);
+  assert.equal((aidataPage.match(/gtag\('config', 'G-BGHM581VD4'\)/g) || []).length, 1);
+  assert.match(aidataPage, /window\.dataLayer = window\.dataLayer \|\| \[\]/);
+  assert.doesNotMatch(portalPage, new RegExp(measurementId));
+});
+
 test('sporttech route publishes its static page and local assets', async () => {
   const html = await readFile(sporttechPagePath, 'utf8');
   assert.match(html, /運動X科技預算(?:查詢)?小幫手/);
@@ -200,6 +213,27 @@ test('aidata route includes every relative company logo asset used by the page',
   }
 });
 
+test('public report pool uses the latest checked primary-source baseline', async () => {
+  const html = await readFile(aidataPagePath, 'utf8');
+  const versionDate = html.match(/<meta name="page-version-date" content="([^"]+)">/)?.[1];
+  const sourceCheckedDate = html.match(/<meta name="source-checked-date" content="([^"]+)">/)?.[1];
+  const requiredSources = [
+    'https://hai.stanford.edu/ai-index/2026-ai-index-report',
+    'https://www.deloitte.com/us/en/what-we-do/capabilities/applied-artificial-intelligence/content/state-of-ai-in-the-enterprise.html',
+    'https://www.oecd.org/en/about/news/announcements/2026/01/ai-use-by-individuals-surges-across-the-oecd-as-adoption-by-firms-continues-to-expand.html',
+    'https://blogs.microsoft.com/on-the-issues/2026/05/07/the-state-of-global-ai-diffusion-in-2026/',
+    'https://www.anthropic.com/research/economic-index-june-2026-report',
+    'https://www.pwc.com/gx/en/issues/analytics/assets/pwc-ai-analysis-sizing-the-prize-report.pdf',
+  ];
+
+  assert.equal(sourceCheckedDate, versionDate);
+  assert.match(html, new RegExp(`<time data-source-checked-date datetime="${versionDate}">${versionDate}<\\/time>`));
+  assert.match(html, /2017 年發布，2030 年估計/);
+  for (const source of requiredSources) {
+    assert.match(html, new RegExp(source.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  }
+});
+
 test('aidata route includes the hero visual asset used by the page', async () => {
   const html = await readFile(aidataPagePath, 'utf8');
   const paths = [...html.matchAll(/src="(assets\/(?:ai-industry-data-observation|industry-adoption|investment-productivity|industry-impact|adoption-stages|industry-clusters|hybrid-talent|hybrid-influence)-hero(?:-dark)?\.svg)"/g)].map(match => match[1]);
@@ -228,16 +262,18 @@ test('aidata route includes the hero visual asset used by the page', async () =>
   }
 });
 
-test('hero visual theme rules override the generic image display rule', async () => {
+test('hero visual theme rules crossfade light and dark images in one stable grid', async () => {
   const html = await readFile(aidataPagePath, 'utf8');
 
+  assert.match(html, /\.hero-visual \{[^}]*display: grid;/);
   assert.match(html, /\.hero-visual img \{[^}]*display: block;/);
-  assert.match(html, /\.hero-visual \.hero-visual-image-dark \{ display: none; \}/);
-  assert.match(html, /:root\[data-theme="dark"\] \.hero-visual \.hero-visual-image-light \{ display: none; \}/);
-  assert.match(html, /:root\[data-theme="dark"\] \.hero-visual \.hero-visual-image-dark \{ display: block; \}/);
+  assert.match(html, /\.hero-visual img \{[^}]*grid-area: 1 \/ 1;/);
+  assert.match(html, /\.hero-visual \.hero-visual-image-dark \{ opacity: 0; \}/);
+  assert.match(html, /:root\[data-theme="dark"\] \.hero-visual \.hero-visual-image-light \{ opacity: 0; \}/);
+  assert.match(html, /:root\[data-theme="dark"\] \.hero-visual \.hero-visual-image-dark \{ opacity: 1; \}/);
 });
 
-test('industry adoption visual theme rules override the generic image display rule', async () => {
+test('industry adoption visual theme rules crossfade without changing layout', async () => {
   const html = await readFile(aidataPagePath, 'utf8');
   const [lightSvg, darkSvg] = await Promise.all([
     readFile(new URL('../assets/industry-adoption-hero.svg', import.meta.url), 'utf8'),
@@ -245,12 +281,80 @@ test('industry adoption visual theme rules override the generic image display ru
   ]);
 
   assert.match(html, /id="industry-adoption"[\s\S]*class="section-visual"/);
+  assert.match(html, /\.section-visual \{[^}]*display: grid;/);
   assert.match(html, /\.section-visual img \{[^}]*display: block;/);
-  assert.match(html, /\.section-visual \.section-visual-image-dark \{ display: none; \}/);
-  assert.match(html, /:root\[data-theme="dark"\] \.section-visual \.section-visual-image-light \{ display: none; \}/);
-  assert.match(html, /:root\[data-theme="dark"\] \.section-visual \.section-visual-image-dark \{ display: block; \}/);
+  assert.match(html, /\.section-visual img \{[^}]*grid-area: 1 \/ 1;/);
+  assert.match(html, /\.section-visual \.section-visual-image-dark \{ opacity: 0; \}/);
+  assert.match(html, /:root\[data-theme="dark"\] \.section-visual \.section-visual-image-light \{ opacity: 0; \}/);
+  assert.match(html, /:root\[data-theme="dark"\] \.section-visual \.section-visual-image-dark \{ opacity: 1; \}/);
   assert.doesNotMatch(lightSvg, /<text\b/);
   assert.doesNotMatch(darkSvg, /<text\b/);
+});
+
+test('only the page hero remains visible while section visuals are retained as hidden assets', async () => {
+  const html = await readFile(aidataPagePath, 'utf8');
+  const hiddenSectionVisuals = html.match(/<figure class="section-visual"[^>]*\shidden>/g) || [];
+
+  assert.equal(hiddenSectionVisuals.length, 7);
+  assert.match(html, /<figure class="hero-visual"/);
+  assert.doesNotMatch(html, /<figure class="hero-visual"[^>]*\shidden>/);
+  assert.match(html, /\.section-visual\[hidden\] \{ display: none !important; \}/);
+  assert.match(html, /\.analysis-section \+ \.analysis-section::before \{[^}]*transform: scaleX\(var\(--section-divider-progress\)\);/);
+  assert.match(html, /:scope > \.section-visual:not\(\[hidden\]\)/);
+});
+
+test('aidata motion enhancement is optional and respects reduced motion', async () => {
+  const html = await readFile(aidataPagePath, 'utf8');
+
+  assert.match(html, /gsap\/3\.13\.0\/gsap\.min\.js/);
+  assert.match(html, /gsap\/3\.13\.0\/ScrollTrigger\.min\.js/);
+  assert.match(html, /const canUseMotion = \(\) => Boolean\(window\.gsap && window\.ScrollTrigger/);
+  assert.match(html, /prefers-reduced-motion: reduce/);
+  assert.match(html, /initPageMotion\(\);/);
+  assert.match(html, /openDrawerWithMotion/);
+  assert.match(html, /const setActiveSectionTab/);
+  assert.match(html, /\.section-tab\[aria-current="location"\]/);
+  assert.match(html, /'--section-progress': '100%'/);
+  assert.match(html, /const cardRevealSelector/);
+  assert.match(html, /sectionBlocks\.forEach\(block =>/);
+  assert.match(html, /trigger: block,[\s\S]*start: 'top 94%',[\s\S]*scrub: 0\.35,[\s\S]*once: true/);
+  assert.match(html, /'--section-divider-progress': 1/);
+});
+
+test('talent and influence cards open a shared accessible detail drawer', async () => {
+  const html = await readFile(aidataPagePath, 'utf8');
+  const talentButtons = html.match(/<button class="talent-card"[^>]*data-capability-group="talent"/g) || [];
+  const influenceButtons = html.match(/<button class="influence-card"[^>]*data-capability-group="influence"/g) || [];
+
+  assert.equal(talentButtons.length, 4);
+  assert.equal(influenceButtons.length, 4);
+  assert.match(html, /id="capability-detail-drawer"[^>]*aria-hidden="true"[^>]*aria-labelledby="capability-drawer-title"/);
+  assert.match(html, /const capabilityDetailData = \{/);
+  assert.match(html, /const openCapabilityDetail = item =>/);
+  assert.match(html, /document\.querySelectorAll\('\[data-capability-group\]'\)/);
+  assert.match(html, /renderDrawerList\(capabilitySituationList, item\.situations\)/);
+  assert.match(html, /renderDrawerList\(capabilityWatchList, item\.watch\)/);
+  assert.equal((html.match(/class="impact-detail-drawer[^"]*"[^>]*role="dialog"[^>]*aria-modal="true"/g) || []).length, 5);
+  assert.match(html, /event\.key === 'Tab' && openDrawer/);
+});
+
+test('responsive navigation and valuation table remain usable at large text sizes', async () => {
+  const html = await readFile(aidataPagePath, 'utf8');
+
+  assert.match(html, /\.section-tabs \{[^}]*flex-wrap: nowrap;[^}]*overflow-x: auto;[^}]*overflow-y: hidden;/);
+  assert.match(html, /\.section-tab \{[^}]*flex: 0 0 auto;[^}]*white-space: nowrap;/);
+  assert.match(html, /@media \(max-width: 480px\)[\s\S]*?\.valuation-table th:nth-child\(4\), \.valuation-table td:nth-child\(4\) \{ display: none; \}/);
+  assert.match(html, /class="control-group" role="group" aria-label="主題模式"/);
+  assert.match(html, /class="control-group" role="group" aria-label="字級大小"/);
+});
+
+test('influence radar values expand from an empty default state on hover or focus', async () => {
+  const html = await readFile(aidataPagePath, 'utf8');
+
+  assert.match(html, /\.radar-static-area \{[^}]*fill-opacity: 0;[^}]*transform: scale\(0\);/);
+  assert.match(html, /\.radar-static-point \{[^}]*opacity: 0;/);
+  assert.match(html, /\.influence-card:hover \.radar-static-area,[\s\S]*\.influence-card:focus-visible \.radar-static-area \{[^}]*fill-opacity: 0\.18;[^}]*transform: scale\(1\);/);
+  assert.match(html, /\.influence-card:hover \.radar-static-point,[\s\S]*\.influence-card:focus-visible \.radar-static-point \{[^}]*opacity: 1;/);
 });
 
 test('investment productivity visual is placed in its analysis section and has no visible text nodes', async () => {

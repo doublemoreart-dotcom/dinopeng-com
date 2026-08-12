@@ -154,8 +154,10 @@ const groupColors = {
 - 主要檔案保持為單檔 HTML，除非使用者要求改成框架專案。
 - `https://dinopeng.com/` 為跨專案入口，`https://dinopeng.com/aidata/` 為 AI Data 正式網址；更新 AI Data 時只同步日期版本至 `aidata/index.html` 與 `aidata/assets/`，不要覆蓋根目錄入口。
 - AI Data、TP Trees、SportTech、48 DIRECTORY 與 MAE 的網站內容應分別在各自的獨立 repo 維護；本 repo 的同名子目錄是部署快照，不是主要編輯來源。
+- AI Data 的本機獨立來源預設位於 `.worktrees/aidata-source/`。每次更新都必須保留 GA4 `G-BGHM581VD4`，確認每份正式 HTML 只載入與設定一次，並以 `npm run aidata:source:status -- --strict` 檢查來源 repo、部署快照、資源及 GA4 一致性。
 - `dinopeng.com` 的 `CNAME` 只保留在本 repo。修改同步腳本或 workflow 後，需確認來源驗證、路由測試與無變更時不提交的行為仍成立。
 - 每次本機端更新任何項目時，無論是資料、UI、文案、樣式或資源，都必須檢查 `AI 公司估值排行榜` 是否仍為最新可追溯數據；若有新的公司公告、投資方公告、一線媒體報導或上市公司市值基準日，需同步更新頁面、資料整理時間、來源連結與公開報告來源池。
+- 完成核心報告與估值來源查核後，統一以 `npm run update:start -- --date YYYY-MM-DD --sources-checked --valuation-checked` 開始更新；只編輯 `.worktrees/aidata-source/index.html`，完成後直接以 `npm run update:finish` 測試來源與 GA4、建立日期快照、同步資源並執行完整檢查。`npm run update:status` 僅供中途診斷。不要手動分散修改版本日與查核日。
 - 週更時必須建立新日期檔，格式為 `ai_industry_penetration_YYYY-MM-DD.html`。
 - 第一次週更以 `ai_industry_penetration.html` 作為範本；後續週更以最近一期日期版本作為範本。
 - 不要覆蓋或回改舊日期版本，除非使用者明確要求修正歷史檔案。

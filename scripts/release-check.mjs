@@ -18,7 +18,55 @@ const portalHtml = await readText('index.html');
 const aidataHtml = await readText('aidata/index.html');
 const versionDate = extractMeta(aidataHtml, 'page-version-date');
 const versionNumber = extractMeta(aidataHtml, 'page-version-number');
+const valuationCheckedDate = extractMeta(aidataHtml, 'valuation-checked-date');
+const sourceCheckedDate = extractMeta(aidataHtml, 'source-checked-date');
+const sourceRegistry = JSON.parse(await readText('data/source_registry.json'));
 const currentSnapshot = dateSnapshotName(versionDate);
+
+if (!aidataHtml.includes(`<span data-footer-version-date>${versionDate}</span>`)) {
+  throw new Error(`Footer version date must match ${versionDate}`);
+}
+if (!aidataHtml.includes(`<span data-footer-version-number>${versionNumber}</span>`)) {
+  throw new Error(`Footer version number must match ${versionNumber}`);
+}
+
+if (valuationCheckedDate !== versionDate) {
+  throw new Error(`Valuation check date ${valuationCheckedDate} must match page version date ${versionDate}`);
+}
+const valuationDateMarkers = [...aidataHtml.matchAll(/<time data-valuation-checked-date datetime="([^"]+)">([^<]+)<\/time>/g)];
+if (valuationDateMarkers.length < 5) {
+  throw new Error(`Expected at least 5 visible valuation check dates, found ${valuationDateMarkers.length}`);
+}
+for (const [, datetime, text] of valuationDateMarkers) {
+  if (datetime !== valuationCheckedDate || text !== valuationCheckedDate) {
+    throw new Error(`Visible valuation check date ${text} (${datetime}) does not match ${valuationCheckedDate}`);
+  }
+}
+
+if (sourceCheckedDate !== versionDate) {
+  throw new Error(`Report source check date ${sourceCheckedDate} must match page version date ${versionDate}`);
+}
+const sourceDateMarkers = [...aidataHtml.matchAll(/<time data-source-checked-date datetime="([^"]+)">([^<]+)<\/time>/g)];
+if (sourceDateMarkers.length < 1) {
+  throw new Error('Expected at least 1 visible report source check date');
+}
+for (const [, datetime, text] of sourceDateMarkers) {
+  if (datetime !== sourceCheckedDate || text !== sourceCheckedDate) {
+    throw new Error(`Visible report source check date ${text} (${datetime}) does not match ${sourceCheckedDate}`);
+  }
+}
+if (sourceRegistry.checkedDate !== sourceCheckedDate) {
+  throw new Error(`Source registry date ${sourceRegistry.checkedDate} must match ${sourceCheckedDate}`);
+}
+const activeSources = sourceRegistry.sources.filter((source) => source.status === 'active');
+if (activeSources.length < 5) {
+  throw new Error(`Expected at least 5 active report sources, found ${activeSources.length}`);
+}
+for (const source of activeSources) {
+  if (!aidataHtml.includes(source.url)) {
+    throw new Error(`Active report source is missing from aidata/index.html: ${source.id}`);
+  }
+}
 
 requireFile('index.html');
 requireFile('aidata/index.html');

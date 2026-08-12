@@ -130,16 +130,23 @@ test('valuation drawer link hover and focus-visible states share the site accent
 
 test('valuation section discloses update timing and mirrors sources in the public report pool', async () => {
   const html = await readFile(pagePath, 'utf8');
+  const valuationCheckedDate = html.match(/<meta name="valuation-checked-date" content="([^"]+)">/)?.[1];
   const sourceUrls = [
     'https://openai.com/index/accelerating-the-next-phase-ai/',
-    'https://apnews.com/article/anthropic-ai-claude-openai-valuation-86c432fa375548fd4f111f8164d6ffc1',
+    'https://www.anthropic.com/news/series-h',
     'https://www.prnewswire.com/news-releases/databricks-grows-65-yoy-surpasses-5-4-billion-revenue-run-rate-doubles-down-on-lakebase-and-genie-302682674.html',
+    'https://www.databricks.com/company/newsroom/press-releases/databricks-raising-strategic-round-funding-188-billion-valuation',
     'https://www.figure.ai/news/series-c',
+    'https://apnews.com/article/a5c60fcbaaca262cf107d30f1de899ef',
     'https://www.nasdaq.com/market-activity/stocks',
   ];
 
+  assert.ok(valuationCheckedDate, 'valuation-checked-date meta should be present');
   assert.match(html, /class="valuation-data-note"/);
-  assert.match(html, /資料整理時間：<time datetime="2026-07-13">2026-07-13<\/time>/);
+  assert.match(
+    html,
+    new RegExp(`資料整理時間：<time data-valuation-checked-date datetime="${escapeRegExp(valuationCheckedDate)}">${escapeRegExp(valuationCheckedDate)}<\\/time>`),
+  );
   assert.match(html, /上市公司市值仍沿用 <time datetime="2026-06-30">2026-06-30<\/time> Nasdaq 基準日/);
   assert.match(html, /data-valuation-source-card/);
   assert.match(html, /公司估值 \/ 市場市值/);
@@ -162,7 +169,10 @@ test('valuation data contains two sorted source-backed top tens', async () => {
   assert.equal(privateRows[0].companyName, 'Anthropic');
   assert.equal(privateRows[0].valueUsd, 965e9);
   assert.equal(privateRows[0].previousValueUsd, 380e9);
-  assert.equal(privateRows[0].sourceTier, 'tier_one_media');
+  assert.equal(privateRows[0].sourceTier, 'official');
+  const databricks = privateRows.find(row => row.companyName === 'Databricks');
+  assert.equal(databricks.valueUsd, 134e9);
+  assert.match(databricks.methodologyNote, /US\$188B 策略輪仍在募集/);
   for (const requiredName of ['NVIDIA', 'Microsoft', 'Apple', 'Alphabet', 'Amazon', 'Meta']) {
     assert.ok(publicRows.some(row => row.companyName === requiredName), `${requiredName} should be included`);
   }
