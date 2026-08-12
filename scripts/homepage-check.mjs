@@ -61,6 +61,10 @@ for (const text of requiredHomepageText) {
   }
 }
 
+if (html.includes(">Archive <")) {
+  throw new Error("index.html 不應渲染 Archive 按鈕。");
+}
+
 const trackingIdOccurrences = html.match(/G-RLCNPY896C/g)?.length ?? 0;
 if (trackingIdOccurrences !== 2) {
   throw new Error(
