@@ -46,11 +46,14 @@ await mkdir(rootPath('aidata/assets'), { recursive: true });
 await mkdir(rootPath('assets'), { recursive: true });
 await writeFile(rootPath('aidata/index.html'), sourceHtml);
 
-for (const destination of [rootPath('assets'), rootPath('aidata/assets')]) {
-  execFileSync('rsync', ['-a', '--delete', `${sourceAssetsPath}/`, `${destination}/`], {
-    stdio: 'inherit',
-  });
-}
+// The root assets directory is shared by the portal and other projects, so it
+// may receive AI Data files but must never be pruned by this project.
+execFileSync('rsync', ['-a', `${sourceAssetsPath}/`, `${rootPath('assets')}/`], {
+  stdio: 'inherit',
+});
+execFileSync('rsync', ['-a', '--delete', `${sourceAssetsPath}/`, `${rootPath('aidata/assets')}/`], {
+  stdio: 'inherit',
+});
 
 console.log('AI Data source synchronized to the portal deployment snapshot.');
 console.log(`- source: ${sourceRoot}`);

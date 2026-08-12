@@ -67,8 +67,8 @@ const [sourceAssets, rootAssets, deployedAssets] = await Promise.all([
   listFiles(deployedAssetsRoot),
 ]);
 const sourceAssetList = JSON.stringify(sourceAssets);
-const sameAssetList = sourceAssetList === JSON.stringify(rootAssets)
-  && sourceAssetList === JSON.stringify(deployedAssets);
+const sameAssetList = sourceAssetList === JSON.stringify(deployedAssets)
+  && sourceAssets.every(asset => rootAssets.includes(asset));
 let sameAssetContent = sameAssetList;
 if (sameAssetList) {
   for (const asset of sourceAssets) {
@@ -84,7 +84,11 @@ if (sameAssetList) {
     }
   }
 }
-record('asset parity', sameAssetList && sameAssetContent, `${sourceAssets.length} assets across source, root, and /aidata/`);
+record(
+  'asset parity',
+  sameAssetList && sameAssetContent,
+  `${sourceAssets.length} AI Data assets match; ${rootAssets.length - sourceAssets.length} shared root assets preserved`,
+);
 
 const gaLoaderPattern = /googletagmanager\.com\/gtag\/js\?id=G-BGHM581VD4/g;
 const gaConfigPattern = /gtag\('config', 'G-BGHM581VD4'\)/g;

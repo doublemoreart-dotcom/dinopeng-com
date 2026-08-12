@@ -33,7 +33,8 @@ test('AI Data source sync validates the source and GA before copying', async () 
   assert.match(script, /tests\/site\.test\.mjs/);
   assert.match(script, /GA4 must be installed exactly once/);
   assert.match(script, /aidata\/index\.html/);
-  assert.match(script, /--delete/);
+  assert.match(script, /shared by the portal and other projects/);
+  assert.equal((script.match(/'--delete'/g) || []).length, 1, 'only /aidata/assets may be pruned');
 });
 
 test('AI Data source status checks repository, page, assets, and GA parity', async () => {
