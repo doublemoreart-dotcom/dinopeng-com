@@ -37,7 +37,7 @@ AI Data 使用 Chart.js CDN 呈現泡泡圖與採用階段圖表，並使用 GSA
 
 根目錄 `index.html` 是專案入口，AI Data 則由 `aidata/index.html` 發布。GitHub Pages 使用下列設定：
 
-- 入口網站 repo：[`doublemoreart-dotcom/dinopeng-com`](https://github.com/doublemoreart-dotcom/dinopeng-com)。
+- 入口網站 repo：[`doublemoreart-dotcom/aidata-portal`](https://github.com/doublemoreart-dotcom/aidata-portal)。
 - 將本專案推到 `main` branch。
 - 在 GitHub repo 的 Settings → Pages 設定：
   - Source：Deploy from a branch

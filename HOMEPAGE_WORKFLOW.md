@@ -1,4 +1,4 @@
-# dinopeng-com 主頁：本機、Git 發布與回復流程
+# aidata-portal 主頁：本機、Git 發布與回復流程
 
 ## 責任邊界
 
@@ -20,14 +20,14 @@
 
 ```bash
 git fetch --prune origin
-git worktree add -b codex/homepage-<change> ../dinopeng-com-homepage-<change> origin/main
+git worktree add -b codex/homepage-<change> ../aidata-portal-homepage-<change> origin/main
 ```
 
 在新工作目錄執行一次主頁更新：
 
 ```bash
-npm run homepage:update -- /absolute/path/to/local/dinopeng-com --dry-run
-npm run homepage:update -- /absolute/path/to/local/dinopeng-com
+npm run homepage:update -- /absolute/path/to/local/aidata-portal --dry-run
+npm run homepage:update -- /absolute/path/to/local/aidata-portal
 ```
 
 `--dry-run` 只驗證，不寫入檔案。正式執行會依序預檢、同步、驗證及精準暫存白名單內的主頁檔案；任何一步失敗就停止，而且不會自動 commit 或 push。
@@ -37,8 +37,8 @@ npm run homepage:update -- /absolute/path/to/local/dinopeng-com
 若需要分步除錯，仍可個別使用：
 
 ```bash
-npm run homepage:sync -- /absolute/path/to/local/dinopeng-com --dry-run
-npm run homepage:sync -- /absolute/path/to/local/dinopeng-com
+npm run homepage:sync -- /absolute/path/to/local/aidata-portal --dry-run
+npm run homepage:sync -- /absolute/path/to/local/aidata-portal
 npm run homepage:check
 git add index.html assets/favicon.png assets/og.png assets/projects
 npm run homepage:check:staged
@@ -62,8 +62,8 @@ git ls-remote origin refs/heads/<branch>
 
 ```bash
 git fetch --prune origin
-git worktree add -b codex/revert-homepage ../dinopeng-com-revert-homepage origin/main
-cd ../dinopeng-com-revert-homepage
+git worktree add -b codex/revert-homepage ../aidata-portal-revert-homepage origin/main
+cd ../aidata-portal-revert-homepage
 git revert <homepage-merge-commit>
 npm run homepage:check
 npm run release:check

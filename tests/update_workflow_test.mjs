@@ -7,6 +7,7 @@ const readProjectFile = path => readFile(new URL(`../${path}`, import.meta.url),
 test('package exposes the two-step update workflow', async () => {
   const packageJson = JSON.parse(await readProjectFile('package.json'));
 
+  assert.equal(packageJson.name, 'aidata-portal');
   assert.equal(packageJson.scripts['update:help'], 'node scripts/update-help.mjs');
   assert.equal(packageJson.scripts['update:start'], 'node scripts/update-start.mjs');
   assert.equal(packageJson.scripts['update:status'], 'node scripts/update-status.mjs');
@@ -14,6 +15,24 @@ test('package exposes the two-step update workflow', async () => {
   assert.equal(packageJson.scripts['update:finish'], 'node scripts/update-finish.mjs');
   assert.equal(packageJson.scripts['aidata:source:sync'], 'node scripts/aidata-source-sync.mjs');
   assert.equal(packageJson.scripts['aidata:source:status'], 'node scripts/aidata-source-status.mjs');
+});
+
+test('repository identity preserves the public domain and current GitHub name', async () => {
+  const maintainedFiles = await Promise.all([
+    readProjectFile('README.md'),
+    readProjectFile('HOMEPAGE_WORKFLOW.md'),
+    readProjectFile('scripts/homepage-sync.mjs'),
+    readProjectFile('scripts/homepage-update.mjs'),
+    readProjectFile('tptrees/README.md'),
+    readProjectFile('tptrees/docs/CSV_UPDATE_FLOW.md'),
+    readProjectFile('tptrees/scripts/update-site-data.sh'),
+  ]);
+
+  assert.equal((await readProjectFile('CNAME')).trim(), 'dinopeng.com');
+  assert.match(maintainedFiles[0], /doublemoreart-dotcom\/aidata-portal/);
+  for (const file of maintainedFiles) {
+    assert.doesNotMatch(file, /doublemoreart-dotcom\/dinopeng-com/);
+  }
 });
 
 test('update help points editors to the independent source and two-step flow', async () => {

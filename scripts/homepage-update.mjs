@@ -16,7 +16,7 @@ const sourceArgument = argumentsFromCli.find(
 
 if (!sourceArgument) {
   throw new Error(
-    "請提供本機主頁資料夾，例如：npm run homepage:update -- /path/to/local/dinopeng-com",
+    "請提供本機主頁資料夾，例如：npm run homepage:update -- /path/to/local/aidata-portal",
   );
 }
 
