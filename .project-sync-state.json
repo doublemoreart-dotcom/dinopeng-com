@@ -4,12 +4,12 @@
     "aidata": {
       "repository": "doublemoreart-dotcom/aidata",
       "ref": "main",
-      "sha": "c30896f0f3569faa8eca1606b6ce9aae088fecab"
+      "sha": "955cc42efefd1ad3cb616eb5e33283798819f2e8"
     },
     "tptrees": {
       "repository": "doublemoreart-dotcom/tptrees",
       "ref": "main",
-      "sha": "44163506493b55d030e6604b1d704d8424b0144c"
+      "sha": "5565cd36f198e87944cc1ce914b400bcc540d1c5"
     },
     "sporttech": {
       "repository": "doublemoreart-dotcom/sporttech",
