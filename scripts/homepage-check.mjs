@@ -42,7 +42,6 @@ const requiredHomepageText = [
   "https://dinopeng.com/tptrees/",
   "https://dinopeng.com/aidata/",
   "https://dinopeng.com/sporttech/",
-  "https://dinopeng.com/48DIRECTORY/",
   "https://dinopeng.com/small-parties/",
   "https://dinopeng.com/taiwan-food-safety/",
   "https://dinopeng.com/ccp-stability-spending/",
@@ -63,6 +62,17 @@ for (const text of requiredHomepageText) {
 
 if (html.includes(">Archive <")) {
   throw new Error("index.html 不應渲染 Archive 按鈕。");
+}
+
+const hiddenHomepageText = [
+  'title: "48 DIRECTORY"',
+  "https://dinopeng.com/48DIRECTORY/",
+  "assets/projects/48directory.png",
+];
+for (const text of hiddenHomepageText) {
+  if (html.includes(text)) {
+    throw new Error(`index.html 仍包含已下架專案：${text}`);
+  }
 }
 
 const trackingIdOccurrences = html.match(/G-RLCNPY896C/g)?.length ?? 0;

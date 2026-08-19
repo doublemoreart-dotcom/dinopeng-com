@@ -2,7 +2,6 @@ export const projectPreviewNames = [
   "tptrees.png",
   "aidata.png",
   "sporttech.png",
-  "48directory.png",
   "small-parties.png",
   "taiwan-food-safety.png",
   "ccp-stability-spending.png",
@@ -24,4 +23,5 @@ export const homepageWorkflowFiles = [
   "scripts/homepage-config.mjs",
   "scripts/homepage-sync.mjs",
   "scripts/homepage-update.mjs",
+  "tests/aidata_route_test.mjs",
 ];

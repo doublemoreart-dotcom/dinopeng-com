@@ -42,7 +42,7 @@ test('root publishes a project portal while /aidata/ keeps the AI report', async
   assert.match(portalPage, /https:\/\/dinopeng\.com\/tptrees\//);
   assert.match(portalPage, /https:\/\/dinopeng\.com\/aidata\//);
   assert.match(portalPage, /https:\/\/dinopeng\.com\/sporttech\//);
-  assert.match(portalPage, /https:\/\/dinopeng\.com\/48DIRECTORY\//);
+  assert.doesNotMatch(portalPage, /https:\/\/dinopeng\.com\/48DIRECTORY\//);
   assert.match(portalPage, /https:\/\/dinopeng\.com\/small-parties\//);
   assert.match(portalPage, /https:\/\/dinopeng\.com\/taiwan-food-safety\//);
   assert.match(
