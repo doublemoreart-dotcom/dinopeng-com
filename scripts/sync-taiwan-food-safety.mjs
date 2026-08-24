@@ -410,17 +410,6 @@ async function safeGitBuffer(cwd, args) {
   return stdout;
 }
 
-async function gitExit(cwd, args) {
-  try {
-    return { code: 0, stdout: await safeGit(cwd, args) };
-  } catch (error) {
-    if (Number.isInteger(error.code)) {
-      return { code: error.code, stdout: error.stdout?.toString() ?? '', stderr: error.stderr?.toString() ?? '' };
-    }
-    throw error;
-  }
-}
-
 function chunks(values, size = 400) {
   const result = [];
   for (let index = 0; index < values.length; index += size) result.push(values.slice(index, index + size));
@@ -433,17 +422,13 @@ export async function assertSafeGitEnvironment(portalRoot, portalSha, payloadPat
   const rootAttributes = await safeGit(root, ['ls-tree', '--name-only', portalSha, '--', '.gitattributes']);
   if (rootAttributes.trim() !== '') fail('Root .gitattributes is forbidden for publication staging.');
 
-  const filters = await gitExit(root, ['config', '--show-origin', '--get-regexp', '^filter\\.']);
-  if (filters.code === 0 && filters.stdout.trim() !== '') fail('Installed Git filters are forbidden for publication staging.');
-  if (![0, 1].includes(filters.code)) fail(`Unable to inspect installed Git filters: exit ${filters.code}`);
-
-  const canonicalPaths = payloadPaths.map(path => {
+  const canonicalPaths = ['.project-sync-state.json', ...payloadPaths.map(path => {
     validateRelativePath(path);
     return `${PROJECT}/${path}`;
-  });
+  })];
   for (const group of chunks(canonicalPaths)) {
     const attributes = await safeGit(root, ['check-attr', '-a', '-z', '--', ...group]);
-    if (attributes !== '') fail('Applicable Git attributes are forbidden for publication payload paths.');
+    if (attributes !== '') fail('Applicable Git attributes are forbidden for publication payload or state paths.');
   }
   return true;
 }
@@ -590,13 +575,6 @@ export async function applyValidatedArtifact(
 ) {
   validateSourceSha(sourceSha);
   const root = await assertPortalCheckout(portalRoot, portalSha);
-  const initialStatus = await git(root, ['status', '--porcelain=v1', '-z', '--untracked-files=all']);
-  if (initialStatus !== '') fail('Portal checkout must be clean before publication.');
-  const initialIgnored = await ignoredPaths(root);
-  if (initialIgnored.length > 0) fail('Portal checkout contains ignored artifacts before publication.');
-  const baseline = await immutableStateText(root, portalSha);
-  const statePath = join(root, '.project-sync-state.json');
-  assertImmutableBaseline(baseline, await readFile(statePath, 'utf8'));
   const manifest = await verifyValidatedArtifact(
     artifactRoot,
     sourceSha,
@@ -605,6 +583,13 @@ export async function applyValidatedArtifact(
     rawArtifactDigest,
   );
   await assertSafeGitEnvironment(root, portalSha, manifest.files.map(file => file.path));
+  const initialStatus = await git(root, ['status', '--porcelain=v1', '-z', '--untracked-files=all']);
+  if (initialStatus !== '') fail('Portal checkout must be clean before publication.');
+  const initialIgnored = await ignoredPaths(root);
+  if (initialIgnored.length > 0) fail('Portal checkout contains ignored artifacts before publication.');
+  const baseline = await immutableStateText(root, portalSha);
+  const statePath = join(root, '.project-sync-state.json');
+  assertImmutableBaseline(baseline, await readFile(statePath, 'utf8'));
   await copyPayloadToPortal(join(resolve(artifactRoot), 'payload'), root);
   const expectedState = expectedStateText(baseline, sourceSha);
   await writeFile(statePath, expectedState);
