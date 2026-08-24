@@ -3,13 +3,12 @@ name: Sync project sites
 on:
   workflow_dispatch:
     inputs:
-      force_sync:
-        description: Rebuild and verify every project even when source revisions are unchanged
-        required: false
-        default: false
-        type: boolean
-  schedule:
-    - cron: "17 * * * *"
+      project:
+        description: Project to synchronize
+        required: true
+        type: choice
+        options:
+          - taiwan-food-safety
 
 permissions:
   contents: write
@@ -18,32 +17,51 @@ concurrency:
   group: sync-project-sites
   cancel-in-progress: false
 
+env:
+  EXPECTED_PROJECT: taiwan-food-safety
+  EXPECTED_SOURCE_SHA: 1fe44a0f72d21ddddc149129faff691e60b4019f
+
 jobs:
   sync:
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
     steps:
+      - name: Validate requested project
+        env:
+          SELECTED_PROJECT: ${{ inputs.project }}
+        run: |
+          if [[ "$SELECTED_PROJECT" != "$EXPECTED_PROJECT" ]]; then
+            echo "Only project=taiwan-food-safety is allowed." >&2
+            exit 64
+          fi
+
       - name: Check out portal
         uses: actions/checkout@v7
         with:
           ref: main
           path: portal
 
+      - name: Capture state baseline
+        working-directory: portal
+        run: cp .project-sync-state.json "$RUNNER_TEMP/project-sync-state.before.json"
+
       - name: Check source revisions
         id: revisions
         working-directory: portal
         env:
-          FORCE_SYNC: ${{ github.event_name == 'workflow_dispatch' && inputs.force_sync || false }}
-        run: node scripts/project-revisions.mjs check config/project-sources.json .project-sync-state.json
+          SELECTED_PROJECT: ${{ inputs.project }}
+        run: node scripts/project-revisions.mjs check config/project-sources.json .project-sync-state.json "$SELECTED_PROJECT" "$EXPECTED_SOURCE_SHA"
 
-      - name: Check out changed project sources
+      - name: Check out selected project source
         if: steps.revisions.outputs.changed == 'true'
         working-directory: portal
-        run: node scripts/project-revisions.mjs checkout config/project-sources.json ../sources "${{ steps.revisions.outputs.changed_projects }}"
+        env:
+          SELECTED_PROJECT: ${{ inputs.project }}
+        run: node scripts/project-revisions.mjs checkout config/project-sources.json ../sources "$SELECTED_PROJECT" "$EXPECTED_SOURCE_SHA"
 
       - name: Set up Node.js
-        if: contains(steps.revisions.outputs.changed_projects, 'taiwan-food-safety')
+        if: steps.revisions.outputs.changed == 'true'
         uses: actions/setup-node@v6
         with:
           node-version: 22
@@ -51,14 +69,22 @@ jobs:
           cache-dependency-path: sources/taiwan-food-safety/package-lock.json
 
       - name: Build Taiwan Food Safety
-        if: contains(steps.revisions.outputs.changed_projects, 'taiwan-food-safety')
+        if: steps.revisions.outputs.changed == 'true'
         working-directory: sources/taiwan-food-safety
-        run: npm ci && NEXT_BUILD_ID="$(git rev-parse HEAD)" npm run build:pages
+        run: |
+          if [[ "$(git rev-parse HEAD)" != "$EXPECTED_SOURCE_SHA" ]]; then
+            echo "Checked out source no longer matches the approved SHA." >&2
+            exit 65
+          fi
+          npm ci
+          NEXT_BUILD_ID="$EXPECTED_SOURCE_SHA" npm run build:pages
 
       - name: Sync published files
         if: steps.revisions.outputs.changed == 'true'
         working-directory: portal
-        run: ./scripts/sync-projects.sh ../sources . "${{ steps.revisions.outputs.changed_projects }}"
+        env:
+          SELECTED_PROJECT: ${{ inputs.project }}
+        run: ./scripts/sync-projects.sh ../sources . "$SELECTED_PROJECT"
 
       - name: Verify portal routes
         if: steps.revisions.outputs.changed == 'true'
@@ -68,16 +94,27 @@ jobs:
       - name: Record published revisions
         if: steps.revisions.outputs.changed == 'true'
         working-directory: portal
-        run: node scripts/project-revisions.mjs capture config/project-sources.json ../sources .project-sync-state.json "${{ steps.revisions.outputs.changed_projects }}"
+        env:
+          SELECTED_PROJECT: ${{ inputs.project }}
+        run: node scripts/project-revisions.mjs capture config/project-sources.json ../sources .project-sync-state.json "$SELECTED_PROJECT" "$EXPECTED_SOURCE_SHA"
+
+      - name: Verify selected project scope
+        if: steps.revisions.outputs.changed == 'true'
+        working-directory: portal
+        env:
+          SELECTED_PROJECT: ${{ inputs.project }}
+        run: |
+          node scripts/project-revisions.mjs verify-state config/project-sources.json "$RUNNER_TEMP/project-sync-state.before.json" .project-sync-state.json "$SELECTED_PROJECT" "$EXPECTED_SOURCE_SHA"
+          node scripts/project-revisions.mjs verify-scope . "$SELECTED_PROJECT" unstaged
 
       - name: Commit updated snapshots
         if: steps.revisions.outputs.changed == 'true'
         working-directory: portal
+        env:
+          SELECTED_PROJECT: ${{ inputs.project }}
         run: |
-          changed_projects="${{ steps.revisions.outputs.changed_projects }}"
-          IFS=',' read -r -a project_paths <<< "$changed_projects"
-          git add .project-sync-state.json
-          git add -- "${project_paths[@]}"
+          git add -- .project-sync-state.json taiwan-food-safety
+          node scripts/project-revisions.mjs verify-scope . "$SELECTED_PROJECT" staged
           if git diff --cached --quiet; then
             echo "Published snapshots and source revisions are already current."
             exit 0
@@ -85,5 +122,5 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: sync project sites" -m "Changed sources: ${changed_projects:-forced verification}"
+          git commit -m "chore: sync taiwan-food-safety" -m "Source: $EXPECTED_SOURCE_SHA"
           git push origin HEAD:main

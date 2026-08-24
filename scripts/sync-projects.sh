@@ -7,9 +7,18 @@ if [[ $# -ne 3 ]]; then
   exit 64
 fi
 
+project_ids="$3"
+if [[ -z "$project_ids" || "$project_ids" == *,* ]]; then
+  echo "Exactly one project id is required." >&2
+  exit 64
+fi
+if [[ "$project_ids" != "taiwan-food-safety" ]]; then
+  echo "Unknown project id: $project_ids" >&2
+  exit 65
+fi
+
 sources_root="$(cd "$1" && pwd)"
 portal_root="$(cd "$2" && pwd)"
-project_ids="$3"
 
 require_file() {
   if [[ ! -f "$1" ]]; then
@@ -162,27 +171,6 @@ require_file "$portal_root/index.html"
 require_file "$portal_root/CNAME"
 require_file "$portal_root/.nojekyll"
 
-if [[ -z "$project_ids" ]]; then
-  echo "At least one project id is required." >&2
-  exit 64
-fi
-
-IFS=',' read -r -a projects <<< "$project_ids"
-for project in "${projects[@]}"; do
-  case "$project" in
-    aidata) sync_aidata ;;
-    tptrees) sync_tptrees ;;
-    sporttech) sync_sporttech ;;
-    48DIRECTORY) sync_48directory ;;
-    small-parties) sync_small_parties ;;
-    taiwan-food-safety) sync_taiwan_food_safety ;;
-    mae) sync_mae ;;
-    ccp-stability-spending) sync_ccp_stability_spending ;;
-    *)
-      echo "Unknown project id: $project" >&2
-      exit 65
-      ;;
-  esac
-done
+sync_taiwan_food_safety
 
 echo "Synced selected projects into the portal repository: $project_ids"
