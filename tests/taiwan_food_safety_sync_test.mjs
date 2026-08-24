@@ -132,6 +132,51 @@ async function applyAndStagePublication(fixture) {
   safeGit(fixture.root, ['add', '--', '.project-sync-state.json', PROJECT]);
 }
 
+function configureMarkerFilter(root, marker) {
+  const helper = `sh -c 'printf invoked > "${marker}"; exit 1'`;
+  git(root, ['config', 'filter.evil.clean', helper]);
+  git(root, ['config', 'filter.evil.process', helper]);
+  git(root, ['config', 'filter.evil.smudge', helper]);
+  git(root, ['config', 'filter.evil.required', 'true']);
+}
+
+function configureExternalMarkerFilter(configPath, attributesPath, marker) {
+  const helper = `sh -c 'printf invoked > "${marker}"; exit 1'`;
+  for (const [key, value] of [
+    ['core.attributesFile', attributesPath],
+    ['filter.evil.clean', helper],
+    ['filter.evil.process', helper],
+    ['filter.evil.smudge', helper],
+    ['filter.evil.required', 'true'],
+  ]) {
+    execFileSync('git', ['config', '--file', configPath, key, value]);
+  }
+}
+
+async function withGitConfigEnvironment(overrides, callback) {
+  const keys = [
+    'HOME',
+    'XDG_CONFIG_HOME',
+    'GIT_CONFIG_GLOBAL',
+    'GIT_CONFIG_SYSTEM',
+    'GIT_CONFIG_NOSYSTEM',
+  ];
+  const previous = new Map(keys.map(key => [key, process.env[key]]));
+  try {
+    for (const key of keys) {
+      const value = overrides[key];
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+    return await callback();
+  } finally {
+    for (const [key, value] of previous) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
+}
+
 test('project and source selection reject empty, broad, multi, traversal, and shell values', () => {
   assert.equal(validateProject(PROJECT), PROJECT);
   for (const value of [
@@ -424,7 +469,7 @@ test('git scope gate rejects rename/copy and ignored escape paths', async t => {
   await assert.rejects(verifyGitScope(ignored, 'unstaged'), /Ignored artifact paths/);
 });
 
-test('root attributes and installed clean filters fail before staging without invoking the filter', async t => {
+test('root attributes remain forbidden for publication staging', async t => {
   const withAttributes = await publicationFixture(t);
   await writeFile(join(withAttributes.root, '.gitattributes'), `${PROJECT}/** filter=evil\n`);
   git(withAttributes.root, ['add', '--', '.gitattributes']);
@@ -438,31 +483,178 @@ test('root attributes and installed clean filters fail before staging without in
     ),
     /Root \.gitattributes/,
   );
+});
 
-  const withFilter = await publicationFixture(t);
-  const marker = join(withFilter.directory, 'filter-invoked');
-  git(withFilter.root, ['config', 'filter.evil.clean', `sh -c 'touch "${marker}"; cat'`]);
-  await assert.rejects(
-    assertSafeGitEnvironment(
-      withFilter.root,
-      withFilter.portalSha,
-      withFilter.manifest.files.map(file => file.path),
+test('inert installed filters allow the complete publication path without executing helpers', async t => {
+  const fixture = await publicationFixture(t);
+  const marker = join(fixture.directory, 'filter-invoked');
+  configureMarkerFilter(fixture.root, marker);
+
+  assert.equal(
+    await assertSafeGitEnvironment(
+      fixture.root,
+      fixture.portalSha,
+      fixture.manifest.files.map(file => file.path),
     ),
-    /Installed Git filters/,
+    true,
   );
+  await applyAndStagePublication(fixture);
+  const staged = await verifyStagedObjects(
+    fixture.validated,
+    fixture.root,
+    fixture.portalSha,
+    SOURCE_SHA,
+    fixture.manifest.treeSha256,
+    RAW_ID,
+    RAW_DIGEST,
+  );
+  assert.equal(staged.treeSha256, fixture.manifest.treeSha256);
+  safeGit(fixture.root, ['commit', '-q', '-m', 'publish with inert filter']);
+  const committed = await verifyPublicationCommit(
+    fixture.validated,
+    fixture.root,
+    fixture.portalSha,
+    SOURCE_SHA,
+    fixture.manifest.treeSha256,
+    RAW_ID,
+    RAW_DIGEST,
+  );
+  assert.equal(committed.treeSha256, fixture.manifest.treeSha256);
   await assert.rejects(lstat(marker), error => error.code === 'ENOENT');
 });
 
-test('applicable Git info attributes fail closed before staging', async t => {
+test('global and system attribute sources cannot transform staged or committed publication bytes', async t => {
+  for (const source of ['global', 'system']) {
+    const fixture = await publicationFixture(t);
+    const environmentRoot = await temporaryDirectory(t, `tfs-${source}-attributes`);
+    const home = join(environmentRoot, 'home');
+    const xdg = join(environmentRoot, 'xdg');
+    const configPath = join(environmentRoot, `${source}.gitconfig`);
+    const attributesPath = join(environmentRoot, `${source}.attributes`);
+    const marker = join(environmentRoot, `${source}-filter-invoked`);
+    await mkdir(home);
+    await mkdir(xdg);
+    await writeFile(attributesPath, `${PROJECT}/** filter=evil\n`);
+    configureExternalMarkerFilter(configPath, attributesPath, marker);
+
+    const environment = source === 'global'
+      ? {
+        HOME: home,
+        XDG_CONFIG_HOME: xdg,
+        GIT_CONFIG_GLOBAL: configPath,
+        GIT_CONFIG_SYSTEM: '/dev/null',
+        GIT_CONFIG_NOSYSTEM: '1',
+      }
+      : {
+        HOME: home,
+        XDG_CONFIG_HOME: xdg,
+        GIT_CONFIG_GLOBAL: '/dev/null',
+        GIT_CONFIG_SYSTEM: configPath,
+        GIT_CONFIG_NOSYSTEM: undefined,
+      };
+
+    await withGitConfigEnvironment(environment, async () => {
+      const payloadPath = `${PROJECT}/index.html`;
+      const hostileAttribute = execFileSync(
+        'git',
+        ['-C', fixture.root, 'check-attr', 'filter', '--', payloadPath],
+        { encoding: 'utf8' },
+      ).trim();
+      assert.equal(hostileAttribute, `${payloadPath}: filter: evil`, `${source} attribute fixture is effective`);
+      await assert.rejects(lstat(marker), error => error.code === 'ENOENT');
+
+      await applyValidatedArtifact(
+        fixture.validated,
+        fixture.root,
+        fixture.portalSha,
+        SOURCE_SHA,
+        fixture.manifest.treeSha256,
+        RAW_ID,
+        RAW_DIGEST,
+      );
+      assert.equal(
+        await readFile(join(fixture.root, '.project-sync-state.json'), 'utf8'),
+        expectedStateText(stateText()),
+      );
+      assert.deepEqual(
+        await readFile(join(fixture.root, PROJECT, 'index.html')),
+        await readFile(join(fixture.validated, 'payload', 'index.html')),
+      );
+      await assert.rejects(lstat(marker), error => error.code === 'ENOENT');
+
+      safeGit(fixture.root, ['add', '--', '.project-sync-state.json', PROJECT]);
+      const staged = await verifyStagedObjects(
+        fixture.validated,
+        fixture.root,
+        fixture.portalSha,
+        SOURCE_SHA,
+        fixture.manifest.treeSha256,
+        RAW_ID,
+        RAW_DIGEST,
+      );
+      assert.equal(staged.treeSha256, fixture.manifest.treeSha256);
+      safeGit(fixture.root, ['commit', '-q', '-m', `publish with ${source} attributes disabled`]);
+      const committed = await verifyPublicationCommit(
+        fixture.validated,
+        fixture.root,
+        fixture.portalSha,
+        SOURCE_SHA,
+        fixture.manifest.treeSha256,
+        RAW_ID,
+        RAW_DIGEST,
+      );
+      assert.equal(committed.treeSha256, fixture.manifest.treeSha256);
+      await assert.rejects(lstat(marker), error => error.code === 'ENOENT');
+    });
+  }
+});
+
+test('an applicable info attribute filter fails before payload copy without executing its helper', async t => {
   const fixture = await publicationFixture(t);
+  const marker = join(fixture.directory, 'filter-invoked');
+  configureMarkerFilter(fixture.root, marker);
   const gitDirectory = git(fixture.root, ['rev-parse', '--git-dir']);
   const absoluteGitDirectory = gitDirectory.startsWith('/') ? gitDirectory : join(fixture.root, gitDirectory);
   await mkdir(join(absoluteGitDirectory, 'info'), { recursive: true });
-  await writeFile(join(absoluteGitDirectory, 'info', 'attributes'), `${PROJECT}/** text\n`);
+  await writeFile(join(absoluteGitDirectory, 'info', 'attributes'), `${PROJECT}/** filter=evil\n`);
+  const stateBefore = await readFile(join(fixture.root, '.project-sync-state.json'), 'utf8');
+  const payloadBefore = await readFile(join(fixture.root, PROJECT, 'index.html'), 'utf8');
   await assert.rejects(
-    assertSafeGitEnvironment(fixture.root, fixture.portalSha, fixture.manifest.files.map(file => file.path)),
+    applyValidatedArtifact(
+      fixture.validated,
+      fixture.root,
+      fixture.portalSha,
+      SOURCE_SHA,
+      fixture.manifest.treeSha256,
+      RAW_ID,
+      RAW_DIGEST,
+    ),
     /Applicable Git attributes/,
   );
+  assert.equal(await readFile(join(fixture.root, '.project-sync-state.json'), 'utf8'), stateBefore);
+  assert.equal(await readFile(join(fixture.root, PROJECT, 'index.html'), 'utf8'), payloadBefore);
+  await assert.rejects(lstat(marker), error => error.code === 'ENOENT');
+});
+
+test('applicable filter and non-filter attributes fail closed for payload and state paths', async t => {
+  const cases = [
+    [`${PROJECT}/**`, 'text'],
+    [`${PROJECT}/**`, 'eol=lf'],
+    [`${PROJECT}/**`, 'working-tree-encoding=UTF-16'],
+    ['.project-sync-state.json', 'ident'],
+  ];
+  for (const [pattern, attribute] of cases) {
+    const fixture = await publicationFixture(t);
+    const gitDirectory = git(fixture.root, ['rev-parse', '--git-dir']);
+    const absoluteGitDirectory = gitDirectory.startsWith('/') ? gitDirectory : join(fixture.root, gitDirectory);
+    await mkdir(join(absoluteGitDirectory, 'info'), { recursive: true });
+    await writeFile(join(absoluteGitDirectory, 'info', 'attributes'), `${pattern} ${attribute}\n`);
+    await assert.rejects(
+      assertSafeGitEnvironment(fixture.root, fixture.portalSha, fixture.manifest.files.map(file => file.path)),
+      /Applicable Git attributes/,
+      `${pattern} ${attribute}`,
+    );
+  }
 });
 
 test('staged index objects and committed tree exactly equal the validated artifact', async t => {
@@ -590,6 +782,108 @@ test('post-commit blob, path, and inventory tamper are detected from committed o
     ),
     /missing, extra|blob differs|inventory/i,
   );
+});
+
+test('blob-only and state-only committed tamper are independently detected', async t => {
+  const blobFixture = await publicationFixture(t);
+  await applyAndStagePublication(blobFixture);
+  const validBlobStage = await verifyStagedObjects(
+    blobFixture.validated,
+    blobFixture.root,
+    blobFixture.portalSha,
+    SOURCE_SHA,
+    blobFixture.manifest.treeSha256,
+    RAW_ID,
+    RAW_DIGEST,
+  );
+  assert.equal(validBlobStage.treeSha256, blobFixture.manifest.treeSha256);
+  await writeFile(join(blobFixture.root, PROJECT, 'index.html'), 'blob-only committed tamper');
+  safeGit(blobFixture.root, ['add', '--', `${PROJECT}/index.html`]);
+  safeGit(blobFixture.root, ['commit', '-q', '-m', 'blob-only tamper']);
+  await assert.rejects(
+    verifyPublicationCommit(
+      blobFixture.validated,
+      blobFixture.root,
+      blobFixture.portalSha,
+      SOURCE_SHA,
+      blobFixture.manifest.treeSha256,
+      RAW_ID,
+      RAW_DIGEST,
+    ),
+    error => {
+      assert.equal(
+        error.message,
+        `Git blob differs from validated artifact bytes: ${PROJECT}/index.html`,
+      );
+      assert.doesNotMatch(error.message, /state|inventory|scope|mode|missing|extra/i);
+      return true;
+    },
+  );
+
+  const stateFixture = await publicationFixture(t);
+  await applyAndStagePublication(stateFixture);
+  const validStateStage = await verifyStagedObjects(
+    stateFixture.validated,
+    stateFixture.root,
+    stateFixture.portalSha,
+    SOURCE_SHA,
+    stateFixture.manifest.treeSha256,
+    RAW_ID,
+    RAW_DIGEST,
+  );
+  assert.equal(validStateStage.treeSha256, stateFixture.manifest.treeSha256);
+  const validExpectedState = expectedStateText(stateText());
+  await writeFile(join(stateFixture.root, '.project-sync-state.json'), `${validExpectedState} `);
+  safeGit(stateFixture.root, ['add', '--', '.project-sync-state.json']);
+  safeGit(stateFixture.root, ['commit', '-q', '-m', 'state-only tamper']);
+  await assert.rejects(
+    verifyPublicationCommit(
+      stateFixture.validated,
+      stateFixture.root,
+      stateFixture.portalSha,
+      SOURCE_SHA,
+      stateFixture.manifest.treeSha256,
+      RAW_ID,
+      RAW_DIGEST,
+    ),
+    error => {
+      assert.equal(
+        error.message,
+        'Staged/committed state blob differs from expected immutable bytes.',
+      );
+      assert.doesNotMatch(error.message, /inventory|scope|mode|missing|extra/i);
+      return true;
+    },
+  );
+});
+
+test('production permits installed filters only through the applicable-attribute gate', async () => {
+  const script = await readFile(new URL('../scripts/sync-taiwan-food-safety.mjs', import.meta.url), 'utf8');
+  assert.doesNotMatch(script, /Installed Git filters/);
+  assert.match(script, /check-attr/);
+  assert.match(script, /Applicable Git attributes are forbidden/);
+  assert.match(script, /\.project-sync-state\.json/);
+});
+
+test('publication pipeline keeps checkout and worktree inspection in the safe Git context', async () => {
+  const script = await readFile(new URL('../scripts/sync-taiwan-food-safety.mjs', import.meta.url), 'utf8');
+  const pipeline = script.slice(
+    script.indexOf('export async function assertSafeGitEnvironment'),
+    script.indexOf('async function main()'),
+  );
+  const apply = pipeline.slice(
+    pipeline.indexOf('export async function applyValidatedArtifact'),
+    pipeline.indexOf('export async function verifyStateFromImmutableObject'),
+  );
+
+  assert.doesNotMatch(pipeline, /await git\(/);
+  assert.match(pipeline, /safeGit\(root, \['rev-parse', '--show-toplevel'\]\)/);
+  assert.match(pipeline, /safeGit\(root, \['rev-parse', 'HEAD'\]\)/);
+  assert.match(apply, /initialStatus = await safeGit\(root, \['status'/);
+  assert.doesNotMatch(apply, /initialStatus = await git\(/);
+  for (const command of ['status', 'diff', 'ls-files', 'ls-tree', 'cat-file', 'check-attr']) {
+    assert.match(pipeline, new RegExp(`safeGit(?:Buffer)?\\([^;]+['"]${command}['"]`, 's'), command);
+  }
 });
 
 test('dedicated workflow is dispatch-only, pinned, and isolated into three jobs', async () => {
