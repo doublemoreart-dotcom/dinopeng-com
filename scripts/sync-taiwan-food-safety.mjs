@@ -32,6 +32,16 @@ const CONTROL_PATTERN = /[\u0000-\u001f\u007f]/;
 const MAX_FILES = 20_000;
 const MAX_FILE_BYTES = 64 * 1024 * 1024;
 const MAX_TREE_BYTES = 384 * 1024 * 1024;
+const SAFE_GIT_CONFIG = [
+  '-c', 'core.autocrlf=false',
+  '-c', 'core.attributesFile=/dev/null',
+  '-c', 'core.hooksPath=/dev/null',
+];
+const FORBIDDEN_GIT_CONTROL_NAMES = new Set([
+  '.gitattributes',
+  '.gitignore',
+  '.gitmodules',
+]);
 
 function fail(message) {
   throw new Error(message);
@@ -60,6 +70,22 @@ export function validateTransportMetadata(artifactId, artifactDigest) {
   return { artifactId, artifactDigest: artifactDigest.toLowerCase() };
 }
 
+export function gitSafeFoldComponent(value) {
+  return value
+    .normalize('NFKC')
+    .replace(/\p{Default_Ignorable_Code_Point}/gu, '')
+    .replace(/[ .]+$/u, '')
+    .toLowerCase();
+}
+
+export function validateGitControlComponent(value) {
+  const folded = gitSafeFoldComponent(value);
+  if (/^\.git(?:~[0-9]+)?$/u.test(folded) || FORBIDDEN_GIT_CONTROL_NAMES.has(folded)) {
+    fail(`Artifact path contains a forbidden Git control component: ${value}`);
+  }
+  return value;
+}
+
 export function validateRelativePath(value) {
   if (typeof value !== 'string' || value.length === 0) fail('Artifact paths must be non-empty strings.');
   if (CONTROL_PATTERN.test(value)) fail(`Artifact path contains control characters: ${JSON.stringify(value)}`);
@@ -69,6 +95,7 @@ export function validateRelativePath(value) {
   if (parts.some(part => part === '' || part === '.' || part === '..')) {
     fail(`Artifact path contains an empty or traversal segment: ${value}`);
   }
+  for (const part of parts) validateGitControlComponent(part);
   if (posix.normalize(value) !== value) fail(`Artifact path is not canonical: ${value}`);
   return value;
 }
@@ -371,6 +398,131 @@ async function git(cwd, args, options = {}) {
   return stdout;
 }
 
+async function safeGit(cwd, args, options = {}) {
+  return git(cwd, [...SAFE_GIT_CONFIG, ...args], options);
+}
+
+async function safeGitBuffer(cwd, args) {
+  const { stdout } = await execFileAsync('git', ['-C', cwd, ...SAFE_GIT_CONFIG, ...args], {
+    encoding: null,
+    maxBuffer: 384 * 1024 * 1024,
+  });
+  return stdout;
+}
+
+async function gitExit(cwd, args) {
+  try {
+    return { code: 0, stdout: await safeGit(cwd, args) };
+  } catch (error) {
+    if (Number.isInteger(error.code)) {
+      return { code: error.code, stdout: error.stdout?.toString() ?? '', stderr: error.stderr?.toString() ?? '' };
+    }
+    throw error;
+  }
+}
+
+function chunks(values, size = 400) {
+  const result = [];
+  for (let index = 0; index < values.length; index += size) result.push(values.slice(index, index + size));
+  return result;
+}
+
+export async function assertSafeGitEnvironment(portalRoot, portalSha, payloadPaths) {
+  validatePortalSha(portalSha);
+  const root = resolve(portalRoot);
+  const rootAttributes = await safeGit(root, ['ls-tree', '--name-only', portalSha, '--', '.gitattributes']);
+  if (rootAttributes.trim() !== '') fail('Root .gitattributes is forbidden for publication staging.');
+
+  const filters = await gitExit(root, ['config', '--show-origin', '--get-regexp', '^filter\\.']);
+  if (filters.code === 0 && filters.stdout.trim() !== '') fail('Installed Git filters are forbidden for publication staging.');
+  if (![0, 1].includes(filters.code)) fail(`Unable to inspect installed Git filters: exit ${filters.code}`);
+
+  const canonicalPaths = payloadPaths.map(path => {
+    validateRelativePath(path);
+    return `${PROJECT}/${path}`;
+  });
+  for (const group of chunks(canonicalPaths)) {
+    const attributes = await safeGit(root, ['check-attr', '-a', '-z', '--', ...group]);
+    if (attributes !== '') fail('Applicable Git attributes are forbidden for publication payload paths.');
+  }
+  return true;
+}
+
+function parseStageEntries(output) {
+  return output.split('\0').filter(Boolean).map(record => {
+    const match = /^([0-7]{6}) ([0-9a-f]{40,64}) ([0-3])\t([\s\S]+)$/u.exec(record);
+    if (!match) fail(`Cannot parse staged index record: ${record}`);
+    const [, mode, oid, stage, path] = match;
+    validateRelativePath(path);
+    return { mode, oid, stage, path, type: mode === '160000' ? 'commit' : 'blob' };
+  });
+}
+
+function parseTreeEntries(output) {
+  return output.split('\0').filter(Boolean).map(record => {
+    const match = /^([0-7]{6}) (blob|tree|commit) ([0-9a-f]{40,64})\t([\s\S]+)$/u.exec(record);
+    if (!match) fail(`Cannot parse committed tree record: ${record}`);
+    const [, mode, type, oid, path] = match;
+    validateRelativePath(path);
+    return { mode, type, oid, stage: '0', path };
+  });
+}
+
+async function expectedStateFromObject(portalRoot, portalSha, sourceSha) {
+  const baseline = await immutableStateText(portalRoot, portalSha);
+  return { baseline, expected: expectedStateText(baseline, sourceSha) };
+}
+
+async function verifyObjectInventory(
+  entries,
+  artifactRoot,
+  manifest,
+  expectedState,
+  readBlob,
+) {
+  const byPath = new Map();
+  for (const entry of entries) {
+    if (byPath.has(entry.path)) fail(`Git object inventory contains duplicate path: ${entry.path}`);
+    if (entry.stage !== '0') fail(`Unmerged index stage is forbidden: ${entry.path}`);
+    if (entry.mode === '160000' || entry.type === 'commit') fail(`Gitlink/submodule mode is forbidden: ${entry.path}`);
+    if (entry.mode !== '100644' || entry.type !== 'blob') {
+      fail(`Git object mode must be 100644 blob: ${entry.path} (${entry.mode} ${entry.type})`);
+    }
+    byPath.set(entry.path, entry);
+  }
+
+  const expectedPaths = [
+    '.project-sync-state.json',
+    ...manifest.files.map(file => `${PROJECT}/${file.path}`),
+  ].sort((left, right) => left.localeCompare(right, 'en'));
+  const actualPaths = [...byPath.keys()].sort((left, right) => left.localeCompare(right, 'en'));
+  if (JSON.stringify(actualPaths) !== JSON.stringify(expectedPaths)) {
+    fail('Git object inventory has missing, extra, or transformed publication paths.');
+  }
+
+  const stateBlob = await readBlob(byPath.get('.project-sync-state.json').oid);
+  if (!stateBlob.equals(Buffer.from(expectedState))) fail('Staged/committed state blob differs from expected immutable bytes.');
+
+  const objectFiles = [];
+  for (const expectedFile of manifest.files) {
+    const gitPath = `${PROJECT}/${expectedFile.path}`;
+    const blob = await readBlob(byPath.get(gitPath).oid);
+    const artifactBytes = await readFile(join(resolve(artifactRoot), 'payload', expectedFile.path));
+    if (!blob.equals(artifactBytes)) fail(`Git blob differs from validated artifact bytes: ${gitPath}`);
+    objectFiles.push({
+      path: expectedFile.path,
+      size: blob.length,
+      sha256: createHash('sha256').update(blob).digest('hex'),
+    });
+  }
+  objectFiles.sort((left, right) => left.path.localeCompare(right.path, 'en'));
+  assertInventoriesEqual(manifest.files, objectFiles);
+  if (treeDigest(objectFiles, manifest.sourceSha) !== manifest.treeSha256) {
+    fail('Git object tree digest differs from validated artifact digest.');
+  }
+  return true;
+}
+
 async function assertPortalCheckout(portalRoot, portalSha) {
   validatePortalSha(portalSha);
   const root = resolve(portalRoot);
@@ -382,7 +534,7 @@ async function assertPortalCheckout(portalRoot, portalSha) {
 }
 
 async function ignoredPaths(portalRoot) {
-  return (await git(portalRoot, ['ls-files', '--others', '--ignored', '--exclude-standard', '-z']))
+  return (await safeGit(portalRoot, ['ls-files', '--others', '--ignored', '--exclude-standard', '-z']))
     .split('\0')
     .filter(Boolean);
 }
@@ -390,14 +542,14 @@ async function ignoredPaths(portalRoot) {
 export async function verifyGitScope(portalRoot, mode) {
   if (!['unstaged', 'staged'].includes(mode)) fail(`Unknown scope mode: ${mode}`);
   const root = resolve(portalRoot);
-  const statusRecords = parsePorcelain(await git(root, ['status', '--porcelain=v1', '-z', '--untracked-files=all']));
+  const statusRecords = parsePorcelain(await safeGit(root, ['status', '--porcelain=v1', '-z', '--untracked-files=all']));
   validateScopeRecords(statusRecords);
   const ignored = await ignoredPaths(root);
   if (ignored.length > 0) fail(`Ignored artifact paths are forbidden: ${ignored.join(', ')}`);
 
-  const staged = parseNameStatus(await git(root, ['diff', '--cached', '--name-status', '-z']));
-  const unstaged = parseNameStatus(await git(root, ['diff', '--name-status', '-z']));
-  const untracked = (await git(root, ['ls-files', '--others', '--exclude-standard', '-z']))
+  const staged = parseNameStatus(await safeGit(root, ['diff', '--cached', '--name-status', '-z']));
+  const unstaged = parseNameStatus(await safeGit(root, ['diff', '--name-status', '-z']));
+  const untracked = (await safeGit(root, ['ls-files', '--others', '--exclude-standard', '-z']))
     .split('\0')
     .filter(Boolean)
     .map(path => ({ status: '??', path }));
@@ -424,7 +576,7 @@ async function copyPayloadToPortal(payloadRoot, portalRoot) {
 }
 
 async function immutableStateText(portalRoot, portalSha) {
-  return git(portalRoot, ['show', `${portalSha}:.project-sync-state.json`]);
+  return safeGit(portalRoot, ['show', `${portalSha}:.project-sync-state.json`]);
 }
 
 export async function applyValidatedArtifact(
@@ -452,6 +604,7 @@ export async function applyValidatedArtifact(
     rawArtifactId,
     rawArtifactDigest,
   );
+  await assertSafeGitEnvironment(root, portalSha, manifest.files.map(file => file.path));
   await copyPayloadToPortal(join(resolve(artifactRoot), 'payload'), root);
   const expectedState = expectedStateText(baseline, sourceSha);
   await writeFile(statePath, expectedState);
@@ -468,24 +621,106 @@ export async function verifyStateFromImmutableObject(portalRoot, portalSha, sour
   return assertExpectedState(baseline, current, sourceSha);
 }
 
-export async function verifyPublicationCommit(portalRoot, portalSha, sourceSha = SOURCE_SHA) {
+export async function verifyStageReady(
+  artifactRoot,
+  portalRoot,
+  portalSha,
+  sourceSha,
+  expectedTreeSha,
+  rawArtifactId,
+  rawArtifactDigest,
+) {
+  const root = await assertPortalCheckout(portalRoot, portalSha);
+  const manifest = await verifyValidatedArtifact(
+    artifactRoot,
+    sourceSha,
+    expectedTreeSha,
+    rawArtifactId,
+    rawArtifactDigest,
+  );
+  await verifyStateFromImmutableObject(root, portalSha, sourceSha);
+  await verifyGitScope(root, 'unstaged');
+  await assertSafeGitEnvironment(root, portalSha, manifest.files.map(file => file.path));
+  return manifest;
+}
+
+export async function verifyStagedObjects(
+  artifactRoot,
+  portalRoot,
+  portalSha,
+  sourceSha,
+  expectedTreeSha,
+  rawArtifactId,
+  rawArtifactDigest,
+) {
+  const root = await assertPortalCheckout(portalRoot, portalSha);
+  const manifest = await verifyValidatedArtifact(
+    artifactRoot,
+    sourceSha,
+    expectedTreeSha,
+    rawArtifactId,
+    rawArtifactDigest,
+  );
+  await assertSafeGitEnvironment(root, portalSha, manifest.files.map(file => file.path));
+  const { expected } = await expectedStateFromObject(root, portalSha, sourceSha);
+  const entries = parseStageEntries(await safeGit(root, [
+    'ls-files', '--stage', '-z', '--', '.project-sync-state.json', PROJECT,
+  ]));
+  await verifyObjectInventory(
+    entries,
+    artifactRoot,
+    manifest,
+    expected,
+    oid => safeGitBuffer(root, ['cat-file', 'blob', oid]),
+  );
+  await verifyGitScope(root, 'staged');
+  return manifest;
+}
+
+export async function verifyPublicationCommit(
+  artifactRoot,
+  portalRoot,
+  portalSha,
+  sourceSha,
+  expectedTreeSha,
+  rawArtifactId,
+  rawArtifactDigest,
+) {
   validateSourceSha(sourceSha);
   validatePortalSha(portalSha);
   const root = resolve(portalRoot);
-  const parent = (await git(root, ['rev-parse', 'HEAD^'])).trim();
+  const topLevel = (await safeGit(root, ['rev-parse', '--show-toplevel'])).trim();
+  if (await realpath(topLevel) !== await realpath(root)) fail('Portal root is not the Git worktree root.');
+  const manifest = await verifyValidatedArtifact(
+    artifactRoot,
+    sourceSha,
+    expectedTreeSha,
+    rawArtifactId,
+    rawArtifactDigest,
+  );
+  await assertSafeGitEnvironment(root, portalSha, manifest.files.map(file => file.path));
+  const parent = (await safeGit(root, ['rev-parse', 'HEAD^'])).trim();
   if (parent !== portalSha) fail(`Publication commit parent drift: expected ${portalSha}, received ${parent}`);
-  const count = Number((await git(root, ['rev-list', '--count', `${portalSha}..HEAD`])).trim());
+  const count = Number((await safeGit(root, ['rev-list', '--count', `${portalSha}..HEAD`])).trim());
   if (count !== 1) fail(`Publication must create exactly one commit, received ${count}.`);
-  const records = parseNameStatus(await git(root, ['diff', '--name-status', '-z', portalSha, 'HEAD']));
+  const records = parseNameStatus(await safeGit(root, ['diff', '--name-status', '-z', portalSha, 'HEAD']));
   validateScopeRecords(records);
-  const status = await git(root, ['status', '--porcelain=v1', '-z', '--untracked-files=all']);
+  const { expected } = await expectedStateFromObject(root, portalSha, sourceSha);
+  const entries = parseTreeEntries(await safeGit(root, [
+    'ls-tree', '-r', '-z', 'HEAD', '--', '.project-sync-state.json', PROJECT,
+  ]));
+  await verifyObjectInventory(
+    entries,
+    artifactRoot,
+    manifest,
+    expected,
+    oid => safeGitBuffer(root, ['cat-file', 'blob', oid]),
+  );
+  const status = await safeGit(root, ['status', '--porcelain=v1', '-z', '--untracked-files=all']);
   if (status !== '') fail('Publication worktree must be clean after commit.');
   const ignored = await ignoredPaths(root);
   if (ignored.length > 0) fail('Publication worktree contains ignored artifacts after commit.');
-  const baseline = await immutableStateText(root, portalSha);
-  const committedState = await git(root, ['show', 'HEAD:.project-sync-state.json']);
-  assertExpectedState(baseline, committedState, sourceSha);
-  return true;
+  return manifest;
 }
 
 async function main() {
@@ -519,11 +754,19 @@ async function main() {
     await verifyGitScope(args[0], args[1]);
     return;
   }
-  if (command === 'verify-commit' && args.length === 3) {
-    await verifyPublicationCommit(args[0], args[1], args[2]);
+  if (command === 'verify-stage-ready' && args.length === 7) {
+    await verifyStageReady(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
     return;
   }
-  fail('Usage: sync-taiwan-food-safety.mjs <validate-project|validate-transport|validate-raw|verify-artifact|apply|verify-state|verify-scope|verify-commit> ...');
+  if (command === 'verify-staged' && args.length === 7) {
+    await verifyStagedObjects(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+    return;
+  }
+  if (command === 'verify-commit' && args.length === 7) {
+    await verifyPublicationCommit(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+    return;
+  }
+  fail('Usage: sync-taiwan-food-safety.mjs <validate-project|validate-transport|validate-raw|verify-artifact|apply|verify-state|verify-scope|verify-stage-ready|verify-staged|verify-commit> ...');
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url))) {

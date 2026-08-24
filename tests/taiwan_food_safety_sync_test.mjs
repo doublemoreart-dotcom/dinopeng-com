@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import {
   mkdir,
   mkdtemp,
+  lstat,
   readFile,
   rm,
   symlink,
@@ -19,6 +20,8 @@ import {
   SOURCE_SHA,
   assertExpectedState,
   assertImmutableBaseline,
+  assertSafeGitEnvironment,
+  applyValidatedArtifact,
   canonicalInventoryText,
   createValidatedArtifact,
   expectedStateText,
@@ -29,6 +32,8 @@ import {
   validateSourceSha,
   validateTransportMetadata,
   verifyGitScope,
+  verifyPublicationCommit,
+  verifyStagedObjects,
   verifyValidatedArtifact,
 } from '../scripts/sync-taiwan-food-safety.mjs';
 
@@ -76,6 +81,16 @@ function git(cwd, args) {
   return execFileSync('git', ['-C', cwd, ...args], { encoding: 'utf8' }).trim();
 }
 
+function safeGit(cwd, args) {
+  return execFileSync('git', [
+    '-C', cwd,
+    '-c', 'core.autocrlf=false',
+    '-c', 'core.attributesFile=/dev/null',
+    '-c', 'core.hooksPath=/dev/null',
+    ...args,
+  ], { encoding: 'utf8' }).trim();
+}
+
 async function gitFixture(t) {
   const root = await temporaryDirectory(t, 'tfs-git');
   execFileSync('git', ['init', '-q', root]);
@@ -87,6 +102,34 @@ async function gitFixture(t) {
   git(root, ['add', '--', '.project-sync-state.json', PROJECT]);
   git(root, ['commit', '-q', '-m', 'fixture']);
   return root;
+}
+
+async function publicationFixture(t) {
+  const root = await temporaryDirectory(t, 'tfs-publication');
+  execFileSync('git', ['init', '-q', root]);
+  git(root, ['config', 'user.name', 'Test']);
+  git(root, ['config', 'user.email', 'test@example.com']);
+  await writeFile(join(root, '.project-sync-state.json'), stateText());
+  await mkdir(join(root, PROJECT));
+  await writeFile(join(root, PROJECT, 'index.html'), 'old publication');
+  git(root, ['add', '--', '.project-sync-state.json', PROJECT]);
+  git(root, ['commit', '-q', '-m', 'portal base']);
+  const portalSha = git(root, ['rev-parse', 'HEAD']);
+  const artifact = await validArtifact(t);
+  return { root, portalSha, ...artifact };
+}
+
+async function applyAndStagePublication(fixture) {
+  await applyValidatedArtifact(
+    fixture.validated,
+    fixture.root,
+    fixture.portalSha,
+    SOURCE_SHA,
+    fixture.manifest.treeSha256,
+    RAW_ID,
+    RAW_DIGEST,
+  );
+  safeGit(fixture.root, ['add', '--', '.project-sync-state.json', PROJECT]);
 }
 
 test('project and source selection reject empty, broad, multi, traversal, and shell values', () => {
@@ -129,6 +172,55 @@ test('artifact paths reject traversal, absolute, backslash, empty segments, and 
   ]) {
     assert.throws(() => validateRelativePath(value), /Artifact path/);
   }
+});
+
+test('real temporary Git fixtures reject root, nested, and case-equivalent Git control paths', async t => {
+  const controls = [
+    '.git',
+    '.GIT',
+    '.git.',
+    '.git ',
+    '.git~1',
+    '.gitattributes',
+    '.GITATTRIBUTES',
+    '.gitmodules',
+    '.GITMODULES',
+    '.gitignore',
+    '.GITIGNORE',
+    'nested/.git',
+    'nested/.GiT',
+    'nested/.gitattributes',
+    'nested/.gitmodules',
+    'nested/.gitignore',
+  ];
+  for (const [index, control] of controls.entries()) {
+    const repository = await temporaryDirectory(t, `tfs-control-${index}`);
+    execFileSync('git', ['init', '-q', repository]);
+    const raw = join(repository, 'raw');
+    await mkdir(raw);
+    await writeFixture(raw);
+    const target = join(raw, control);
+    await mkdir(join(target, '..'), { recursive: true });
+    await writeFile(target, 'forbidden');
+    await assert.rejects(
+      createValidatedArtifact(raw, join(repository, 'validated'), SOURCE_SHA, RAW_ID, RAW_DIGEST),
+      /forbidden Git control component/i,
+      control,
+    );
+  }
+});
+
+test('real temporary Git fixture rejects a nested repository before artifact validation', async t => {
+  const repository = await temporaryDirectory(t, 'tfs-nested-repository');
+  execFileSync('git', ['init', '-q', repository]);
+  const raw = join(repository, 'raw');
+  await mkdir(raw);
+  await writeFixture(raw);
+  execFileSync('git', ['init', '-q', join(raw, 'nested-repository')]);
+  await assert.rejects(
+    createValidatedArtifact(raw, join(repository, 'validated'), SOURCE_SHA, RAW_ID, RAW_DIGEST),
+    /forbidden Git control component/i,
+  );
 });
 
 test('transport metadata requires an immutable numeric id and SHA-256 digest', () => {
@@ -332,6 +424,174 @@ test('git scope gate rejects rename/copy and ignored escape paths', async t => {
   await assert.rejects(verifyGitScope(ignored, 'unstaged'), /Ignored artifact paths/);
 });
 
+test('root attributes and installed clean filters fail before staging without invoking the filter', async t => {
+  const withAttributes = await publicationFixture(t);
+  await writeFile(join(withAttributes.root, '.gitattributes'), `${PROJECT}/** filter=evil\n`);
+  git(withAttributes.root, ['add', '--', '.gitattributes']);
+  git(withAttributes.root, ['commit', '-q', '-m', 'root attributes']);
+  const attributesSha = git(withAttributes.root, ['rev-parse', 'HEAD']);
+  await assert.rejects(
+    assertSafeGitEnvironment(
+      withAttributes.root,
+      attributesSha,
+      withAttributes.manifest.files.map(file => file.path),
+    ),
+    /Root \.gitattributes/,
+  );
+
+  const withFilter = await publicationFixture(t);
+  const marker = join(withFilter.directory, 'filter-invoked');
+  git(withFilter.root, ['config', 'filter.evil.clean', `sh -c 'touch "${marker}"; cat'`]);
+  await assert.rejects(
+    assertSafeGitEnvironment(
+      withFilter.root,
+      withFilter.portalSha,
+      withFilter.manifest.files.map(file => file.path),
+    ),
+    /Installed Git filters/,
+  );
+  await assert.rejects(lstat(marker), error => error.code === 'ENOENT');
+});
+
+test('applicable Git info attributes fail closed before staging', async t => {
+  const fixture = await publicationFixture(t);
+  const gitDirectory = git(fixture.root, ['rev-parse', '--git-dir']);
+  const absoluteGitDirectory = gitDirectory.startsWith('/') ? gitDirectory : join(fixture.root, gitDirectory);
+  await mkdir(join(absoluteGitDirectory, 'info'), { recursive: true });
+  await writeFile(join(absoluteGitDirectory, 'info', 'attributes'), `${PROJECT}/** text\n`);
+  await assert.rejects(
+    assertSafeGitEnvironment(fixture.root, fixture.portalSha, fixture.manifest.files.map(file => file.path)),
+    /Applicable Git attributes/,
+  );
+});
+
+test('staged index objects and committed tree exactly equal the validated artifact', async t => {
+  const fixture = await publicationFixture(t);
+  await applyAndStagePublication(fixture);
+  const staged = await verifyStagedObjects(
+    fixture.validated,
+    fixture.root,
+    fixture.portalSha,
+    SOURCE_SHA,
+    fixture.manifest.treeSha256,
+    RAW_ID,
+    RAW_DIGEST,
+  );
+  assert.equal(staged.treeSha256, fixture.manifest.treeSha256);
+  safeGit(fixture.root, ['commit', '-q', '-m', 'publish fixture']);
+  const committed = await verifyPublicationCommit(
+    fixture.validated,
+    fixture.root,
+    fixture.portalSha,
+    SOURCE_SHA,
+    fixture.manifest.treeSha256,
+    RAW_ID,
+    RAW_DIGEST,
+  );
+  assert.equal(committed.treeSha256, fixture.manifest.treeSha256);
+});
+
+test('post-stage index blob and executable-mode tamper are detected', async t => {
+  const blobFixture = await publicationFixture(t);
+  await applyAndStagePublication(blobFixture);
+  const maliciousOid = execFileSync(
+    'git',
+    ['-C', blobFixture.root, 'hash-object', '-w', '--stdin'],
+    { input: 'malicious staged bytes', encoding: 'utf8' },
+  ).trim();
+  git(blobFixture.root, [
+    'update-index', '--cacheinfo', `100644,${maliciousOid},${PROJECT}/index.html`,
+  ]);
+  await assert.rejects(
+    verifyStagedObjects(
+      blobFixture.validated,
+      blobFixture.root,
+      blobFixture.portalSha,
+      SOURCE_SHA,
+      blobFixture.manifest.treeSha256,
+      RAW_ID,
+      RAW_DIGEST,
+    ),
+    /blob differs|inventory/i,
+  );
+
+  const modeFixture = await publicationFixture(t);
+  await applyAndStagePublication(modeFixture);
+  git(modeFixture.root, ['update-index', '--chmod=+x', `${PROJECT}/index.html`]);
+  await assert.rejects(
+    verifyStagedObjects(
+      modeFixture.validated,
+      modeFixture.root,
+      modeFixture.portalSha,
+      SOURCE_SHA,
+      modeFixture.manifest.treeSha256,
+      RAW_ID,
+      RAW_DIGEST,
+    ),
+    /mode must be 100644/i,
+  );
+});
+
+test('staged and committed gitlink mode 160000 are rejected', async t => {
+  const stagedFixture = await publicationFixture(t);
+  await applyAndStagePublication(stagedFixture);
+  git(stagedFixture.root, [
+    'update-index', '--add', '--cacheinfo', `160000,${stagedFixture.portalSha},${PROJECT}/submodule`,
+  ]);
+  await assert.rejects(
+    verifyStagedObjects(
+      stagedFixture.validated,
+      stagedFixture.root,
+      stagedFixture.portalSha,
+      SOURCE_SHA,
+      stagedFixture.manifest.treeSha256,
+      RAW_ID,
+      RAW_DIGEST,
+    ),
+    /Gitlink\/submodule mode/,
+  );
+
+  const committedFixture = await publicationFixture(t);
+  await applyAndStagePublication(committedFixture);
+  git(committedFixture.root, [
+    'update-index', '--add', '--cacheinfo', `160000,${committedFixture.portalSha},${PROJECT}/submodule`,
+  ]);
+  safeGit(committedFixture.root, ['commit', '-q', '-m', 'gitlink tamper']);
+  await assert.rejects(
+    verifyPublicationCommit(
+      committedFixture.validated,
+      committedFixture.root,
+      committedFixture.portalSha,
+      SOURCE_SHA,
+      committedFixture.manifest.treeSha256,
+      RAW_ID,
+      RAW_DIGEST,
+    ),
+    /Gitlink\/submodule mode/,
+  );
+});
+
+test('post-commit blob, path, and inventory tamper are detected from committed objects', async t => {
+  const fixture = await publicationFixture(t);
+  await applyAndStagePublication(fixture);
+  await writeFile(join(fixture.root, PROJECT, 'index.html'), 'post-stage tamper');
+  await writeFile(join(fixture.root, PROJECT, 'extra.html'), 'extra');
+  safeGit(fixture.root, ['add', '--', '.project-sync-state.json', PROJECT]);
+  safeGit(fixture.root, ['commit', '-q', '-m', 'committed tamper']);
+  await assert.rejects(
+    verifyPublicationCommit(
+      fixture.validated,
+      fixture.root,
+      fixture.portalSha,
+      SOURCE_SHA,
+      fixture.manifest.treeSha256,
+      RAW_ID,
+      RAW_DIGEST,
+    ),
+    /missing, extra|blob differs|inventory/i,
+  );
+});
+
 test('dedicated workflow is dispatch-only, pinned, and isolated into three jobs', async () => {
   const workflow = await readFile(new URL('../.github/workflows/sync-taiwan-food-safety.yml', import.meta.url), 'utf8');
   assert.match(workflow, /^name: Sync Taiwan Food Safety$/m);
@@ -372,19 +632,22 @@ test('artifact jobs bind ids and digests and never execute downloaded data', asy
   assert.doesNotMatch(publish, /working-directory: source|npm ci|npm run build|source\/package|source\/out/);
 });
 
-test('publish derives state from immutable Git object and gates literal staging before one push', async () => {
+test('publish derives state from immutable objects and safely binds stage, commit, and one push', async () => {
   const workflow = await readFile(new URL('../.github/workflows/sync-taiwan-food-safety.yml', import.meta.url), 'utf8');
   const script = await readFile(new URL('../scripts/sync-taiwan-food-safety.mjs', import.meta.url), 'utf8');
   const publish = workflow.slice(workflow.indexOf('  publish:'));
   assert.match(script, /\['show', `\$\{portalSha\}:\.project-sync-state\.json`\]/);
-  assert.match(publish, /git add -- \.project-sync-state\.json taiwan-food-safety/);
-  assert.match(publish, /verify-scope \. unstaged/);
-  assert.match(publish, /verify-scope \. staged/);
+  assert.match(publish, /verify-stage-ready/);
+  assert.match(publish, /add -- \.project-sync-state\.json taiwan-food-safety/);
+  assert.match(publish, /verify-staged/);
+  assert.match(publish, /git -c core\.autocrlf=false[\s\S]*-c core\.attributesFile=\/dev\/null[\s\S]*-c core\.hooksPath=\/dev\/null[\s\S]*add -- \.project-sync-state\.json taiwan-food-safety/);
+  assert.match(publish, /-c core\.hooksPath=\/dev\/null[\s\S]*commit -m "chore: sync taiwan-food-safety"/);
+  assert.match(publish, /verify-commit/);
   assert.match(publish, /git ls-remote --exit-code .* refs\/heads\/main/);
   assert.equal((workflow.match(/\$\{\{ github\.token \}\}/g) ?? []).length, 1);
   assert.equal((workflow.match(/git -c http\.https:\/\/github\.com\/\.extraheader=/g) ?? []).length, 1);
   assert.doesNotMatch(workflow, /git remote set-url|credential\.helper|persist-credentials: true/);
-  assert.ok(publish.indexOf('Verify staged publication scope') < publish.indexOf('PUSH_TOKEN:'));
+  assert.ok(publish.indexOf('Bind staged index objects') < publish.indexOf('PUSH_TOKEN:'));
   assert.ok(publish.indexOf('Verify remote main remains') < publish.indexOf('PUSH_TOKEN:'));
 });
 

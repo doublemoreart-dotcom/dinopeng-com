@@ -219,29 +219,67 @@ jobs:
           node --test tests/*.mjs
           npm run release:check
 
-      - name: Verify unstaged publication scope and state bytes
+      - name: Prove artifact, state, attributes, filters, and unstaged scope are safe
         working-directory: portal
+        env:
+          RAW_ARTIFACT_ID: ${{ needs.build.outputs.raw_artifact_id }}
+          RAW_ARTIFACT_DIGEST: ${{ needs.build.outputs.raw_artifact_digest }}
+          TREE_SHA256: ${{ needs.validate_artifact.outputs.tree_sha256 }}
         run: |
-          node scripts/sync-taiwan-food-safety.mjs verify-state . "$GITHUB_SHA" "$EXPECTED_SOURCE_SHA"
-          node scripts/sync-taiwan-food-safety.mjs verify-scope . unstaged
+          node scripts/sync-taiwan-food-safety.mjs verify-stage-ready \
+            "$RUNNER_TEMP/taiwan-food-safety-validated" \
+            . \
+            "$GITHUB_SHA" \
+            "$EXPECTED_SOURCE_SHA" \
+            "$TREE_SHA256" \
+            "$RAW_ARTIFACT_ID" \
+            "$RAW_ARTIFACT_DIGEST"
 
       - name: Stage literal publication paths
         working-directory: portal
-        run: git add -- .project-sync-state.json taiwan-food-safety
-
-      - name: Verify staged publication scope and state bytes
-        working-directory: portal
         run: |
-          node scripts/sync-taiwan-food-safety.mjs verify-state . "$GITHUB_SHA" "$EXPECTED_SOURCE_SHA"
-          node scripts/sync-taiwan-food-safety.mjs verify-scope . staged
+          git -c core.autocrlf=false \
+            -c core.attributesFile=/dev/null \
+            -c core.hooksPath=/dev/null \
+            add -- .project-sync-state.json taiwan-food-safety
+
+      - name: Bind staged index objects to validated artifact and state bytes
+        working-directory: portal
+        env:
+          RAW_ARTIFACT_ID: ${{ needs.build.outputs.raw_artifact_id }}
+          RAW_ARTIFACT_DIGEST: ${{ needs.build.outputs.raw_artifact_digest }}
+          TREE_SHA256: ${{ needs.validate_artifact.outputs.tree_sha256 }}
+        run: |
+          node scripts/sync-taiwan-food-safety.mjs verify-staged \
+            "$RUNNER_TEMP/taiwan-food-safety-validated" \
+            . \
+            "$GITHUB_SHA" \
+            "$EXPECTED_SOURCE_SHA" \
+            "$TREE_SHA256" \
+            "$RAW_ARTIFACT_ID" \
+            "$RAW_ARTIFACT_DIGEST"
 
       - name: Create one validated publication commit
         working-directory: portal
+        env:
+          RAW_ARTIFACT_ID: ${{ needs.build.outputs.raw_artifact_id }}
+          RAW_ARTIFACT_DIGEST: ${{ needs.build.outputs.raw_artifact_digest }}
+          TREE_SHA256: ${{ needs.validate_artifact.outputs.tree_sha256 }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: sync taiwan-food-safety" -m "Source: $EXPECTED_SOURCE_SHA"
-          node scripts/sync-taiwan-food-safety.mjs verify-commit . "$GITHUB_SHA" "$EXPECTED_SOURCE_SHA"
+          git -c core.autocrlf=false \
+            -c core.attributesFile=/dev/null \
+            -c core.hooksPath=/dev/null \
+            commit -m "chore: sync taiwan-food-safety" -m "Source: $EXPECTED_SOURCE_SHA"
+          node scripts/sync-taiwan-food-safety.mjs verify-commit \
+            "$RUNNER_TEMP/taiwan-food-safety-validated" \
+            . \
+            "$GITHUB_SHA" \
+            "$EXPECTED_SOURCE_SHA" \
+            "$TREE_SHA256" \
+            "$RAW_ARTIFACT_ID" \
+            "$RAW_ARTIFACT_DIGEST"
 
       - name: Verify remote main remains the immutable dispatch base
         working-directory: portal
