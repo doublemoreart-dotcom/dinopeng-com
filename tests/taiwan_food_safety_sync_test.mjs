@@ -526,16 +526,6 @@ test('inert installed filters allow the complete publication path without execut
 test('global and system attribute sources cannot transform staged or committed publication bytes', async t => {
   for (const source of ['global', 'system']) {
     const fixture = await publicationFixture(t);
-    await applyValidatedArtifact(
-      fixture.validated,
-      fixture.root,
-      fixture.portalSha,
-      SOURCE_SHA,
-      fixture.manifest.treeSha256,
-      RAW_ID,
-      RAW_DIGEST,
-    );
-
     const environmentRoot = await temporaryDirectory(t, `tfs-${source}-attributes`);
     const home = join(environmentRoot, 'home');
     const xdg = join(environmentRoot, 'xdg');
@@ -573,14 +563,25 @@ test('global and system attribute sources cannot transform staged or committed p
       assert.equal(hostileAttribute, `${payloadPath}: filter: evil`, `${source} attribute fixture is effective`);
       await assert.rejects(lstat(marker), error => error.code === 'ENOENT');
 
-      assert.equal(
-        await assertSafeGitEnvironment(
-          fixture.root,
-          fixture.portalSha,
-          fixture.manifest.files.map(file => file.path),
-        ),
-        true,
+      await applyValidatedArtifact(
+        fixture.validated,
+        fixture.root,
+        fixture.portalSha,
+        SOURCE_SHA,
+        fixture.manifest.treeSha256,
+        RAW_ID,
+        RAW_DIGEST,
       );
+      assert.equal(
+        await readFile(join(fixture.root, '.project-sync-state.json'), 'utf8'),
+        expectedStateText(stateText()),
+      );
+      assert.deepEqual(
+        await readFile(join(fixture.root, PROJECT, 'index.html')),
+        await readFile(join(fixture.validated, 'payload', 'index.html')),
+      );
+      await assert.rejects(lstat(marker), error => error.code === 'ENOENT');
+
       safeGit(fixture.root, ['add', '--', '.project-sync-state.json', PROJECT]);
       const staged = await verifyStagedObjects(
         fixture.validated,
@@ -862,6 +863,27 @@ test('production permits installed filters only through the applicable-attribute
   assert.match(script, /check-attr/);
   assert.match(script, /Applicable Git attributes are forbidden/);
   assert.match(script, /\.project-sync-state\.json/);
+});
+
+test('publication pipeline keeps checkout and worktree inspection in the safe Git context', async () => {
+  const script = await readFile(new URL('../scripts/sync-taiwan-food-safety.mjs', import.meta.url), 'utf8');
+  const pipeline = script.slice(
+    script.indexOf('export async function assertSafeGitEnvironment'),
+    script.indexOf('async function main()'),
+  );
+  const apply = pipeline.slice(
+    pipeline.indexOf('export async function applyValidatedArtifact'),
+    pipeline.indexOf('export async function verifyStateFromImmutableObject'),
+  );
+
+  assert.doesNotMatch(pipeline, /await git\(/);
+  assert.match(pipeline, /safeGit\(root, \['rev-parse', '--show-toplevel'\]\)/);
+  assert.match(pipeline, /safeGit\(root, \['rev-parse', 'HEAD'\]\)/);
+  assert.match(apply, /initialStatus = await safeGit\(root, \['status'/);
+  assert.doesNotMatch(apply, /initialStatus = await git\(/);
+  for (const command of ['status', 'diff', 'ls-files', 'ls-tree', 'cat-file', 'check-attr']) {
+    assert.match(pipeline, new RegExp(`safeGit(?:Buffer)?\\([^;]+['"]${command}['"]`, 's'), command);
+  }
 });
 
 test('dedicated workflow is dispatch-only, pinned, and isolated into three jobs', async () => {

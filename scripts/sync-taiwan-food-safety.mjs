@@ -511,9 +511,9 @@ async function verifyObjectInventory(
 async function assertPortalCheckout(portalRoot, portalSha) {
   validatePortalSha(portalSha);
   const root = resolve(portalRoot);
-  const topLevel = (await git(root, ['rev-parse', '--show-toplevel'])).trim();
+  const topLevel = (await safeGit(root, ['rev-parse', '--show-toplevel'])).trim();
   if (await realpath(topLevel) !== await realpath(root)) fail('Portal root is not the Git worktree root.');
-  const head = (await git(root, ['rev-parse', 'HEAD'])).trim();
+  const head = (await safeGit(root, ['rev-parse', 'HEAD'])).trim();
   if (head !== portalSha) fail(`Portal HEAD drift: expected ${portalSha}, received ${head}`);
   return root;
 }
@@ -583,7 +583,7 @@ export async function applyValidatedArtifact(
     rawArtifactDigest,
   );
   await assertSafeGitEnvironment(root, portalSha, manifest.files.map(file => file.path));
-  const initialStatus = await git(root, ['status', '--porcelain=v1', '-z', '--untracked-files=all']);
+  const initialStatus = await safeGit(root, ['status', '--porcelain=v1', '-z', '--untracked-files=all']);
   if (initialStatus !== '') fail('Portal checkout must be clean before publication.');
   const initialIgnored = await ignoredPaths(root);
   if (initialIgnored.length > 0) fail('Portal checkout contains ignored artifacts before publication.');
