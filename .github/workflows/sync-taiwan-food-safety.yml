@@ -1,0 +1,260 @@
+name: Sync Taiwan Food Safety
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: Project to synchronize
+        required: true
+        type: choice
+        options:
+          - taiwan-food-safety
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-project-sites
+  cancel-in-progress: false
+
+env:
+  EXPECTED_PROJECT: taiwan-food-safety
+  EXPECTED_SOURCE_SHA: 1fe44a0f72d21ddddc149129faff691e60b4019f
+  RAW_ARTIFACT_NAME: taiwan-food-safety-raw
+  VALIDATED_ARTIFACT_NAME: taiwan-food-safety-validated
+
+jobs:
+  build:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      raw_artifact_id: ${{ steps.upload_raw.outputs.artifact-id }}
+      raw_artifact_digest: ${{ steps.upload_raw.outputs.artifact-digest }}
+
+    steps:
+      - name: Check out trusted portal tools
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: trusted
+          persist-credentials: false
+
+      - name: Validate dispatch and immutable portal checkout
+        working-directory: trusted
+        env:
+          SELECTED_PROJECT: ${{ inputs.project }}
+        run: |
+          test "$GITHUB_REF" = "refs/heads/main"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          node scripts/sync-taiwan-food-safety.mjs validate-project "$SELECTED_PROJECT"
+
+      - name: Check out pinned Taiwan Food Safety source
+        uses: actions/checkout@v7
+        with:
+          repository: doublemoreart-dotcom/taiwan-food-safety
+          ref: 1fe44a0f72d21ddddc149129faff691e60b4019f
+          path: source
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Verify pinned source checkout
+        run: test "$(git -C source rev-parse HEAD)" = "$EXPECTED_SOURCE_SHA"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: source/package-lock.json
+
+      - name: Build untrusted source without write credentials
+        working-directory: source
+        run: |
+          npm ci
+          NEXT_BUILD_ID="$EXPECTED_SOURCE_SHA" npm run build:pages
+
+      - name: Upload raw build data
+        id: upload_raw
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.RAW_ARTIFACT_NAME }}
+          path: source/out/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
+
+  validate_artifact:
+    needs: build
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      tree_sha256: ${{ steps.validate_raw.outputs.tree_sha256 }}
+      validated_artifact_id: ${{ steps.upload_validated.outputs.artifact-id }}
+      validated_artifact_digest: ${{ steps.upload_validated.outputs.artifact-digest }}
+
+    steps:
+      - name: Check out trusted validators
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: trusted
+          persist-credentials: false
+
+      - name: Validate dispatch, portal, and raw transport identity
+        working-directory: trusted
+        env:
+          SELECTED_PROJECT: ${{ inputs.project }}
+          RAW_ARTIFACT_ID: ${{ needs.build.outputs.raw_artifact_id }}
+          RAW_ARTIFACT_DIGEST: ${{ needs.build.outputs.raw_artifact_digest }}
+        run: |
+          test "$GITHUB_REF" = "refs/heads/main"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          node scripts/sync-taiwan-food-safety.mjs validate-project "$SELECTED_PROJECT"
+          node scripts/sync-taiwan-food-safety.mjs validate-transport "$RAW_ARTIFACT_ID" "$RAW_ARTIFACT_DIGEST"
+
+      - name: Download raw artifact by immutable artifact id
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ needs.build.outputs.raw_artifact_id }}
+          path: ${{ runner.temp }}/taiwan-food-safety-raw
+          merge-multiple: true
+
+      - name: Validate and canonicalize raw artifact
+        id: validate_raw
+        working-directory: trusted
+        env:
+          RAW_ARTIFACT_ID: ${{ needs.build.outputs.raw_artifact_id }}
+          RAW_ARTIFACT_DIGEST: ${{ needs.build.outputs.raw_artifact_digest }}
+        run: |
+          tree_sha256="$(node scripts/sync-taiwan-food-safety.mjs validate-raw \
+            "$RUNNER_TEMP/taiwan-food-safety-raw" \
+            "$RUNNER_TEMP/taiwan-food-safety-validated" \
+            "$EXPECTED_SOURCE_SHA" \
+            "$RAW_ARTIFACT_ID" \
+            "$RAW_ARTIFACT_DIGEST")"
+          test "$tree_sha256" != ""
+          printf 'tree_sha256=%s\n' "$tree_sha256" >> "$GITHUB_OUTPUT"
+
+      - name: Upload validated artifact
+        id: upload_validated
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.VALIDATED_ARTIFACT_NAME }}
+          path: ${{ runner.temp }}/taiwan-food-safety-validated/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
+
+  publish:
+    needs: [build, validate_artifact]
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out immutable portal commit
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: portal
+          persist-credentials: false
+
+      - name: Validate dispatch, portal, and validated transport identity
+        working-directory: portal
+        env:
+          SELECTED_PROJECT: ${{ inputs.project }}
+          VALIDATED_ARTIFACT_ID: ${{ needs.validate_artifact.outputs.validated_artifact_id }}
+          VALIDATED_ARTIFACT_DIGEST: ${{ needs.validate_artifact.outputs.validated_artifact_digest }}
+        run: |
+          test "$GITHUB_REF" = "refs/heads/main"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          node scripts/sync-taiwan-food-safety.mjs validate-project "$SELECTED_PROJECT"
+          node scripts/sync-taiwan-food-safety.mjs validate-transport "$VALIDATED_ARTIFACT_ID" "$VALIDATED_ARTIFACT_DIGEST"
+
+      - name: Download validated artifact by immutable artifact id
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ needs.validate_artifact.outputs.validated_artifact_id }}
+          path: ${{ runner.temp }}/taiwan-food-safety-validated
+          merge-multiple: true
+
+      - name: Revalidate artifact without executing it
+        working-directory: portal
+        env:
+          RAW_ARTIFACT_ID: ${{ needs.build.outputs.raw_artifact_id }}
+          RAW_ARTIFACT_DIGEST: ${{ needs.build.outputs.raw_artifact_digest }}
+          TREE_SHA256: ${{ needs.validate_artifact.outputs.tree_sha256 }}
+        run: |
+          node scripts/sync-taiwan-food-safety.mjs verify-artifact \
+            "$RUNNER_TEMP/taiwan-food-safety-validated" \
+            "$EXPECTED_SOURCE_SHA" \
+            "$TREE_SHA256" \
+            "$RAW_ARTIFACT_ID" \
+            "$RAW_ARTIFACT_DIGEST"
+
+      - name: Apply validated data against immutable state baseline
+        working-directory: portal
+        env:
+          RAW_ARTIFACT_ID: ${{ needs.build.outputs.raw_artifact_id }}
+          RAW_ARTIFACT_DIGEST: ${{ needs.build.outputs.raw_artifact_digest }}
+          TREE_SHA256: ${{ needs.validate_artifact.outputs.tree_sha256 }}
+        run: |
+          node scripts/sync-taiwan-food-safety.mjs apply \
+            "$RUNNER_TEMP/taiwan-food-safety-validated" \
+            . \
+            "$GITHUB_SHA" \
+            "$EXPECTED_SOURCE_SHA" \
+            "$TREE_SHA256" \
+            "$RAW_ARTIFACT_ID" \
+            "$RAW_ARTIFACT_DIGEST"
+
+      - name: Verify portal routes and release invariants
+        working-directory: portal
+        run: |
+          node --test tests/*.mjs
+          npm run release:check
+
+      - name: Verify unstaged publication scope and state bytes
+        working-directory: portal
+        run: |
+          node scripts/sync-taiwan-food-safety.mjs verify-state . "$GITHUB_SHA" "$EXPECTED_SOURCE_SHA"
+          node scripts/sync-taiwan-food-safety.mjs verify-scope . unstaged
+
+      - name: Stage literal publication paths
+        working-directory: portal
+        run: git add -- .project-sync-state.json taiwan-food-safety
+
+      - name: Verify staged publication scope and state bytes
+        working-directory: portal
+        run: |
+          node scripts/sync-taiwan-food-safety.mjs verify-state . "$GITHUB_SHA" "$EXPECTED_SOURCE_SHA"
+          node scripts/sync-taiwan-food-safety.mjs verify-scope . staged
+
+      - name: Create one validated publication commit
+        working-directory: portal
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: sync taiwan-food-safety" -m "Source: $EXPECTED_SOURCE_SHA"
+          node scripts/sync-taiwan-food-safety.mjs verify-commit . "$GITHUB_SHA" "$EXPECTED_SOURCE_SHA"
+
+      - name: Verify remote main remains the immutable dispatch base
+        working-directory: portal
+        run: |
+          remote_line="$(git ls-remote --exit-code https://github.com/doublemoreart-dotcom/dinopeng-com.git refs/heads/main)"
+          remote_sha="${remote_line%%$'\t'*}"
+          test "$remote_sha" = "$GITHUB_SHA"
+
+      - name: Push the validated commit with an ephemeral credential
+        working-directory: portal
+        env:
+          PUSH_TOKEN: ${{ github.token }}
+        run: |
+          auth_header="$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 | tr -d '\n')"
+          git -c http.https://github.com/.extraheader="AUTHORIZATION: basic $auth_header" \
+            push https://github.com/doublemoreart-dotcom/dinopeng-com.git HEAD:main
