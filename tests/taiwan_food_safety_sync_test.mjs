@@ -403,14 +403,30 @@ function stateText(tfsSha = '1f7f4baf470c0c7c7abf9c599cb4c7508d8cab19') {
   }, null, 2)}\n`;
 }
 
+function assertPostApplyStateClosure(baseline, actual) {
+  const expected = expectedStateText(baseline);
+  assert.equal(actual, expected, 'Post-apply state bytes differ from the unique approved transition.');
+  assertExpectedState(baseline, actual);
+  return expected;
+}
+
 test('state update changes only the selected SHA and preserves every other byte', () => {
   const before = stateText();
   const after = expectedStateText(before);
-  assertExpectedState(before, after);
+  assert.equal(assertPostApplyStateClosure(before, after), after);
   assert.match(after, new RegExp(SOURCE_SHA));
   assert.match(after, /955cc42efefd1ad3cb616eb5e33283798819f2e8/);
   const changedOther = after.replace('955cc42efefd1ad3cb616eb5e33283798819f2e8', 'b'.repeat(40));
-  assert.throws(() => assertExpectedState(before, changedOther), /outside sources/);
+  assert.throws(() => assertPostApplyStateClosure(before, changedOther), /Post-apply state bytes differ/);
+  assert.throws(
+    () => assertPostApplyStateClosure(before, after.replace(SOURCE_SHA, '1f7f4baf470c0c7c7abf9c599cb4c7508d8cab19')),
+    /Post-apply state bytes differ/,
+  );
+  assert.throws(
+    () => assertPostApplyStateClosure(before, after.replace('955cc42efefd1ad3cb616eb5e33283798819f2e8', SOURCE_SHA)),
+    /Post-apply state bytes differ/,
+  );
+  assert.throws(() => assertPostApplyStateClosure(before, after.trim()), /Post-apply state bytes differ/);
 });
 
 test('state gate rejects baseline tamper, noncanonical text, duplicate keys, and an already-published pin', () => {
@@ -960,12 +976,28 @@ test('shared workflow and immutable dependency closure remain byte-exact to appr
   }
   const blobBindings = new Map([
     ['config/project-sources.json', 'c01cf139bbe0522e2d18e366a2c729c0523a4e3e'],
-    ['.project-sync-state.json', '018e67238959a367c16495770d75fa6fd31e18af'],
     ['package.json', '33858308643261e6b9aeb7bd7e92d6e9f9f2cf60'],
     ['tests/aidata_route_test.mjs', '223d3d93cdb1ec398345aa764932ba7c833c540e'],
   ]);
   for (const [path, blob] of blobBindings) {
     assert.equal(git(repositoryRoot, ['hash-object', path]), blob, `${path} blob drift`);
+  }
+  const immutableStateBlob = '018e67238959a367c16495770d75fa6fd31e18af';
+  assert.equal(
+    git(repositoryRoot, ['rev-parse', 'HEAD:.project-sync-state.json']),
+    immutableStateBlob,
+    '.project-sync-state.json immutable HEAD blob drift',
+  );
+  const immutableState = execFileSync(
+    'git',
+    ['-C', repositoryRoot, 'show', 'HEAD:.project-sync-state.json'],
+    { encoding: 'utf8' },
+  );
+  const workingState = await readFile(new URL('../.project-sync-state.json', import.meta.url), 'utf8');
+  if (workingState === immutableState) {
+    assert.equal(assertImmutableBaseline(immutableState, workingState), true);
+  } else {
+    assert.equal(assertPostApplyStateClosure(immutableState, workingState), workingState);
   }
   assert.equal(git(repositoryRoot, ['rev-parse', `${BASE}^{commit}`]), BASE);
 });
