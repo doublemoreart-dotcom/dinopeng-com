@@ -527,13 +527,15 @@ async function ignoredPaths(portalRoot) {
 export async function verifyGitScope(portalRoot, mode) {
   if (!['unstaged', 'staged'].includes(mode)) fail(`Unknown scope mode: ${mode}`);
   const root = resolve(portalRoot);
-  const statusRecords = parsePorcelain(await safeGit(root, ['status', '--porcelain=v1', '-z', '--untracked-files=all']));
+  const statusRecords = parsePorcelain(await safeGit(root, [
+    'status', '--porcelain=v1', '-z', '--untracked-files=all', '--no-renames',
+  ]));
   validateScopeRecords(statusRecords);
   const ignored = await ignoredPaths(root);
   if (ignored.length > 0) fail(`Ignored artifact paths are forbidden: ${ignored.join(', ')}`);
 
-  const staged = parseNameStatus(await safeGit(root, ['diff', '--cached', '--name-status', '-z']));
-  const unstaged = parseNameStatus(await safeGit(root, ['diff', '--name-status', '-z']));
+  const staged = parseNameStatus(await safeGit(root, ['diff', '--cached', '--name-status', '-z', '--no-renames']));
+  const unstaged = parseNameStatus(await safeGit(root, ['diff', '--name-status', '-z', '--no-renames']));
   const untracked = (await safeGit(root, ['ls-files', '--others', '--exclude-standard', '-z']))
     .split('\0')
     .filter(Boolean)

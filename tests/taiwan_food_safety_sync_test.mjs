@@ -467,11 +467,31 @@ test('git scope gate accepts only exact unstaged and staged publication paths', 
   await assert.rejects(verifyGitScope(root, 'staged'), /forbidden path|unstaged0/);
 });
 
-test('git scope gate rejects rename/copy and ignored escape paths', async t => {
-  const renamed = await gitFixture(t);
-  await writeFile(join(renamed, '.project-sync-state.json'), '{"changed":true}\n');
-  git(renamed, ['mv', `${PROJECT}/index.html`, `${PROJECT}/renamed.html`]);
-  await assert.rejects(verifyGitScope(renamed, 'unstaged'), /Rename\/copy/);
+test('git scope gate accepts in-scope build-id replacement and rejects cross-scope and ignored escapes', async t => {
+  const replacement = await gitFixture(t);
+  const oldBuildPath = join(replacement, PROJECT, '_next/static/old-build/_buildManifest.js');
+  const newBuildPath = join(replacement, PROJECT, '_next/static/new-build/_buildManifest.js');
+  await mkdir(join(oldBuildPath, '..'), { recursive: true });
+  await writeFile(oldBuildPath, 'self.__BUILD_MANIFEST={};\n');
+  git(replacement, ['add', '--', PROJECT]);
+  git(replacement, ['commit', '-q', '-m', 'old build id']);
+  await writeFile(join(replacement, '.project-sync-state.json'), '{"changed":true}\n');
+  await mkdir(join(newBuildPath, '..'), { recursive: true });
+  await writeFile(newBuildPath, 'self.__BUILD_MANIFEST={};\n');
+  await rm(oldBuildPath);
+  git(replacement, ['add', '--', '.project-sync-state.json', PROJECT]);
+  assert.match(
+    git(replacement, ['diff', '--cached', '--name-status', '-M']),
+    /R100\s+taiwan-food-safety\/_next\/static\/old-build\/_buildManifest\.js\s+taiwan-food-safety\/_next\/static\/new-build\/_buildManifest\.js/,
+  );
+  assert.equal(await verifyGitScope(replacement, 'staged'), true);
+
+  const escaped = await gitFixture(t);
+  await writeFile(join(escaped, '.project-sync-state.json'), '{"changed":true}\n');
+  await writeFile(join(escaped, 'escaped.html'), 'before');
+  await rm(join(escaped, PROJECT, 'index.html'));
+  git(escaped, ['add', '--', '.project-sync-state.json', PROJECT, 'escaped.html']);
+  await assert.rejects(verifyGitScope(escaped, 'staged'), /forbidden path/);
 
   const ignored = await gitFixture(t);
   await writeFile(join(ignored, '.gitignore'), 'ignored.txt\n');
