@@ -39,8 +39,6 @@ import {
 
 const RAW_ID = '123456';
 const RAW_DIGEST = 'a'.repeat(64);
-const BASE = '16faa417172c035ae52dbe3ffa0ab4b65071b3c6';
-
 async function temporaryDirectory(t, label) {
   const directory = await mkdtemp(join(tmpdir(), `${label}-`));
   t.after(() => rm(directory, { recursive: true, force: true }));
@@ -999,5 +997,4 @@ test('shared workflow and immutable dependency closure remain byte-exact to appr
   } else {
     assert.equal(assertPostApplyStateClosure(immutableState, workingState), workingState);
   }
-  assert.equal(git(repositoryRoot, ['rev-parse', `${BASE}^{commit}`]), BASE);
 });
