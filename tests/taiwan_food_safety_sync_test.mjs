@@ -117,6 +117,34 @@ async function publicationFixture(t) {
   return { root, portalSha, ...artifact };
 }
 
+async function publicationBuildIdFixture(t) {
+  const fixture = await publicationFixture(t);
+  const manifestBytes = 'self.__BUILD_MANIFEST={};\n';
+  const oldBuildPath = join(
+    fixture.root,
+    PROJECT,
+    '_next/static/old-build/_buildManifest.js',
+  );
+  await mkdir(join(oldBuildPath, '..'), { recursive: true });
+  await writeFile(oldBuildPath, manifestBytes);
+  git(fixture.root, ['add', '--', PROJECT]);
+  git(fixture.root, ['commit', '-q', '-m', 'old build id']);
+  const portalSha = git(fixture.root, ['rev-parse', 'HEAD']);
+
+  const newBuildPath = join(fixture.raw, '_next/static/new-build/_buildManifest.js');
+  await mkdir(join(newBuildPath, '..'), { recursive: true });
+  await writeFile(newBuildPath, manifestBytes);
+  await rm(fixture.validated, { recursive: true, force: true });
+  const manifest = await createValidatedArtifact(
+    fixture.raw,
+    fixture.validated,
+    SOURCE_SHA,
+    RAW_ID,
+    RAW_DIGEST,
+  );
+  return { ...fixture, portalSha, manifest };
+}
+
 async function applyAndStagePublication(fixture) {
   await applyValidatedArtifact(
     fixture.validated,
@@ -501,6 +529,41 @@ test('git scope gate accepts in-scope build-id replacement and rejects cross-sco
   await writeFile(join(ignored, PROJECT, 'index.html'), 'after');
   await writeFile(join(ignored, 'ignored.txt'), 'escape');
   await assert.rejects(verifyGitScope(ignored, 'unstaged'), /Ignored artifact paths/);
+});
+
+test('committed publication accepts an in-scope build-id replacement as actual A/D paths', async t => {
+  const fixture = await publicationBuildIdFixture(t);
+  await applyAndStagePublication(fixture);
+  assert.match(
+    git(fixture.root, ['diff', '--cached', '--name-status', '-M']),
+    /R100\s+taiwan-food-safety\/_next\/static\/old-build\/_buildManifest\.js\s+taiwan-food-safety\/_next\/static\/new-build\/_buildManifest\.js/,
+  );
+  const staged = await verifyStagedObjects(
+    fixture.validated,
+    fixture.root,
+    fixture.portalSha,
+    SOURCE_SHA,
+    fixture.manifest.treeSha256,
+    RAW_ID,
+    RAW_DIGEST,
+  );
+  assert.equal(staged.treeSha256, fixture.manifest.treeSha256);
+
+  safeGit(fixture.root, ['commit', '-q', '-m', 'replace build id']);
+  assert.match(
+    git(fixture.root, ['diff', '--name-status', '-M', fixture.portalSha, 'HEAD']),
+    /R100\s+taiwan-food-safety\/_next\/static\/old-build\/_buildManifest\.js\s+taiwan-food-safety\/_next\/static\/new-build\/_buildManifest\.js/,
+  );
+  const committed = await verifyPublicationCommit(
+    fixture.validated,
+    fixture.root,
+    fixture.portalSha,
+    SOURCE_SHA,
+    fixture.manifest.treeSha256,
+    RAW_ID,
+    RAW_DIGEST,
+  );
+  assert.equal(committed.treeSha256, fixture.manifest.treeSha256);
 });
 
 test('root attributes remain forbidden for publication staging', async t => {

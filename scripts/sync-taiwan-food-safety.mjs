@@ -690,7 +690,9 @@ export async function verifyPublicationCommit(
   if (parent !== portalSha) fail(`Publication commit parent drift: expected ${portalSha}, received ${parent}`);
   const count = Number((await safeGit(root, ['rev-list', '--count', `${portalSha}..HEAD`])).trim());
   if (count !== 1) fail(`Publication must create exactly one commit, received ${count}.`);
-  const records = parseNameStatus(await safeGit(root, ['diff', '--name-status', '-z', portalSha, 'HEAD']));
+  const records = parseNameStatus(await safeGit(root, [
+    'diff', '--name-status', '-z', '--no-renames', portalSha, 'HEAD',
+  ]));
   validateScopeRecords(records);
   const { expected } = await expectedStateFromObject(root, portalSha, sourceSha);
   const entries = parseTreeEntries(await safeGit(root, [
